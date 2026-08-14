@@ -24,6 +24,7 @@ const AdminProgramForm: React.FC = () => {
     isFeatured: false,
     pricing: '',
     deliveryFormat: 'ONLINE',
+    targetAudience: '',
   });
 
   useEffect(() => {
@@ -121,7 +122,7 @@ const AdminProgramForm: React.FC = () => {
                 required
                 value={formData.title}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red dark:bg-slate-900 dark:border-slate-800 dark:text-white"
               />
             </div>
             <div className="space-y-2">
@@ -132,23 +133,30 @@ const AdminProgramForm: React.FC = () => {
                 required
                 value={formData.slug}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red dark:bg-slate-900 dark:border-slate-800 dark:text-white"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">Category</label>
-              <input 
-                type="text" 
-                name="categoryId" 
+              <select
+                name="categoryId"
                 required
                 value={formData.categoryId}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red"
-                placeholder="e.g. Web Development"
-              />
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red bg-white dark:bg-slate-900 dark:border-slate-800 dark:text-white"
+              >
+                <option value="">Select Category...</option>
+                <option value="ACADEMICS">Academics</option>
+                <option value="DIGITAL_AND_TECHNOLOGY">Digital & Technology</option>
+                <option value="CREATIVE">Creative</option>
+                <option value="MUSIC">Music</option>
+                <option value="EXAM_PREPARATION">Exam Preparation</option>
+                <option value="PERSONALIZED_LEARNING">Personalized Learning</option>
+                <option value="SCHOOL_PROGRAMS">School Programs & Clubs</option>
+              </select>
             </div>
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">Format</label>
@@ -156,12 +164,23 @@ const AdminProgramForm: React.FC = () => {
                 name="deliveryFormat"
                 value={formData.deliveryFormat}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red bg-white dark:bg-slate-900 dark:border-slate-800"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red bg-white dark:bg-slate-900 dark:border-slate-800 dark:text-white"
               >
                 <option value="ONLINE">Online</option>
                 <option value="PHYSICAL">Physical</option>
                 <option value="HYBRID">Hybrid</option>
               </select>
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">Age Range / Audience</label>
+              <input 
+                type="text" 
+                name="targetAudience" 
+                value={formData.targetAudience || ''}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red dark:bg-slate-900 dark:border-slate-800 dark:text-white"
+                placeholder="e.g. Ages 5-11 or Senior Secondary"
+              />
             </div>
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">Pricing</label>
@@ -170,8 +189,8 @@ const AdminProgramForm: React.FC = () => {
                 name="pricing" 
                 value={formData.pricing}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red"
-                placeholder="e.g. ₦50,000"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red dark:bg-slate-900 dark:border-slate-800 dark:text-white"
+                placeholder="e.g. ₦50,000 or Contact Us"
               />
             </div>
           </div>

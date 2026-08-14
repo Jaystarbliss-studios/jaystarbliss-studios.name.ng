@@ -48,7 +48,7 @@ const ProgramDetails: React.FC = () => {
         <div className="container mx-auto px-4 max-w-5xl">
           <Link to="/#programs" className="text-white/70 hover:text-white inline-flex items-center gap-2 mb-8 text-sm"><ArrowLeft size={16} /> Back</Link>
           <div className="inline-block px-3 py-1 bg-white dark:bg-slate-900 dark:border-slate-800/10 text-brand-red text-xs font-bold uppercase tracking-wider rounded-full mb-6">
-            {program.categoryId || 'General'}
+            {program.categoryId ? program.categoryId.replace(/_/g, ' ') : 'General'}
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">{program.title}</h1>
           <p className="text-xl md:text-2xl text-white/80 max-w-3xl leading-relaxed mb-10">

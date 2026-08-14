@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+const fs = require('fs');
+const content = `import React, { useState, useEffect } from 'react';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { Plus, Search, Trash2, Edit } from 'lucide-react';
@@ -117,15 +118,15 @@ const AdminPrograms: React.FC = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                      <span className={\`px-2 inline-flex text-xs leading-5 font-semibold rounded-full \${
                         program.status === 'PUBLISHED' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-gray-100 text-gray-800 dark:bg-slate-800 dark:text-gray-300'
-                      }`}>
+                      }\`}>
                         {program.status || 'DRAFT'}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex items-center justify-end gap-3">
-                        <Link to={`/admin/programs/${program.id}`} className="text-brand-red hover:text-red-900 dark:hover:text-red-400 transition-colors" title="Edit">
+                        <Link to={\`/admin/programs/\${program.id}\`} className="text-brand-red hover:text-red-900 dark:hover:text-red-400 transition-colors" title="Edit">
                           <Edit size={18} />
                         </Link>
                         <button onClick={() => handleDelete(program.id)} className="text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors" title="Delete">
@@ -145,3 +146,6 @@ const AdminPrograms: React.FC = () => {
 };
 
 export default AdminPrograms;
+`;
+
+fs.writeFileSync('src/pages/admin/AdminPrograms.tsx', content);

@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+const fs = require('fs');
+
+const content = `import React, { useState, useEffect } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import MainLayout from '../components/layout/MainLayout';
@@ -90,14 +92,14 @@ const Programs: React.FC = () => {
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                      {catPrograms.map((program: any) => (
+                      {catPrograms.map((program) => (
                         <div key={program.id} className="flex flex-col bg-gray-50 dark:bg-slate-950 rounded-2xl border border-gray-100 dark:border-slate-800 overflow-hidden hover:shadow-xl transition-shadow group">
                           <div className="p-8 flex-grow">
                             <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 leading-tight group-hover:text-brand-red transition-colors">
                               {program.title}
                             </h3>
                             <p className="text-gray-600 dark:text-gray-400 mb-6 line-clamp-3">
-                              {program.shortDescription || (program.longDescription ? program.longDescription.substring(0, 100) + '...' : '')}
+                              {program.shortDescription || program.longDescription?.substring(0, 100) + '...'}
                             </p>
                             
                             <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
@@ -118,7 +120,7 @@ const Programs: React.FC = () => {
                             <span className="font-bold text-gray-900 dark:text-white text-lg">
                               {program.pricing && program.pricing.trim() !== '' ? program.pricing : 'Contact Us'}
                             </span>
-                            <Link to={`/programs/${program.slug}`} className="bg-brand-slate text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-gray-800 transition-colors">
+                            <Link to={`/programs/${program.slug}`} className="bg-brand-slate dark:bg-brand-red text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-gray-800 dark:hover:bg-red-700 transition-colors">
                               VIEW DETAILS
                             </Link>
                           </div>
@@ -137,3 +139,7 @@ const Programs: React.FC = () => {
 };
 
 export default Programs;
+`;
+
+fs.writeFileSync('src/pages/Programs.tsx', content);
+console.log('Programs.tsx rewritten');
