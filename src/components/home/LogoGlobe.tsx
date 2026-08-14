@@ -1,4 +1,4 @@
-import jaystarblissLogo from "../../assets/favicon.png";
+
 import React, { useRef, useState, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
@@ -12,7 +12,7 @@ const GlobeMesh = () => {
     let isMounted = true;
     const loader = new THREE.TextureLoader();
     loader.load(
-      jaystarblissLogo,
+      "/favicon.png",
       (loadedTexture) => {
         if (isMounted) {
           loadedTexture.wrapS = THREE.RepeatWrapping;
