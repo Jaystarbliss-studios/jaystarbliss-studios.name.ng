@@ -42,7 +42,7 @@ const CorePillars: React.FC = () => {
     <section className="py-24 bg-white dark:bg-slate-900 dark:border-slate-800 border-t border-gray-100">
       <div className="container mx-auto px-4 md:px-8 max-w-7xl">
         <div className="text-center max-w-3xl mx-auto mb-20">
-          <h2 className="text-3xl md:text-5xl font-extrabold text-brand-slate dark:text-white mb-6 tracking-tight">THE JAYSTARBLISS ECOSYSTEM</h2>
+          <h2 className="text-3xl md:text-5xl font-extrabold text-brand-slate dark:text-white mb-6 tracking-tight">OUR ECOSYSTEM</h2>
           <p className="text-xl text-gray-600 dark:text-gray-400 font-medium">
             Education. Technology. Creative Services. Digital Consulting.
           </p>

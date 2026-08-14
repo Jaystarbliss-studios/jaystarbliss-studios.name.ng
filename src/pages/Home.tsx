@@ -3,7 +3,7 @@ import MainLayout from '../components/layout/MainLayout';
 import Hero from '../components/Hero.tsx';
 import CorePillars from '../components/home/CorePillars';
 import FeaturedPrograms from '../components/home/FeaturedPrograms';
-import FeaturedServices from '../components/home/FeaturedServices';
+
 import LearningMethod from '../components/home/LearningMethod';
 import AudiencePathways from '../components/home/AudiencePathways';
 import FinalCTA from '../components/home/FinalCTA';
@@ -14,7 +14,7 @@ const Home: React.FC = () => {
       <Hero />
       <CorePillars />
       <FeaturedPrograms />
-      <FeaturedServices />
+      
       <LearningMethod />
       <AudiencePathways />
       <FinalCTA />
