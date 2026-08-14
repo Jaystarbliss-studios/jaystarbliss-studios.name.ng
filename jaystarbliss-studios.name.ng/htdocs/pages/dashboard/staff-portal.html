@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Jaystarbliss | Staff Portal</title>
+    
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                "colors": { "outline": "var(--outline)", "on-tertiary-container": "var(--on-tertiary-container)", "inverse-primary": "var(--inverse-primary)", "surface-container-lowest": "var(--surface-container-lowest)", "inverse-on-surface": "var(--inverse-on-surface)", "on-tertiary-fixed-variant": "var(--on-tertiary-fixed-variant)", "on-surface": "var(--on-surface)", "on-primary-fixed": "var(--on-primary-fixed)", "on-tertiary-fixed": "var(--on-tertiary-fixed)", "primary-fixed-dim": "var(--primary-fixed-dim)", "primary-fixed": "var(--primary-fixed)", "on-secondary-fixed": "var(--on-secondary-fixed)", "on-surface-variant": "var(--on-surface-variant)", "secondary": "var(--secondary)", "on-error": "var(--on-error)", "tertiary-fixed": "var(--tertiary-fixed)", "inverse-surface": "var(--inverse-surface)", "on-secondary": "var(--on-secondary)", "surface-container-high": "var(--surface-container-high)", "secondary-fixed-dim": "var(--secondary-fixed-dim)", "primary-container": "var(--primary-container)", "error-container": "var(--error-container)", "surface": "var(--surface)", "secondary-container": "var(--secondary-container)", "on-background": "var(--on-background)", "tertiary": "var(--tertiary)", "error": "var(--error)", "on-primary-container": "var(--on-primary-container)", "surface-dim": "var(--surface-dim)", "on-secondary-container": "var(--on-secondary-container)", "tertiary-container": "var(--tertiary-container)", "surface-bright": "var(--surface-bright)", "on-error-container": "var(--on-error-container)", "outline-variant": "var(--outline-variant)", "on-secondary-fixed-variant": "var(--on-secondary-fixed-variant)", "background": "var(--background)", "tertiary-fixed-dim": "var(--tertiary-fixed-dim)", "surface-container": "var(--surface-container)", "on-tertiary": "var(--on-tertiary)", "surface-tint": "var(--surface-tint)", "on-primary-fixed-variant": "var(--on-primary-fixed-variant)", "surface-container-highest": "var(--surface-container-highest)", "secondary-fixed": "var(--secondary-fixed)", "on-primary": "var(--on-primary)", "primary": "var(--primary)", "surface-variant": "var(--surface-variant)", "surface-container-low": "var(--surface-container-low)" },
+                "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "12px", "full": "9999px" },
+                "spacing": { "lg": "24px", "xs": "4px", "md": "16px", "xl": "32px", "margin-mobile": "20px", "gutter-mobile": "12px", "base": "4px", "sm": "8px" },
+                "fontFamily": { "headline-md": ["Inter"], "headline-lg": ["Inter"], "body-lg": ["Inter"], "headline-sm": ["Inter"], "headline-lg-mobile": ["Inter"], "body-sm": ["Inter"], "body-md": ["Inter"], "label-md": ["Inter"], "label-lg": ["Inter"] },
+                "fontSize": {
+                    "headline-md": ["1.5rem", "2rem"],
+                    "headline-lg": ["2rem", "2.5rem"],
+                    "body-lg": ["1.125rem", "1.75rem"],
+                    "headline-sm": ["1.25rem", "1.75rem"],
+                    "headline-lg-mobile": ["1.75rem", "2.25rem"],
+                    "body-sm": ["0.875rem", "1.25rem"],
+                    "body-md": ["1rem", "1.5rem"],
+                    "label-md": ["0.875rem", "1.25rem"],
+                    "label-lg": ["1rem", "1.5rem"]
+                }
+            },
+        },
+    }
+</script>
+<style type="text/tailwindcss">
+:root {
+  --outline: #737784;
+  --on-tertiary-container: #ccced0;
+  --inverse-primary: #b0c6ff;
+  --surface-container-lowest: #ffffff;
+  --inverse-on-surface: #eaf1ff;
+  --on-tertiary-fixed-variant: #444749;
+  --on-surface: #0b1c30;
+  --on-primary-fixed: #001945;
+  --on-tertiary-fixed: #191c1e;
+  --primary-fixed-dim: #b0c6ff;
+  --primary-fixed: #d9e2ff;
+  --on-secondary-fixed: #00201c;
+  --on-surface-variant: #434653;
+  --secondary: #006b5f;
+  --on-error: #ffffff;
+  --tertiary-fixed: #e0e3e5;
+  --inverse-surface: #213145;
+  --on-secondary: #ffffff;
+  --surface-container-high: #dce9ff;
+  --secondary-fixed-dim: #3cddc7;
+  --primary-container: #0f52ba;
+  --error-container: #ffdad6;
+  --surface: #f8f9ff;
+  --secondary-container: #62fae3;
+  --on-background: #0b1c30;
+  --tertiary: #3d4143;
+  --error: #ba1a1a;
+  --on-primary-container: #bcceff;
+  --surface-dim: #cbdbf5;
+  --on-secondary-container: #007165;
+  --tertiary-container: #55585a;
+  --surface-bright: #f8f9ff;
+  --on-error-container: #93000a;
+  --outline-variant: #c3c6d5;
+  --on-secondary-fixed-variant: #005047;
+  --background: #f8f9ff;
+  --tertiary-fixed-dim: #c4c7c9;
+  --surface-container: #e5eeff;
+  --on-tertiary: #ffffff;
+  --surface-tint: #1d59c1;
+  --on-primary-fixed-variant: #00419c;
+  --surface-container-highest: #d3e4fe;
+  --secondary-fixed: #62fae3;
+  --on-primary: #ffffff;
+  --primary: #003c90;
+  --surface-variant: #d3e4fe;
+  --surface-container-low: #eff4ff;
+}
+
+[data-theme='dark'] {
+  --primary: #b0c6ff;
+  --on-primary: #002868;
+  --primary-container: #1d59c1;
+  --on-primary-container: #d9e2ff;
+  --secondary: #62fae3;
+  --on-secondary: #003730;
+  --secondary-container: #005047;
+  --on-secondary-container: #7ffdf1;
+  --tertiary: #c4c7c9;
+  --on-tertiary: #2d3133;
+  --tertiary-container: #444749;
+  --on-tertiary-container: #e0e3e5;
+  --error: #ffb4ab;
+  --on-error: #690005;
+  --error-container: #93000a;
+  --on-error-container: #ffdad6;
+  --background: #0A0A0A;
+  --on-background: #F0F0F0;
+  --surface: #0A0A0A;
+  --on-surface: #F0F0F0;
+  --surface-variant: #222222;
+  --on-surface-variant: #B3B3B3;
+  --outline: #8c909f;
+  --outline-variant: #333333;
+  --inverse-surface: #F0F0F0;
+  --inverse-on-surface: #0A0A0A;
+  --surface-container-lowest: #050505;
+  --surface-container-low: #111111;
+  --surface-container: #181818;
+  --surface-container-high: #222222;
+  --surface-container-highest: #2D2D2D;
+  --surface-dim: #0A0A0A;
+  --surface-bright: #3A3A3A;
+  --inverse-primary: #b0c6ff;
+  --on-tertiary-fixed-variant: #444749;
+  --on-primary-fixed: #001945;
+  --on-tertiary-fixed: #191c1e;
+  --primary-fixed-dim: #b0c6ff;
+  --primary-fixed: #d9e2ff;
+  --on-secondary-fixed: #00201c;
+  --tertiary-fixed: #e0e3e5;
+  --secondary-fixed-dim: #3cddc7;
+  --on-secondary-fixed-variant: #005047;
+  --tertiary-fixed-dim: #c4c7c9;
+  --surface-tint: #1d59c1;
+  --on-primary-fixed-variant: #00419c;
+  --secondary-fixed: #62fae3;
+}
+
+    @layer base { body { font-family: 'Inter', sans-serif; } }
+    @layer components {
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .tonal-elevation-1 { box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.04); border: 1px solid #e2e8f0; }
+        .active-nav-transition { transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        
+        .panel { @apply bg-white rounded-xl tonal-elevation-1 flex flex-col mb-lg; }
+        .panel-head { @apply p-md border-b border-outline-variant flex justify-between items-center bg-surface-container-low; }
+        .panel-title { @apply font-headline-sm text-headline-sm text-on-surface flex items-center gap-sm; }
+        .panel-body { @apply p-md; }
+        .btn { @apply px-lg py-sm rounded-full font-label-lg text-label-lg flex items-center gap-sm shadow-sm transition-all justify-center cursor-pointer border-none; }
+        .btn-blue, .btn-primary { @apply bg-primary text-on-primary hover:bg-primary-container; }
+        .btn-danger { @apply bg-error text-on-error hover:opacity-90; }
+        .btn-sm { @apply px-md py-xs text-sm; }
+        .btn-full { @apply w-full; }
+        
+        .tab-pane, .tab-content { display: none; }
+        .tab-pane.active, .tab-content.active { display: block; }
+        
+        .form-group { @apply mb-md text-left; }
+        .form-group label { @apply block font-label-md text-label-md text-on-surface-variant mb-xs; }
+        .form-group input, .form-group select, .form-group textarea { @apply w-full bg-surface-container text-on-surface text-body-sm px-md py-sm rounded-lg border border-outline-variant focus:ring-2 focus:ring-primary focus:border-transparent transition-all; }
+        
+        .info-box { @apply bg-surface-container p-md rounded-lg mb-md text-body-sm text-on-surface border border-outline-variant; }
+        
+        .sidebar-menu a, .sidebar-menu button { @apply flex justify-start items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high transition-colors rounded-lg mb-xs font-label-lg text-label-lg cursor-pointer bg-transparent border-none w-full text-left; }
+        .sidebar-menu a.active, .sidebar-menu button.active { @apply bg-secondary-container text-on-secondary-container font-bold active-nav-transition; }
+        .sidebar-menu a span.material-symbols-outlined, .sidebar-menu button span.material-symbols-outlined { @apply text-[24px]; }
+        .sidebar-label { @apply font-label-md text-label-md text-on-surface-variant opacity-70 uppercase tracking-widest mt-md mb-xs px-md; }
+        
+        .grid-cards { @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md; }
+        .card-basic { @apply bg-surface-container-low rounded-xl p-md border border-outline-variant flex flex-col gap-sm relative; }
+        
+        table { @apply w-full text-left border-collapse; }
+        th { @apply font-label-md text-label-md text-on-surface-variant p-sm border-b border-outline-variant; }
+        td { @apply p-sm border-b border-outline-variant text-body-sm; }
+        .req-empty { @apply text-center text-on-surface-variant p-md bg-surface-container-low rounded-lg italic; }
+    }
+</style>
+
+
+<script>
+  // Session Timeout Logic (2 hours)
+  (function() {
+    let inactivityTimer;
+    const timeoutDuration = 2 * 60 * 60 * 1000; // 2 hours
+    
+    function resetTimer() {
+      clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(logoutDueToInactivity, timeoutDuration);
+    }
+    
+    function logoutDueToInactivity() {
+      localStorage.clear();
+      alert('Your session has expired due to inactivity. Please log in again.');
+      window.location.href = '../auth/login.html';
+    }
+    
+    window.addEventListener('mousemove', resetTimer);
+    window.addEventListener('keypress', resetTimer);
+    window.addEventListener('click', resetTimer);
+    window.addEventListener('scroll', resetTimer);
+    
+    resetTimer(); // Initialize
+    
+    window.globalPerformLogout = async function() {
+        if (typeof window._doLogout === 'function') { await window._doLogout(); return; }
+        if (typeof window.doLogout === 'function') { await window.doLogout(); return; }
+        
+        try {
+           const { getAuth, signOut } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+           await signOut(getAuth());
+        } catch (e) {}
+        
+        localStorage.clear();
+        window.location.href = '../auth/login.html';
+    };
+  })();
+</script>
+
+    <script>
+        const savedTheme = localStorage.getItem('jdh-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        if (savedTheme === 'dark') document.documentElement.classList.add('dark');
+        
+        window.toggleTheme = function() {
+            const h = document.documentElement;
+            const isDark = h.getAttribute('data-theme') === 'dark';
+            const n = isDark ? 'light' : 'dark';
+            h.setAttribute('data-theme', n);
+            localStorage.setItem('jdh-theme', n);
+            if (n === 'dark') h.classList.add('dark'); else h.classList.remove('dark');
+        };
+    </script>
+    
+</head>
+
+<body class="bg-surface text-on-surface h-screen flex overflow-hidden">
+    <div id="mobileOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden md:hidden" onclick="toggleSidebar()"></div>
+
+    <aside id="appSidebar" class="fixed md:static left-0 top-0 h-full w-64 flex-shrink-0 flex flex-col p-md z-50 bg-surface shadow-sm border-r border-outline-variant transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out overflow-hidden">
+        <div class="mb-xl px-md mt-4 md:mt-0 flex justify-between items-center">
+            
+<div class="logo-block" style="padding: 24px 20px 16px; border-bottom: 1px solid rgba(201,168,76,0.3);">
+  <img src="../../assets/img/android-chrome-192x192.png" alt="Jaystarbliss Dynamic Hub" class="logo-img" style="height: 48px; width: auto; display: block;"
+       onerror="this.style.display='none'; document.getElementById('logo-text').style.display='block'">
+  <div id="logo-text" class="logo-text" style="display:none">
+    <span class="logo-name" style="display: block; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 18px; color: #2C2C59;">Jaystarbliss</span>
+    <span class="logo-sub" style="display: block; font-size: 11px; color: #C9A84C; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500;">Dynamic Hub</span>
+  </div>
+</div>
+
+            <button class="md:hidden text-on-surface border-none bg-transparent" onclick="toggleSidebar()">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <nav class="flex-1 min-h-0 overflow-y-auto space-y-sm sidebar-menu" style="overflow-y:auto; padding-right:5px;" id="sidebarMenu">
+            <div class="sidebar-label">Content</div><button class="nav-item active" data-tab="null" onclick="switchTab('resources',this)">
+                    
+        <span class="material-symbols-outlined">menu_book</span> Resources
+      
+                </button><button class="nav-item " data-tab="null" onclick="switchTab('links',this)">
+                    
+        <span class="material-symbols-outlined">link</span> Links
+      
+                </button><button class="nav-item " data-tab="null" onclick="switchTab('exams',this)">
+                    
+        <span class="material-symbols-outlined">quiz</span> Exam Questions
+      
+                </button><div class="sidebar-label">Schools</div><button class="nav-item " data-tab="null" onclick="switchTab('schoolExams',this)">
+                    
+        <span class="material-symbols-outlined">school</span> School Exams
+      
+                </button><button class="nav-item " data-tab="null" onclick="switchTab('schoolResources',this)">
+                    
+        <span class="material-symbols-outlined">auto_stories</span> School Resources
+      
+                </button><button class="nav-item " data-tab="null" onclick="switchTab('schoolManage',this)">
+                    
+        <span class="material-symbols-outlined">lock</span> Manage Schools
+      
+                </button><div class="sidebar-label">Students</div><button class="nav-item " data-tab="null" onclick="switchTab('studentManage',this)">
+                    
+        <span class="material-symbols-outlined">groups</span> Manage Students
+      
+                </button><button class="nav-item " data-tab="null" onclick="switchTab('studentResources',this)">
+                    
+        <span class="material-symbols-outlined">send</span> Send Resources
+      
+                </button><div class="sidebar-label">Session</div><button class="nav-item " data-tab="null" onclick="toggleTheme()">
+                    
+        <span class="material-symbols-outlined">contrast</span> Toggle Theme
+      
+                </button><button class="nav-item " data-tab="null" onclick="window.globalPerformLogout()">
+                    
+        <span class="material-symbols-outlined">logout</span> Exit Session
+      
+                </button>
+        </nav>
+        <div class="mt-auto space-y-sm pt-md border-t border-outline-variant">
+            
+        <button class="w-full text-left flex items-center gap-md bg-primary-container text-white rounded-lg px-md py-sm font-bold mb-md hover:opacity-90 transition-opacity">
+            <span class="material-symbols-outlined">support</span>
+            <span class="font-label-lg text-label-lg">Support</span>
+        </button>
+        
+     <button class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high transition-colors rounded-lg cursor-pointer border-none bg-transparent w-full text-left mb-2" onclick="window.toggleTheme()">
+         <span class="material-symbols-outlined">contrast</span>
+         <span class="font-label-lg text-label-lg">Theme</span>
+     </button>
+     <button class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high transition-colors rounded-lg cursor-pointer border-none bg-transparent w-full text-left" onclick="window.globalPerformLogout()">
+            <span class="material-symbols-outlined">logout</span>
+            <span class="font-label-lg text-label-lg">Logout</span>
+        </button>
+    
+        </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col h-screen overflow-hidden relative">
+        <header class="h-16 flex-shrink-0 flex justify-between items-center px-4 md:px-xl z-30 bg-surface-container-lowest shadow-sm">
+            <div class="flex items-center gap-md">
+                <button class="md:hidden p-sm rounded-full hover:bg-surface-container text-on-surface-variant border-none bg-transparent" onclick="toggleSidebar()">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+                <div class="relative w-full max-w-md group hidden sm:block">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">search</span>
+                    <input class="w-full bg-surface-container text-on-surface text-body-sm pl-10 pr-4 py-2 rounded-xl border-none focus:ring-2 focus:ring-primary transition-all" placeholder="Search..." type="text"/>
+                </div>
+            </div>
+            <div class="flex items-center gap-md">
+                <button class="p-sm rounded-full hover:bg-surface-container transition-colors text-on-surface-variant relative border-none bg-transparent">
+                    <span class="material-symbols-outlined">notifications</span>
+                    <span id="notifBadge" class="notif-badge absolute top-1 right-1" style="display:none; font-size:10px; background:#C9A84C; color:white; border-radius:50%; padding:2px 5px;">0</span>
+                </button>
+                <div class="h-8 w-[1px] bg-outline-variant mx-sm"></div>
+                <div class="flex items-center gap-sm hover:bg-surface-container p-sm rounded-xl transition-all">
+                    <div class="text-right hidden xl:block">
+                        <p class="font-label-lg text-label-lg leading-none"><span id="navNameFallback">Loading...</span></p>
+                        <p id="navRoleFallback" class="font-label-md text-label-md text-on-surface-variant">Staff/Tutor</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-bold text-lg" id="topNavInitials">
+                        ?
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main class="flex-1 overflow-y-auto p-4 md:p-xl w-full max-w-[1600px] mx-auto">
+            <div class="tab-pane active" id="resources">
+      <div class="panel">
+        <div class="panel-head">
+          <span class="panel-title"><span class="material-symbols-outlined">add_circle</span> Post General Resource</span>
+        </div>
+        <div class="panel-body">
+          <div class="info-box"><strong>General Resources</strong> — visible to all students on the main student portal.</div>
+          <div class="msg" id="resMsg">Resource posted successfully!</div>
+          <form id="resourceForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Resource Title</label>
+                <input id="resTitle" type="text" required="" placeholder="e.g., Python Basics Guide" autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label>Category</label>
+                <select id="resCategory" required="">
+                  <option value="">Select category</option>
+                  <option value="coding">Coding</option>
+                  <option value="music">Music</option>
+                  <option value="art">Art</option>
+                  <option value="math">Mathematics</option>
+                  <option value="science">Science</option>
+                  <option value="general">General</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Resource URL</label>
+              <input id="resUrl" type="url" required="" placeholder="https://drive.google.com/..." autocomplete="off" inputmode="url">
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea id="resDesc" required="" placeholder="Brief description of the resource..."></textarea>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">POST_RESOURCE</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="section-head">Posted Resources</div>
+      <div class="resource-grid" id="resourcesGrid"><div class="empty-state">Loading…</div></div>
+    </div>
+<div class="tab-pane" id="links">
+      <div class="panel">
+        <div class="panel-head">
+          <span class="panel-title"><span class="material-symbols-outlined">add_link</span> Post General Link</span>
+        </div>
+        <div class="panel-body">
+          <div class="info-box"><strong>General Links</strong> — helpful URLs visible to all students on the portal.</div>
+          <div class="msg" id="linkMsg">Link posted successfully!</div>
+          <form id="linkForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Link Title</label>
+                <input id="linkTitle" type="text" required="" placeholder="e.g., Free Scratch Tutorial" autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label>Category</label>
+                <select id="linkCategory" required="">
+                  <option value="">Select category</option>
+                  <option value="tutorial">Tutorial</option>
+                  <option value="tool">Tool</option>
+                  <option value="reference">Reference</option>
+                  <option value="game">Game</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>URL</label>
+              <input id="linkUrl" type="url" required="" placeholder="https://..." inputmode="url">
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea id="linkDesc" required="" placeholder="What is this link about?"></textarea>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">POST_LINK</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="section-head">Posted Links</div>
+      <div class="resource-grid" id="linksGrid"><div class="empty-state">Loading…</div></div>
+    </div>
+<div class="tab-pane" id="exams">
+      <div class="panel">
+        <div class="panel-head">
+          <span class="panel-title"><span class="material-symbols-outlined">quiz</span> Post General Exam</span>
+        </div>
+        <div class="panel-body">
+          <div class="info-box"><strong>General Exams</strong> — available to all students across the platform.</div>
+          <div class="msg" id="examMsg">Exam posted successfully!</div>
+          <form id="examForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Exam Title</label>
+                <input id="examTitle" type="text" required="" placeholder="e.g., Term 1 Coding Quiz" autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label>Subject</label>
+                <select id="examSubject" required="">
+                  <option value="">Select subject</option>
+                  <option value="coding">Coding</option>
+                  <option value="music">Music</option>
+                  <option value="art">Art</option>
+                  <option value="math">Mathematics</option>
+                  <option value="science">Science</option>
+                  <option value="general">General</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Exam Link (Google Forms, etc.)</label>
+              <input id="examUrl" type="url" required="" placeholder="https://forms.google.com/..." inputmode="url">
+            </div>
+            <div class="form-group">
+              <label>Instructions</label>
+              <textarea id="examDesc" required="" placeholder="Instructions and exam details..."></textarea>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">POST_EXAM</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="section-head">Posted Exams</div>
+      <div class="resource-grid" id="examsGrid"><div class="empty-state">Loading…</div></div>
+    </div>
+<div class="tab-pane" id="schoolExams">
+      <div class="panel">
+        <div class="panel-head">
+          <span class="panel-title"><span class="material-symbols-outlined">school</span> Post School Exam</span>
+        </div>
+        <div class="panel-body">
+          <div class="info-box"><strong>School-Specific Exams</strong> — only visible to students from the selected school portal.</div>
+          <div class="msg" id="schoolExamMsg">School exam posted successfully!</div>
+          <form id="schoolExamForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Exam Title</label>
+                <input id="schoolExamTitle" type="text" required="" placeholder="e.g., Term 1 Mathematics Exam" autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label>Select School</label>
+                <select id="schoolExamSchool" required="">
+                  <option value="">Choose School</option>
+                  <option value="peniel">Peniel Lily Montessori School</option>
+                  <option value="southgold">South Gold Montessori School</option>
+                  <option value="sapphire">Sapphire Explorer Montessori School</option>
+                  <option value="easystars">Easy Stars Early Years Academy</option>
+                  <option value="christycaleb">Christy Caleb International School</option>
+                  <option value="royalbreed">Royal Breed Academy</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Exam Link (Google Forms, etc.)</label>
+              <input id="schoolExamUrl" type="url" required="" placeholder="https://forms.google.com/..." inputmode="url">
+            </div>
+            <div class="form-group">
+              <label>Instructions</label>
+              <textarea id="schoolExamDesc" required="" placeholder="Exam instructions and details"></textarea>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">POST_SCHOOL_EXAM</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="section-head">Posted School Exams</div>
+      <div class="resource-grid" id="schoolExamsGrid"><div class="empty-state">Loading…</div></div>
+    </div>
+<div class="tab-pane" id="schoolResources">
+      <div class="panel">
+        <div class="panel-head">
+          <span class="panel-title"><span class="material-symbols-outlined">auto_stories</span> Post School Resource or Link</span>
+        </div>
+        <div class="panel-body">
+          <div class="info-box"><strong>School Resources &amp; Links</strong> — visible only to students from the selected school.</div>
+          <div class="msg" id="schoolResMsg">Resource posted successfully!</div>
+          <form id="schoolResourceForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Type</label>
+                <select id="schoolResType" required="">
+                  <option value="">Select type</option>
+                  <option value="resource">📄 File / Document</option>
+                  <option value="link">Link</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Select School</label>
+                <select id="schoolResSchool" required="">
+                  <option value="">Choose School</option>
+                  <option value="peniel">Peniel Lily Montessori School</option>
+                  <option value="southgold">South Gold Montessori School</option>
+                  <option value="sapphire">Sapphire Explorer Montessori School</option>
+                  <option value="easystars">Easy Stars Early Years Academy</option>
+                  <option value="christycaleb">Christy Caleb International School</option>
+                  <option value="royalbreed">Royal Breed Academy</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Title</label>
+              <input id="schoolResTitle" type="text" required="" placeholder="e.g., Mathematics Study Guide" autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label>URL / Link</label>
+              <input id="schoolResUrl" type="url" required="" placeholder="https://..." inputmode="url">
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea id="schoolResDesc" required="" placeholder="Brief description"></textarea>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">POST_TO_SCHOOL</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="section-head">Posted School Resources</div>
+      <div class="resource-grid" id="schoolResGrid"><div class="empty-state">Loading…</div></div>
+    </div>
+<div class="tab-pane" id="schoolManage">
+      <div class="info-box red">
+        <strong>⚠️ Admin-Only Section</strong> — School access codes can only be updated by administrators. Contact your admin to change a school's code. Current codes are shown below for reference.
+      </div>
+      <div class="school-card-grid" id="schoolCodesDisplay">
+        <div class="empty-state">Loading school codes…</div>
+      </div>
+    </div>
+<div class="tab-pane" id="studentManage">
+      <div class="panel">
+        <div class="panel-head">
+          <span class="panel-title"><span class="material-symbols-outlined">person_add</span> Add New Student</span>
+        </div>
+        <div class="panel-body">
+          <div class="info-box"><strong>Create Student Accounts</strong> — students login with their username and access code.</div>
+          <div class="msg" id="studentAddMsg">Student added successfully!</div>
+          <form id="addStudentForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Full Name</label>
+                <input id="newStudentName" type="text" required="" placeholder="Student's full name" autocomplete="name">
+              </div>
+              <div class="form-group">
+                <label>Username</label>
+                <input id="newStudentUsername" type="text" required="" placeholder="Unique username" autocomplete="off">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Email (Optional)</label>
+                <input id="newStudentEmail" type="email" placeholder="student@example.com" autocomplete="email" inputmode="email">
+              </div>
+              <div class="form-group">
+                <label>Access Code</label>
+                <input id="newStudentCode" type="text" required="" placeholder="Create access code" autocomplete="off">
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">ADD_STUDENT</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="section-head">Registered Students</div>
+      <div class="person-grid" id="studentsGrid"><div class="empty-state">Loading students…</div></div>
+    </div>
+<div class="tab-pane" id="studentResources">
+      <div class="panel">
+        <div class="panel-head">
+          <span class="panel-title"><span class="material-symbols-outlined">send</span> Send to Individual Student</span>
+        </div>
+        <div class="panel-body">
+          <div class="info-box"><strong>Personal Resources</strong> — sent directly to a specific student. Only they can see it in their personal portal.</div>
+          <div class="msg" id="personalResMsg">Resource sent successfully!</div>
+          <form id="personalResForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Select Student</label>
+                <select id="targetStudent" required="">
+                  <option value="">Choose Student</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Resource Type</label>
+                <select id="personalResType" required="">
+                  <option value="">Select type</option>
+                  <option value="resource">📄 File / Document</option>
+                  <option value="link">Link</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Title</label>
+              <input id="personalResTitle" type="text" required="" placeholder="e.g., Your Python Assignment" autocomplete="off">
+            </div>
+            <div class="form-group">
+              <label>URL / Link</label>
+              <input id="personalResUrl" type="url" required="" placeholder="https://..." inputmode="url">
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea id="personalResDesc" required="" placeholder="Brief description"></textarea>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">TRANSMIT_RESOURCE</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="section-head">Recently Sent Resources</div>
+      <div class="resource-grid" id="personalResGrid"><div class="empty-state">Loading…</div></div>
+    </div>
+
+        </main>
+    </div>
+    
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('appSidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            if (sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+        
+        document.querySelectorAll('.sidebar-menu .nav-item').forEach(a => {
+            a.addEventListener('click', () => {
+                if(window.innerWidth < 768) toggleSidebar();
+            });
+        });
+
+        // Patch switchTab if it doesn't handle our new active classes correctly
+        const originalSwitchTab = window.switchTab;
+        window.switchTab = function(name) {
+            if(originalSwitchTab) {
+                try { originalSwitchTab(name); } catch(e){}
+            }
+            // Fallback forced switch
+            document.querySelectorAll('.sidebar-menu .nav-item').forEach(n => n.classList.remove('active'));
+            document.querySelectorAll('.tab-pane, .tab-content').forEach(p => p.classList.remove('active'));
+            
+            const btn = document.querySelector('.sidebar-menu .nav-item[data-tab="' + name + '"]');
+            if(btn) btn.classList.add('active');
+            
+            const pane = document.getElementById('tab-' + name) || document.getElementById(name);
+            if(pane) pane.classList.add('active');
+            document.querySelector('main')?.scrollTo(0, 0);
+        };
+  /* ─── Notifications ─── */
+  function toggleNotif() {
+    document.getElementById('notifPanel').classList.toggle('open');
+    document.getElementById('notifOverlay').classList.toggle('open');
+    if (document.getElementById('notifPanel').classList.contains('open')) {
+      if (window._loadNotif) window._loadNotif();
+    }
+  }
+
+  /* ─── Logout ─── */
+  function doLogout() {
+    if (window._doLogout) { window._doLogout(); return; }
+    localStorage.clear();
+    window.location.href = '../auth/login.html';
+  }
+</script>
+<script type="module">
+console.log("[DEBUG] Module started in staff-portal");
+
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getAuth, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import {
+  getFirestore, collection, addDoc, getDocs, deleteDoc, doc,
+  query, orderBy, where, serverTimestamp, setDoc, getDoc, updateDoc
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { setupNotifications } from '../../assets/js/jdh-firebase-modules.js';
+
+
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD_lq2Z4qBrZZkzYmEMPPMtCKQmfSx2rkY",
+  authDomain: "jaystarbliss-studios.firebaseapp.com",
+  projectId: "jaystarbliss-studios",
+  storageBucket: "jaystarbliss-studios.firebasestorage.app",
+  messagingSenderId: "885364100276",
+  appId: "1:885364100276:web:1159c4cbd9159aaa0e1be1"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+    const myUid = localStorage.getItem('userId');
+    if(myUid) {
+        setupNotifications(myUid, 'notifBell', 'notifBadge', 'notifPanel', 'notifContent');
+    }
+    
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    localStorage.clear();
+    window.location.href = '../auth/login.html';
+  }
+});
+
+/* ─── Auth Guard ─── */
+const role = localStorage.getItem('userRole');
+if (!role || role !== 'staff') {
+  window.location.href = '../auth/login.html';
+}
+const tmp_staffEmailDisplay = document.getElementById('staffEmailDisplay'); if(tmp_staffEmailDisplay) tmp_staffEmailDisplay.textContent = localStorage.getItem('userEmail') || localStorage.getItem('staffName') || 'Staff';
+
+/* ─── Logout ─── */
+window._doLogout = async function() {
+  try { await signOut(auth); } catch(e) {}
+  localStorage.clear();
+  window.location.href = '../auth/login.html';
+};
+
+/* ─── Helpers ─── */
+const SCHOOL_NAMES = {
+  peniel: 'Peniel Lily Montessori', southgold: 'South Gold Montessori',
+  sapphire: 'Sapphire Explorer Montessori', easystars: 'Easy Stars Early Years Academy',
+  christycaleb: 'Christy Caleb International', royalbreed: 'Royal Breed Academy'
+};
+
+function fmt(ts) {
+  if (!ts) return '—';
+  try { return ts.toDate().toLocaleDateString(); } catch(e) { return '—'; }
+}
+
+function showMsg(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+function emptyGrid(id, msg) {
+  const el = document.getElementById(id);
+  if (el) el.innerHTML = `<div class="empty-state">${msg}</div>`;
+}
+
+function makeCard(data, type) {
+  const card = document.createElement('div');
+  card.className = 'bg-surface-container-low p-6 rounded-2xl border border-outline-variant flex flex-col gap-4 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group';
+  
+  let iconName = 'file-text';
+  if(type === 'exam') iconName = 'file-question';
+  if(type === 'link') iconName = 'link';
+  if(type === 'resource') iconName = 'book-open';
+  
+  let badgeLabel = data.category || data.subject || 'General';
+  let badgeHtml = `<span class="flex items-center gap-1 bg-surface-container py-0.5 px-2 rounded-full"><i data-lucide="tag" class="w-3 h-3"></i> ${badgeLabel}</span>`;
+  
+  if (data.schoolId) {
+    let sName = (typeof SCHOOL_NAMES !== 'undefined' && SCHOOL_NAMES[data.schoolId]) ? SCHOOL_NAMES[data.schoolId] : data.schoolId;
+    badgeHtml = `<span class="flex items-center gap-1 bg-surface-container py-0.5 px-2 rounded-full"><i data-lucide="school" class="w-3 h-3"></i> ${sName}</span>`;
+  }
+  
+  if (data.studentName) {
+    badgeHtml = `<span class="flex items-center gap-1 bg-surface-container py-0.5 px-2 rounded-full"><i data-lucide="user" class="w-3 h-3"></i> ${data.studentName}</span>`;
+  }
+
+  let url = data.url || data.fileUrl;
+  let actionText = type === 'link' ? 'View External Link' : type === 'exam' ? 'Open Exam' : 'Open Resource';
+  let actionIcon = type === 'link' ? 'external-link' : type === 'exam' ? 'pencil' : 'paperclip';
+
+  card.innerHTML = `
+    <div class="flex items-start justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+          <i data-lucide="${iconName}" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h3 class="font-bold text-lg text-on-surface m-0 leading-tight">${data.title}</h3>
+          <div class="flex items-center gap-2 mt-1 text-xs text-on-surface-variant font-medium">
+            ${badgeHtml}
+            <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-3 h-3"></i> ${fmt(data.timestamp)}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="text-sm text-on-surface-variant leading-relaxed m-0 line-clamp-3">${data.description || 'No description provided.'}</p>
+    <div class="mt-auto pt-4 flex flex-col gap-2 border-t border-outline-variant">
+      ${url ? `<a href="${url}" target="_blank" class="flex items-center gap-2 text-sm text-primary font-medium hover:underline w-fit"><i data-lucide="${actionIcon}" class="w-4 h-4"></i> ${actionText}</a>` : ''}
+      <div class="flex justify-end mt-2">
+        <button class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md bg-error/10 text-error hover:bg-error hover:text-white transition-colors" onclick="deleteRes('${data.id}', '${data.colName}')">
+          <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Delete
+        </button>
+      </div>
+    </div>
+  `;
+  setTimeout(() => lucide.createIcons({ root: card }), 0);
+  return card;
+}
+
+/* ─── RESOURCES ─── */
+document.getElementById('resourceForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  try {
+    await addDoc(collection(db, 'resources'), {
+      title: document.getElementById('resTitle').value.trim(),
+      category: document.getElementById('resCategory').value,
+      fileUrl: document.getElementById('resUrl').value.trim(),
+      description: document.getElementById('resDesc').value.trim(),
+      postedBy: localStorage.getItem('userId') || 'staff',
+      timestamp: serverTimestamp()
+    });
+    showMsg('resMsg'); this.reset(); loadResources();
+  } catch(err) { alert('Error: ' + err.message); }
+});
+
+async function loadResources() {
+  const grid = document.getElementById('resourcesGrid');
+  grid.innerHTML = '<div class="empty-state">Loading…</div>';
+  try {
+    const snap = await getDocs(query(collection(db, 'resources'), orderBy('timestamp', 'desc')));
+    if (snap.empty) { emptyGrid('resourcesGrid', 'No resources posted yet.'); return; }
+    grid.innerHTML = '';
+    snap.forEach(d => {
+      const data = d.data();
+      grid.appendChild(makeCard({...data, id: d.id, colName: 'resources'}, 'resource'));
+    });
+  } catch(e) { console.error(e); emptyGrid('resourcesGrid', 'Error loading resources.'); }
+}
+
+window._delResource = async function(id) {
+  if (!confirm('Delete this resource?')) return;
+  try { await deleteDoc(doc(db, 'resources', id)); loadResources(); }
+  catch(e) { alert('Error: ' + e.message); }
+};
+
+/* ─── LINKS ─── */
+document.getElementById('linkForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  try {
+    await addDoc(collection(db, 'links'), {
+      title: document.getElementById('linkTitle').value.trim(),
+      category: document.getElementById('linkCategory').value,
+      url: document.getElementById('linkUrl').value.trim(),
+      description: document.getElementById('linkDesc').value.trim(),
+      postedBy: localStorage.getItem('userId') || 'staff',
+      timestamp: serverTimestamp()
+    });
+    showMsg('linkMsg'); this.reset(); loadLinks();
+  } catch(err) { alert('Error: ' + err.message); }
+});
+
+async function loadLinks() {
+  const grid = document.getElementById('linksGrid');
+  grid.innerHTML = '<div class="empty-state">Loading…</div>';
+  try {
+    const snap = await getDocs(query(collection(db, 'links'), orderBy('timestamp', 'desc')));
+    if (snap.empty) { emptyGrid('linksGrid', 'No links posted yet.'); return; }
+    grid.innerHTML = '';
+    snap.forEach(d => {
+      const data = d.data();
+      grid.appendChild(makeCard({...data, id: d.id, colName: 'links'}, 'link'));
+    });
+  } catch(e) { console.error(e); emptyGrid('linksGrid', 'Error loading links.'); }
+}
+
+window._delLink = async function(id) {
+  if (!confirm('Delete this link?')) return;
+  try { await deleteDoc(doc(db, 'links', id)); loadLinks(); }
+  catch(e) { alert('Error: ' + e.message); }
+};
+
+/* ─── EXAMS ─── */
+document.getElementById('examForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  try {
+    await addDoc(collection(db, 'exams'), {
+      title: document.getElementById('examTitle').value.trim(),
+      subject: document.getElementById('examSubject').value,
+      url: document.getElementById('examUrl').value.trim(),
+      description: document.getElementById('examDesc').value.trim(),
+      postedBy: localStorage.getItem('userId') || 'staff',
+      timestamp: serverTimestamp()
+    });
+    showMsg('examMsg'); this.reset(); loadExams();
+  } catch(err) { alert('Error: ' + err.message); }
+});
+
+async function loadExams() {
+  const grid = document.getElementById('examsGrid');
+  grid.innerHTML = '<div class="empty-state">Loading…</div>';
+  try {
+    const snap = await getDocs(query(collection(db, 'exams'), orderBy('timestamp', 'desc')));
+    if (snap.empty) { emptyGrid('examsGrid', 'No exams posted yet.'); return; }
+    grid.innerHTML = '';
+    snap.forEach(d => {
+      const data = d.data();
+      grid.appendChild(makeCard({...data, id: d.id, colName: 'exams'}, 'exam'));
+    });
+  } catch(e) { console.error(e); emptyGrid('examsGrid', 'Error loading exams.'); }
+}
+
+window._delExam = async function(id) {
+  if (!confirm('Delete this exam?')) return;
+  try { await deleteDoc(doc(db, 'exams', id)); loadExams(); }
+  catch(e) { alert('Error: ' + e.message); }
+};
+
+/* ─── SCHOOL EXAMS ─── */
+document.getElementById('schoolExamForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  try {
+    await addDoc(collection(db, 'schoolExams'), {
+      title: document.getElementById('schoolExamTitle').value.trim(),
+      schoolId: document.getElementById('schoolExamSchool').value,
+      url: document.getElementById('schoolExamUrl').value.trim(),
+      description: document.getElementById('schoolExamDesc').value.trim(),
+      timestamp: serverTimestamp()
+    });
+    showMsg('schoolExamMsg'); this.reset(); loadSchoolExams();
+  } catch(err) { alert('Error: ' + err.message); }
+});
+
+async function loadSchoolExams() {
+  const grid = document.getElementById('schoolExamsGrid');
+  grid.innerHTML = '<div class="empty-state">Loading…</div>';
+  try {
+    const snap = await getDocs(query(collection(db, 'schoolExams'), orderBy('timestamp', 'desc')));
+    if (snap.empty) { emptyGrid('schoolExamsGrid', 'No school exams posted yet.'); return; }
+    grid.innerHTML = '';
+    snap.forEach(d => {
+      const data = d.data();
+      grid.appendChild(makeCard({...data, id: d.id, colName: 'schoolExams'}, 'exam'));
+    });
+  } catch(e) { console.error(e); emptyGrid('schoolExamsGrid', 'Error loading school exams.'); }
+}
+
+window._delSchoolExam = async function(id) {
+  if (!confirm('Delete this school exam?')) return;
+  try { await deleteDoc(doc(db, 'schoolExams', id)); loadSchoolExams(); }
+  catch(e) { alert('Error: ' + e.message); }
+};
+
+/* ─── SCHOOL RESOURCES ─── */
+document.getElementById('schoolResourceForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const resType = document.getElementById('schoolResType').value;
+  try {
+    const collName = resType === 'link' ? 'schoolLinks' : 'schoolResources';
+    const urlField = resType === 'link' ? 'url' : 'fileUrl';
+    await addDoc(collection(db, collName), {
+      schoolId: document.getElementById('schoolResSchool').value,
+      title: document.getElementById('schoolResTitle').value.trim(),
+      [urlField]: document.getElementById('schoolResUrl').value.trim(),
+      description: document.getElementById('schoolResDesc').value.trim(),
+      timestamp: serverTimestamp()
+    });
+    showMsg('schoolResMsg'); this.reset(); loadSchoolResources();
+  } catch(err) { alert('Error: ' + err.message); }
+});
+
+async function loadSchoolResources() {
+  const grid = document.getElementById('schoolResGrid');
+  grid.innerHTML = '<div class="empty-state">Loading…</div>';
+  try {
+    const [rSnap, lSnap] = await Promise.all([
+      getDocs(query(collection(db, 'schoolResources'), orderBy('timestamp', 'desc'))),
+      getDocs(query(collection(db, 'schoolLinks'), orderBy('timestamp', 'desc')))
+    ]);
+    const all = [];
+    rSnap.forEach(d => all.push({ id: d.id, coll: 'schoolResources', type: 'resource', ...d.data() }));
+    lSnap.forEach(d => all.push({ id: d.id, coll: 'schoolLinks', type: 'link', ...d.data() }));
+    all.sort((a, b) => (b.timestamp?.toDate() || new Date(0)) - (a.timestamp?.toDate() || new Date(0)));
+    if (!all.length) { emptyGrid('schoolResGrid', 'No school resources posted yet.'); return; }
+    grid.innerHTML = '';
+    all.forEach(item => {
+      const url = item.type === 'link' ? item.url : item.fileUrl;
+      grid.appendChild(makeCard({...item, id: item.id, colName: item.col}, item.type));
+    });
+  } catch(e) { console.error(e); emptyGrid('schoolResGrid', 'Error loading resources.'); }
+}
+
+window._delSchoolRes = async function(id, coll) {
+  if (!confirm('Delete this resource?')) return;
+  try { await deleteDoc(doc(db, coll, id)); loadSchoolResources(); }
+  catch(e) { alert('Error: ' + e.message); }
+};
+
+/* ─── MANAGE SCHOOLS (read-only) ─── */
+async function loadSchoolCodes() {
+  const container = document.getElementById('schoolCodesDisplay');
+  container.innerHTML = '';
+  const schools = [
+    { id: 'peniel',       label: '🎓 Peniel Lily Montessori School' },
+    { id: 'southgold',    label: '🏆 South Gold Montessori School' },
+    { id: 'sapphire',     label: '💎 Sapphire Explorer Montessori School' },
+    { id: 'easystars',    label: '⭐ Easy Stars Early Years Academy' },
+    { id: 'christycaleb', label: 'Christy Caleb International School' },
+    { id: 'royalbreed',   label: '👑 Royal Breed Academy' }
+  ];
+  for (const s of schools) {
+    let code = '—';
+    try {
+      const schoolDoc = await getDoc(doc(db, 'schools', s.id));
+      if (schoolDoc.exists()) code = schoolDoc.data().accessCode || '(not set)';
+    } catch(e) { code = '(error)'; }
+    const card = document.createElement('div');
+    card.className = 'school-card';
+    card.innerHTML = `
+      <h4>${s.label}</h4>
+      <p style="font-size:.8rem;color:var(--text-muted);">
+        Current Code: <span style="font-family:var(--mono);color:var(--crimson);">${code}</span>
+      </p>
+      <p style="font-size:.7rem;color:var(--text-dim);margin-top:.4rem;">Contact admin to update this code.</p>`;
+    container.appendChild(card);
+  }
+}
+
+/* ─── MANAGE STUDENTS ─── */
+document.getElementById('addStudentForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const fullName   = document.getElementById('newStudentName').value.trim();
+  const username   = document.getElementById('newStudentUsername').value.trim();
+  const email      = document.getElementById('newStudentEmail').value.trim();
+  const accessCode = document.getElementById('newStudentCode').value.trim();
+  try {
+    const dupSnap = await getDocs(query(collection(db, 'students'), where('username', '==', username)));
+    if (!dupSnap.empty) { alert('Username already exists! Choose another.'); return; }
+    await addDoc(collection(db, 'students'), {
+      fullName, username, email, accessCode,
+      staffId: localStorage.getItem('userId') || '',
+      registeredAt: serverTimestamp()
+    });
+    showMsg('studentAddMsg'); this.reset();
+    loadStudents(); loadStudentsDropdown();
+  } catch(err) { alert('Error: ' + err.message); }
+});
+
+async function loadStudents() {
+  const grid = document.getElementById('studentsGrid');
+  grid.innerHTML = '<div class="empty-state">Loading…</div>';
+  try {
+    const snap = await getDocs(collection(db, 'students'));
+    if (snap.empty) { emptyGrid('studentsGrid', 'No students registered yet.'); return; }
+    grid.innerHTML = '';
+    snap.forEach(d => {
+      const data = d.data();
+      const card = document.createElement('div');
+      card.className = 'person-card';
+      card.innerHTML = `
+        <div class="person-card-head">
+          <div class="person-card-info">
+            <h4><i data-lucide="user" class="w-4 h-4 inline align-text-bottom mr-1"></i> ${data.fullName || data.username}</h4>
+            <p>@${data.username}${data.email ? '<br/>' + data.email : ''}<br/>Code: ${data.accessCode}<br/>Registered: ${fmt(data.registeredAt)}</p>
+          </div>
+          <button class="btn btn-danger btn-sm" onclick="window._delStudent('${d.id}')">DELETE</button>
+        </div>
+        <div class="person-card-update">
+          <input id="code_${d.id}" type="text" value="${data.accessCode}" placeholder="New access code" />
+          <button class="btn btn-gold btn-sm" onclick="window._updateCode('${d.id}')">UPDATE</button>
+        </div>`;
+      grid.appendChild(card);
+    });
+  } catch(e) { console.error(e); emptyGrid('studentsGrid', 'Error loading students.'); }
+}
+
+window._updateCode = async function(id) {
+  const newCode = document.getElementById('code_' + id)?.value.trim();
+  if (!newCode) { alert('Enter a code first.'); return; }
+  try {
+    await setDoc(doc(db, 'individualStudents', id), { accessCode: newCode }, { merge: true });
+    alert('Access code updated!');
+  } catch(e) { alert('Error: ' + e.message); }
+};
+
+window._delStudent = async function(id) {
+  if (!confirm('Delete this student and all their resources?')) return;
+  try {
+    await deleteDoc(doc(db, 'individualStudents', id));
+    const [rSnap, lSnap] = await Promise.all([
+      getDocs(query(collection(db, 'personalResources'), where('studentId', '==', id))),
+      getDocs(query(collection(db, 'personalLinks'), where('studentId', '==', id)))
+    ]);
+    const dels = [];
+    rSnap.forEach(d => dels.push(deleteDoc(d.ref)));
+    lSnap.forEach(d => dels.push(deleteDoc(d.ref)));
+    await Promise.all(dels);
+    loadStudents(); loadStudentsDropdown();
+  } catch(e) { alert('Error: ' + e.message); }
+};
+
+async function loadStudentsDropdown() {
+  const sel = document.getElementById('targetStudent');
+  sel.innerHTML = '<option value="">Choose Student</option>';
+  try {
+    const snap = await getDocs(collection(db, 'students'));
+    snap.forEach(d => {
+      const data = d.data();
+      const opt = document.createElement('option');
+      opt.value = d.id;
+      opt.textContent = `${data.fullName || data.username} (@${data.username})`;
+      sel.appendChild(opt);
+    });
+  } catch(e) { console.error(e); }
+}
+
+/* ─── SEND TO INDIVIDUAL STUDENT ─── */
+document.getElementById('personalResForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const studentId = document.getElementById('targetStudent').value;
+  const resType   = document.getElementById('personalResType').value;
+  const urlField  = resType === 'link' ? 'url' : 'fileUrl';
+  try {
+    await addDoc(collection(db, resType === 'link' ? 'personalLinks' : 'personalResources'), {
+      studentId,
+      title: document.getElementById('personalResTitle').value.trim(),
+      [urlField]: document.getElementById('personalResUrl').value.trim(),
+      description: document.getElementById('personalResDesc').value.trim(),
+      sentBy: localStorage.getItem('userId') || 'staff',
+      timestamp: serverTimestamp()
+    });
+    showMsg('personalResMsg'); this.reset(); loadPersonalResources();
+  } catch(err) { alert('Error: ' + err.message); }
+});
+
+async function loadPersonalResources() {
+  const grid = document.getElementById('personalResGrid');
+  grid.innerHTML = '<div class="empty-state">Loading…</div>';
+  try {
+    const all = [];
+    for (const c of ['personalResources', 'personalLinks']) {
+      const snap = await getDocs(query(collection(db, c), orderBy('timestamp', 'desc')));
+      snap.forEach(d => all.push({ id: d.id, coll: c, ...d.data() }));
+    }
+    all.sort((a, b) => (b.timestamp?.toDate() || new Date(0)) - (a.timestamp?.toDate() || new Date(0)));
+    if (!all.length) { emptyGrid('personalResGrid', 'No resources sent yet.'); return; }
+    grid.innerHTML = '';
+    for (const item of all.slice(0, 12)) {
+      let studentName = 'Unknown';
+      try {
+        const sDoc = await getDoc(doc(db, 'individualStudents', item.studentId));
+        if (sDoc.exists()) studentName = sDoc.data().fullName || sDoc.data().username;
+      } catch(e) {}
+      const url = item.url || item.fileUrl || '#';
+      grid.appendChild(makeCard({...item, studentName, id: item.id, colName: item.colName}, item.type));
+    }
+  } catch(e) { console.error(e); emptyGrid('personalResGrid', 'Error loading resources.'); }
+}
+
+window._delPersonalRes = async function(id, coll) {
+  if (!confirm('Delete this resource?')) return;
+  try { await deleteDoc(doc(db, coll, id)); loadPersonalResources(); }
+  catch(e) { alert('Error: ' + e.message); }
+};
+
+/* ─── NOTIFICATIONS ─── */
+let _lastNotifCount = 0;
+
+async function loadNotifications() {
+  const list = document.getElementById('notifList');
+  list.innerHTML = '<div class="empty-state">Loading…</div>';
+  const staffId = localStorage.getItem('userId');
+  try {
+    const [allSnap, staffSnap, personalSnap] = await Promise.all([
+      getDocs(query(collection(db, 'notifications'), where('recipientId', '==', 'all'))),
+      getDocs(query(collection(db, 'notifications'), where('recipientId', '==', 'all_staff'))),
+      getDocs(query(collection(db, 'notifications'), where('recipientId', '==', staffId)))
+    ]);
+    const map = new Map();
+    [allSnap, staffSnap, personalSnap].forEach(s =>
+      s.forEach(d => map.set(d.id, { id: d.id, ...d.data() }))
+    );
+    const notifs = [...map.values()].sort((a, b) => {
+      return (b.timestamp?.toDate() || new Date(0)) - (a.timestamp?.toDate() || new Date(0));
+    });
+    if (!notifs.length) {
+      list.innerHTML = '<div class="empty-state">No notifications yet.</div>';
+      updateBadge(0); return;
+    }
+    list.innerHTML = '';
+    let unread = 0;
+    notifs.forEach(n => {
+      if (!n.read) unread++;
+      const el = document.createElement('div');
+      el.className = 'notif-item' + (n.read ? '' : ' unread');
+      el.innerHTML = `
+        <div class="notif-content">
+          <h4>${n.title || 'Notification'}</h4>
+          <p>${n.message || ''}</p>
+          <span class="notif-time">${timeAgo(n.timestamp)}</span>
+        </div>
+        ${!n.read ? `<button class="btn btn-ghost btn-sm" onclick="window._markRead('${n.id}')">✓</button>` : ''}`;
+      list.appendChild(el);
+    });
+    if (unread > _lastNotifCount && _lastNotifCount > 0) pingSound();
+    _lastNotifCount = unread;
+    updateBadge(unread);
+  } catch(e) {
+    list.innerHTML = `<div class="empty-state">Error loading.<br/><small>${e.message}</small></div>`;
+  }
+}
+
+window._loadNotif = loadNotifications;
+
+window._markRead = async function(id) {
+  try { await updateDoc(doc(db, 'notifications', id), { read: true }); loadNotifications(); }
+  catch(e) { console.error(e); }
+};
+
+window.markAllRead = async function() {
+  const items = document.querySelectorAll('.notif-item.unread');
+  const promises = [];
+  items.forEach(el => {
+    const btn = el.querySelector('button[onclick]');
+    if (btn) {
+      const m = btn.getAttribute('onclick').match(/'([^']+)'/);
+      if (m) promises.push(updateDoc(doc(db, 'notifications', m[1]), { read: true }));
+    }
+  });
+  try { await Promise.all(promises); loadNotifications(); } catch(e) {}
+};
+
+function updateBadge(count) {
+  const b = document.getElementById('notifBadge');
+  b.style.display = count > 0 ? 'grid' : 'none';
+  b.textContent = count;
+}
+
+function timeAgo(ts) {
+  if (!ts) return 'just now';
+  const diff = Date.now() - ts.toDate().getTime();
+  const m = Math.floor(diff / 60000);
+  const h = Math.floor(diff / 3600000);
+  const d = Math.floor(diff / 86400000);
+  if (m < 1) return 'just now';
+  if (m < 60) return `${m}m ago`;
+  if (h < 24) return `${h}h ago`;
+  return `${d}d ago`;
+}
+
+function pingSound() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const g = ctx.createGain();
+    osc.connect(g); g.connect(ctx.destination);
+    osc.frequency.value = 800; osc.type = 'sine';
+    g.gain.setValueAtTime(0.25, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.5);
+  } catch(e) {}
+}
+
+/* ─── INIT ─── */
+loadResources();
+loadLinks();
+loadExams();
+loadSchoolExams();
+loadSchoolResources();
+loadSchoolCodes();
+loadStudents();
+loadStudentsDropdown();
+loadPersonalResources();
+
+setTimeout(() => { loadNotifications(); _lastNotifCount = 0; }, 1200);
+setInterval(() => {
+  if (!document.getElementById('notifPanel').classList.contains('open')) loadNotifications();
+}, 30000);
+
+setTimeout(async () => {
+  if ('Notification' in window && Notification.permission === 'default') {
+    const ok = confirm('🔔 Allow desktop notifications from Jaystarbliss Dynamic Hub?');
+    if (ok) await Notification.requestPermission();
+  }
+}, 2500);
+</script>
+
+
+    <!-- Slide-out Notifications Panel -->
+    <div id="notifPanel" class="fixed right-0 top-0 h-full w-80 bg-surface-container-lowest shadow-lg transform translate-x-full transition-transform duration-300 z-50 flex flex-col">
+        <div class="p-md border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+            <h3 class="font-headline-sm text-on-surface">Notifications</h3>
+            <button onclick="document.getElementById('notifPanel').classList.add('translate-x-full'); document.getElementById('notifPanel').classList.remove('active');" class="text-on-surface-variant"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <div id="notifContent" class="flex-grow overflow-y-auto bg-surface p-sm"></div>
+    </div>
+    <style>
+        #notifPanel.active { transform: translateX(0); }
+    </style>
+    
+<script>
+        setTimeout(() => {
+            const savedName = localStorage.getItem('userName') || localStorage.getItem('userEmail') || 'User';
+            const savedRole = localStorage.getItem('userRole');
+            const nameSrc = document.getElementById('navNameFallback');
+            const roleSrc = document.getElementById('navRoleFallback');
+            if(nameSrc && savedName) {
+                nameSrc.innerText = savedName;
+                const initials = savedName.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+                const navInitials = document.getElementById('topNavInitials');
+                if(navInitials) navInitials.innerText = initials;
+            }
+            if(roleSrc && savedRole) {
+                const roleFormatted = savedRole.charAt(0).toUpperCase() + savedRole.slice(1);
+                roleSrc.innerText = roleFormatted;
+            }
+        }, 100);
+    </script>
+
+<script>
+window.switchTab = function(name, btn) {
+    console.log("Switching to tab:", name);
+    document.querySelectorAll('.sidebar-menu .nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelectorAll('.tab-pane, .tab-content').forEach(p => p.classList.remove('active'));
+    
+    let targetBtn = btn || document.querySelector('.sidebar-menu .nav-item[data-tab="' + name + '"]');
+    if(targetBtn) targetBtn.classList.add('active');
+    
+    // Some buttons might pass data-tab="null" but pass 'name' as first argument.
+    // We try to find the button by onclick if we couldn't find it
+    if(!targetBtn) {
+        let allBtns = document.querySelectorAll('.sidebar-menu .nav-item');
+        for(let i=0; i<allBtns.length; i++) {
+            let attr = allBtns[i].getAttribute('onclick') || '';
+            if(attr.includes("'" + name + "'")) {
+                allBtns[i].classList.add('active');
+                break;
+            }
+        }
+    }
+    
+    const pane = document.getElementById(name);
+    if(pane) pane.classList.add('active');
+    
+    document.querySelector('main')?.scrollTo(0, 0);
+};
+window.toggleSidebar = function() {
+    const sb = document.getElementById('sidebar');
+    if(sb) sb.classList.toggle('-translate-x-full');
+};
+</script>
+
+<script>document.addEventListener("DOMContentLoaded", function() { lucide.createIcons(); });</script></body>
+</html>

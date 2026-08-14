@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register — Jaystarbliss Dynamic Hub</title>
+<link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  if (localStorage.getItem('jdh-theme') === 'light') {
+    document.documentElement.classList.remove('dark');
+  }
+</script>
+<style>
+/* ══════════════════════════════════════
+   TOKENS
+══════════════════════════════════════ */
+:root {
+  --madder:        #ab1a0d;
+  --madder-hover:  #8a1509;
+  --madder-glow:   rgba(171,26,13,0.35);
+  --gold:          #FFD700;
+  --gold-dim:      rgba(255,215,0,0.15);
+  --obsidian:      #0a0a0a;
+  --surface:       #141414;
+  --surface-2:     #1c1c1c;
+  --border:        rgba(255,255,255,0.07);
+  --border-focus:  var(--gold);
+  --text:          #f1f5f9;
+  --text-muted:    #64748b;
+  --text-soft:     #94a3b8;
+  --input-bg:      #111111;
+  --green:         #22c55e;
+  --orange:        #f97316;
+  --font-display:  'DM Serif Display', Georgia, serif;
+  --font-body:     'DM Sans', sans-serif;
+  --radius-sm:     8px;
+  --radius-md:     12px;
+  --radius-lg:     18px;
+  --shadow-madder: 0 8px 32px rgba(171,26,13,0.3);
+}
+
+html:not(.dark) {
+  --obsidian:   #f0eeec;
+  --surface:    #ffffff;
+  --surface-2:  #f7f5f3;
+  --border:     rgba(0,0,0,0.09);
+  --text:       #100806;
+  --text-muted: #6b7280;
+  --text-soft:  #9ca3af;
+  --input-bg:   #faf9f8;
+}
+
+/* ══════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--obsidian);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ══════════════════════════════════════
+   GRAIN OVERLAY
+══════════════════════════════════════ */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+}
+
+/* ══════════════════════════════════════
+   NAV
+══════════════════════════════════════ */
+.nav {
+  position: fixed; top: 0; width: 100%; z-index: 100;
+  background: rgba(10,10,10,0.82);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  height: 64px;
+}
+html:not(.dark) .nav {
+  background: rgba(240,238,236,0.88);
+}
+.nav-inner {
+  max-width: 1400px; margin: 0 auto; padding: 0 1.5rem;
+  height: 100%; display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem;
+}
+.nav-brand {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none; color: var(--text);
+  min-width: 0; flex-shrink: 1;
+}
+.nav-brand-icon {
+  width: 36px; height: 36px; border-radius: var(--radius-sm);
+  object-fit: contain;
+  box-shadow: var(--shadow-madder);
+  flex-shrink: 0;
+  transition: transform .2s;
+}
+.nav-brand:hover .nav-brand-icon { transform: scale(1.07); }
+.nav-brand-name {
+  font-size: .95rem; font-weight: 700; letter-spacing: -.02em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.nav-actions {
+  display: flex; align-items: center; gap: .5rem;
+  flex-shrink: 0;
+}
+
+.nav-login {
+  font-size: .8rem; font-weight: 600;
+  color: var(--text-soft); text-decoration: none;
+  padding: .4rem .85rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  transition: all .2s;
+  white-space: nowrap;
+}
+.nav-login:hover { color: var(--gold); border-color: var(--gold-dim); }
+
+.theme-btn {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: transparent; border: 1px solid var(--border);
+  cursor: pointer; color: var(--text-soft);
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s;
+  flex-shrink: 0;
+}
+.theme-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+.theme-btn svg { width: 15px; height: 15px; }
+.icon-sun  { display: none; }
+.icon-moon { display: block; }
+html:not(.dark) .icon-sun  { display: block; }
+html:not(.dark) .icon-moon { display: none; }
+
+@media (max-width: 520px) {
+  .nav-brand-name { font-size: .78rem; }
+  .nav-login      { font-size: .72rem; padding: .35rem .6rem; }
+  .nav-inner      { padding: 0 1rem; }
+}
+@media (max-width: 380px) {
+  .nav-brand-name .hide-xs { display: none; }
+}
+
+/* ══════════════════════════════════════
+   LAYOUT: TWO-PANEL SPLIT
+══════════════════════════════════════ */
+.page-layout {
+  display: flex;
+  min-height: 100vh;
+  padding-top: 64px;
+  position: relative; z-index: 1;
+}
+
+/* ── LEFT HERO PANEL ──
+   The panel itself is sticky so its column space stays reserved.
+   The background image is on a pseudo-element that scrolls normally
+   (it's not sticky), while the text content is also sticky so it
+   stays pinned in view as the right form panel scrolls. */
+.hero-panel {
+  width: 46%;
+  position: sticky;
+  top: 64px;                    /* stick just below the nav */
+  height: calc(100vh - 64px);  /* fill the visible viewport */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3rem;
+  padding: 4rem 3.5rem;
+  border-right: 1px solid var(--border);
+  /* Background image lives here; because the panel is sticky it
+     won't scroll — this achieves the "text fixed, bg can scroll" look.
+     If you want the bg to parallax independently, move it to ::before. */
+  background-image: url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=1200&q=80');
+  background-size: cover;
+  background-position: center;
+  align-self: flex-start;       /* required for sticky inside flex */
+}
+
+/* Gradient overlay */
+.hero-panel::before {
+  content: '';
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    linear-gradient(to bottom, rgba(10,10,10,.82), rgba(10,10,10,.5)),
+    radial-gradient(circle at top right, rgba(171,26,13,.45), transparent 60%),
+    radial-gradient(circle at bottom left, rgba(255,215,0,.1), transparent 55%);
+}
+/* Decorative glow blob */
+.hero-panel::after {
+  content: '';
+  position: absolute; bottom: -80px; right: -80px;
+  width: 340px; height: 340px;
+  background: rgba(171,26,13,.18);
+  border-radius: 50%; filter: blur(90px); z-index: 0;
+}
+.hero-content { position: relative; z-index: 1; }
+
+.hero-headline {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 4.5vw, 4.5rem);
+  line-height: 1.06;
+  color: #fff;
+  margin-bottom: 1.4rem;
+}
+.hero-headline em {
+  font-style: italic;
+  color: var(--gold);
+}
+.hero-sub {
+  font-size: .95rem; line-height: 1.75;
+  color: rgba(255,255,255,.65);
+  max-width: 360px;
+}
+.hero-features { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 1.25rem; }
+.hero-feature {
+  display: flex; align-items: flex-start; gap: .85rem;
+}
+.hero-feature-icon {
+  width: 40px; height: 40px; flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+}
+.hero-feature-icon.red {
+  background: rgba(171,26,13,.2);
+  border: 1px solid rgba(171,26,13,.3);
+  color: #ff6b5e;
+}
+.hero-feature-icon.gold {
+  background: rgba(255,215,0,.15);
+  border: 1px solid rgba(255,215,0,.25);
+  color: var(--gold);
+}
+.hero-feature-icon svg { width: 18px; height: 18px; }
+.hero-feature-title {
+  font-size: .9rem; font-weight: 700; color: #fff;
+  margin-bottom: .2rem;
+}
+.hero-feature-desc { font-size: .78rem; color: rgba(255,255,255,.5); line-height: 1.5; }
+
+/* ── RIGHT FORM PANEL ── */
+.form-panel {
+  flex: 1;
+  background: var(--obsidian);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+}
+.form-card {
+  width: 100%; max-width: 480px;
+  animation: fadeUp .4s ease both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: none; }
+}
+.form-heading { margin-bottom: 2rem; }
+.form-heading h2 {
+  font-family: var(--font-display);
+  font-size: 2rem; font-weight: 400;
+  letter-spacing: -.03em;
+  margin-bottom: .3rem;
+}
+.form-heading p { font-size: .875rem; color: var(--text-muted); }
+
+/* ══════════════════════════════════════
+   MODE TOGGLE
+══════════════════════════════════════ */
+.mode-toggle {
+  display: flex; gap: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 4px;
+  margin-bottom: 2rem;
+}
+.mode-btn {
+  flex: 1; padding: .6rem 1rem;
+  font-family: var(--font-body); font-size: .78rem; font-weight: 700;
+  border: none; border-radius: var(--radius-sm);
+  cursor: pointer; transition: all .2s;
+  background: transparent; color: var(--text-muted);
+  display: flex; align-items: center; justify-content: center; gap: .4rem;
+}
+.mode-btn svg { width: 14px; height: 14px; }
+.mode-btn.active {
+  background: var(--madder);
+  color: #fff;
+  box-shadow: 0 2px 14px var(--madder-glow);
+}
+.mode-btn:not(.active):hover { color: var(--text); }
+
+/* ══════════════════════════════════════
+   ALERTS
+══════════════════════════════════════ */
+.alert {
+  display: none; align-items: flex-start; gap: .6rem;
+  padding: .75rem 1rem; border-radius: var(--radius-sm);
+  font-size: .8rem; font-weight: 500; margin-bottom: 1.25rem;
+}
+.alert.show { display: flex; }
+.alert svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; }
+.alert.error  { background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.25); color: #f87171; }
+.alert.success{ background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.25); color: #4ade80; }
+
+/* ══════════════════════════════════════
+   FORM ELEMENTS
+══════════════════════════════════════ */
+.reg-form { display: flex; flex-direction: column; gap: 1rem; }
+
+.form-group { display: flex; flex-direction: column; gap: .35rem; }
+.form-group label {
+  font-size: .68rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--text-muted);
+}
+.input-wrap { position: relative; }
+.input-wrap svg {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  width: 15px; height: 15px; color: var(--text-muted);
+  pointer-events: none;
+}
+.input-wrap input,
+.input-wrap select {
+  width: 100%; padding: .7rem 1rem .7rem 2.4rem;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font-body); font-size: .875rem;
+  border-radius: var(--radius-sm);
+  outline: none; transition: border .2s, box-shadow .2s;
+  appearance: none;
+}
+input::placeholder { color: var(--text-muted); }
+.input-wrap input:focus,
+.input-wrap select:focus,
+textarea:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(255,215,0,.1);
+}
+.input-bare {
+  width: 100%; padding: .7rem 1rem;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font-body); font-size: .875rem;
+  border-radius: var(--radius-sm);
+  outline: none; transition: border .2s, box-shadow .2s;
+  appearance: none;
+}
+.input-bare::placeholder { color: var(--text-muted); }
+textarea.input-bare { resize: vertical; min-height: 80px; line-height: 1.6; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+
+/* ── Password Strength ── */
+.pw-strength-bar { display: flex; gap: 3px; margin-top: .5rem; }
+.pw-seg {
+  flex: 1; height: 3px; border-radius: 2px;
+  background: rgba(255,255,255,.08); transition: background .3s;
+}
+html:not(.dark) .pw-seg { background: rgba(0,0,0,.1); }
+
+/* ── Subject Chips ── */
+.subjects-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+  margin-top: .25rem;
+}
+.subject-chip input { display: none; }
+.subject-chip label {
+  display: block; text-align: center;
+  padding: .45rem .5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: .72rem; font-weight: 600;
+  color: var(--text-soft); cursor: pointer;
+  transition: all .15s; user-select: none;
+}
+.subject-chip label:hover { border-color: rgba(255,215,0,.35); color: var(--gold); }
+.subject-chip input:checked + label {
+  background: var(--madder); border-color: var(--madder);
+  color: #fff; box-shadow: 0 0 12px var(--madder-glow);
+}
+
+/* ── Info Box ── */
+.info-box {
+  padding: .65rem .9rem;
+  background: rgba(255,215,0,.05);
+  border-left: 2px solid rgba(255,215,0,.35);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: .78rem; line-height: 1.6; color: var(--text-muted);
+}
+.info-box strong { color: var(--gold); }
+html:not(.dark) .info-box { background: rgba(154,103,0,.06); }
+html:not(.dark) .info-box strong { color: #8a6000; }
+
+/* ── Submit Button ── */
+.btn-submit {
+  width: 100%; padding: .85rem 1rem;
+  background: var(--madder); color: #fff;
+  border: none; border-radius: var(--radius-md);
+  font-family: var(--font-body); font-size: .9rem; font-weight: 700;
+  cursor: pointer; transition: all .2s;
+  display: flex; align-items: center; justify-content: center; gap: .5rem;
+  box-shadow: var(--shadow-madder); margin-top: .5rem; letter-spacing: .01em;
+}
+.btn-submit:hover:not(:disabled) {
+  background: var(--madder-hover); transform: translateY(-1px);
+  box-shadow: 0 12px 36px var(--madder-glow);
+}
+.btn-submit:active { transform: scale(.98); }
+.btn-submit:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+.btn-submit svg { width: 16px; height: 16px; }
+.btn-submit .spinner {
+  width: 16px; height: 16px;
+  border: 2px solid rgba(255,255,255,.3); border-top-color: #fff;
+  border-radius: 50%; animation: spin .6s linear infinite; display: none;
+}
+.btn-submit.loading .spinner { display: block; }
+.btn-submit.loading .btn-text { display: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Footer ── */
+.form-footer {
+  text-align: center; margin-top: 1.5rem;
+  font-size: .8rem; color: var(--text-muted);
+}
+.form-footer a { color: var(--gold); font-weight: 700; text-decoration: none; }
+.form-footer a:hover { text-decoration: underline; }
+
+/* ── Divider ── */
+.divider {
+  display: flex; align-items: center; gap: .75rem;
+  font-size: .72rem; color: var(--text-muted); margin: .75rem 0;
+}
+.divider::before, .divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+
+/* ── Rate limit note ── */
+.rate-note {
+  font-size: .7rem; color: var(--text-muted);
+  text-align: center; margin-top: .5rem; line-height: 1.5;
+}
+
+/* ══════════════════════════════════════
+   SECTION VISIBILITY
+══════════════════════════════════════ */
+#studentFields { display: none; }
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media (max-width: 900px) {
+  .page-layout { flex-direction: column; }
+  .hero-panel {
+    width: 100%;
+    position: relative; /* disable sticky on mobile stack */
+    top: auto;
+    height: auto;
+    min-height: 320px;
+    padding: 2.5rem 2rem;
+    border-right: none; border-bottom: 1px solid var(--border);
+    align-self: auto;
+  }
+  .hero-headline { font-size: 2.4rem; }
+  .hero-features { flex-direction: row; flex-wrap: wrap; gap: 1rem; }
+}
+@media (max-width: 560px) {
+  .form-row { grid-template-columns: 1fr; }
+  .subjects-grid { grid-template-columns: repeat(2, 1fr); }
+  .form-panel { padding: 2rem 1.25rem; }
+  .hero-panel { display: none; }
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <img class="nav-brand-icon" src="assets/img/favicon.png" alt="Jaystarbliss Hub">
+      <span class="nav-brand-name">Jaystarbliss <span class="hide-xs">Dynamic </span><span style="color:var(--madder)">Hub</span></span>
+    </a>
+    <div class="nav-actions">
+      <button class="theme-btn" onclick="toggleTheme()" aria-label="Toggle theme">
+        <svg class="icon-sun" data-lucide="sun"></svg>
+        <svg class="icon-moon" data-lucide="moon"></svg>
+      </button>
+      <a href="pages/auth/login.html" class="nav-login">Sign In →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE LAYOUT -->
+<div class="page-layout">
+
+  <!-- ── LEFT HERO PANEL ── -->
+  <section class="hero-panel">
+    <div class="hero-content">
+      <h1 class="hero-headline">
+        Ignite Your<br>
+        <em>Potential</em><br>
+        With Expert<br>
+        Mentorship.
+      </h1>
+      <p class="hero-sub">
+        Join a community dedicated to mastery and brilliance. Your journey begins with a single step.
+      </p>
+    </div>
+    <div class="hero-features">
+      <div class="hero-feature">
+        <div class="hero-feature-icon red">
+          <svg data-lucide="check-circle-2"></svg>
+        </div>
+        <div>
+          <div class="hero-feature-title">Personalized Learning</div>
+          <div class="hero-feature-desc">Tailored curriculums for every unique student.</div>
+        </div>
+      </div>
+      <div class="hero-feature">
+        <div class="hero-feature-icon gold">
+          <svg data-lucide="users"></svg>
+        </div>
+        <div>
+          <div class="hero-feature-title">Expert Tutors</div>
+          <div class="hero-feature-desc">Learn from the best in the industry.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── RIGHT FORM PANEL ── -->
+  <section class="form-panel">
+    <div class="form-card">
+
+      <div class="form-heading">
+        <h2>Create an account</h2>
+        <p>Join Jaystarbliss Dynamic Hub today.</p>
+      </div>
+
+      <!-- MODE TOGGLE -->
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="modeParent" onclick="switchMode('parent')">
+          <svg data-lucide="users"></svg>
+          Parent Account
+        </button>
+        <button class="mode-btn" id="modeStudent" onclick="switchMode('student')">
+          <svg data-lucide="graduation-cap"></svg>
+          Student Request
+        </button>
+      </div>
+
+      <!-- ALERTS -->
+      <div class="alert error" id="alertError" role="alert" aria-live="assertive">
+        <svg data-lucide="alert-circle"></svg>
+        <span id="alertErrorMsg">An error occurred.</span>
+      </div>
+      <div class="alert success" id="alertSuccess" role="status" aria-live="polite">
+        <svg data-lucide="check-circle-2"></svg>
+        <span id="alertSuccessMsg">Success!</span>
+      </div>
+
+      <!-- FORM -->
+      <form class="reg-form" id="registrationForm" novalidate>
+
+        <!-- ── COMMON FIELDS ── -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fullName">Full Name *</label>
+            <div class="input-wrap">
+              <svg data-lucide="user"></svg>
+              <input type="text" name="fullName" id="fullName" placeholder="John Doe" required autocomplete="name" maxlength="120">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number *</label>
+            <div class="input-wrap">
+              <svg data-lucide="phone"></svg>
+              <input type="tel" name="phone" id="phone" placeholder="+234 xxx xxx xxxx" required autocomplete="tel" maxlength="20">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address *</label>
+          <div class="input-wrap">
+            <svg data-lucide="mail"></svg>
+            <input type="email" name="email" id="email" placeholder="you@email.com" required autocomplete="email" maxlength="254">
+          </div>
+        </div>
+
+        <!-- ── PARENT FIELDS ── -->
+        <div id="parentFields">
+          <div class="info-box" style="margin-bottom:1rem">
+            <strong>Parent Account:</strong>
+            Register to enroll your children, track their progress, and manage payments from one dashboard.
+          </div>
+
+          <div class="form-group" style="margin-bottom:1rem">
+            <label for="pPassword">Password *</label>
+            <div class="input-wrap">
+              <svg data-lucide="lock"></svg>
+              <input type="password" id="pPassword" name="password" placeholder="Min. 8 characters"
+                autocomplete="new-password" oninput="checkStrength(this.value)" maxlength="128">
+            </div>
+            <div class="pw-strength-bar" role="meter" aria-label="Password strength">
+              <div class="pw-seg" id="seg1"></div>
+              <div class="pw-seg" id="seg2"></div>
+              <div class="pw-seg" id="seg3"></div>
+              <div class="pw-seg" id="seg4"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="pConfirm">Confirm Password *</label>
+            <div class="input-wrap">
+              <svg data-lucide="shield-check"></svg>
+              <input type="password" id="pConfirm" name="confirmPassword"
+                placeholder="Repeat your password" autocomplete="new-password" maxlength="128">
+            </div>
+          </div>
+        </div>
+
+        <!-- ── STUDENT FIELDS ── -->
+        <div id="studentFields">
+          <div class="info-box" style="margin-bottom:1rem">
+            <strong>Student Request:</strong>
+            Submit your details. An admin will review and send your access code to your email within 24 hours.
+          </div>
+
+          <div class="form-row" style="margin-bottom:1rem">
+            <div class="form-group">
+              <label for="sClass">Class / Grade</label>
+              <div class="input-wrap">
+                <svg data-lucide="book-open"></svg>
+                <select id="sClass" name="grade">
+                  <option value="">Select class</option>
+                  <option>Primary 1–3</option>
+                  <option>Primary 4–6</option>
+                  <option>JSS 1</option><option>JSS 2</option><option>JSS 3</option>
+                  <option>SS 1</option><option>SS 2</option><option>SS 3</option>
+                  <option>University / Tertiary</option>
+                  <option>Adult Learner</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="sParentPhone">Parent's Phone</label>
+              <div class="input-wrap">
+                <svg data-lucide="contact"></svg>
+                <input type="tel" id="sParentPhone" name="parentPhone" placeholder="Emergency contact" maxlength="20">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom:1rem">
+            <label>Subjects of Interest *</label>
+            <div class="subjects-grid" id="subjectsGrid">
+              <!-- built by JS -->
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="sNotes">Learning Goals / Notes</label>
+            <textarea class="input-bare" id="sNotes" name="goals"
+              placeholder="Tell us your goals, requirements, or how you heard about us…" maxlength="2000"></textarea>
+          </div>
+        </div>
+
+        <!-- SUBMIT -->
+        <button type="submit" class="btn-submit" id="submitBtn">
+          <div class="spinner"></div>
+          <span class="btn-text" id="submitBtnText">
+            <svg data-lucide="user-plus" style="width:16px;height:16px;display:inline;vertical-align:middle;margin-right:4px"></svg>
+            Complete Registration
+          </span>
+        </button>
+
+        <p class="rate-note" id="rateNote" style="display:none;">
+          ⏱ To prevent spam, submissions are limited to 3 per hour per device.
+        </p>
+      </form>
+
+      <div class="divider">or</div>
+      <div class="form-footer">
+        Already have an account? <a href="pages/auth/login.html">Login here</a>
+      </div>
+
+    </div>
+  </section>
+
+</div><!-- end page-layout -->
+
+<!-- SCRIPTS -->
+<script>
+/* ── Theme ── */
+(function() {
+  const saved = localStorage.getItem('jdh-theme');
+  const html = document.documentElement;
+  if (saved === 'light') html.classList.remove('dark');
+  else html.classList.add('dark');
+})();
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.classList.contains('dark');
+  html.classList.toggle('dark', !isDark);
+  localStorage.setItem('jdh-theme', isDark ? 'light' : 'dark');
+  lucide.createIcons();
+}
+
+/* ── Mode Switch ── */
+let currentMode = 'parent';
+
+window.switchMode = function(mode) {
+  currentMode = mode;
+  clearAlerts();
+  const pBtn    = document.getElementById('modeParent');
+  const sBtn    = document.getElementById('modeStudent');
+  const pFields = document.getElementById('parentFields');
+  const sFields = document.getElementById('studentFields');
+  const rNote   = document.getElementById('rateNote');
+  const btnText = document.getElementById('submitBtnText');
+
+  if (mode === 'parent') {
+    pBtn.classList.add('active');    sBtn.classList.remove('active');
+    pFields.style.display = 'block'; sFields.style.display = 'none';
+    rNote.style.display   = 'none';
+    btnText.innerHTML = `<svg data-lucide="user-plus" style="width:16px;height:16px;display:inline;vertical-align:middle;margin-right:4px"></svg> Complete Registration`;
+  } else {
+    sBtn.classList.add('active');    pBtn.classList.remove('active');
+    sFields.style.display = 'block'; pFields.style.display = 'none';
+    rNote.style.display   = 'block';
+    btnText.innerHTML = `<svg data-lucide="send" style="width:16px;height:16px;display:inline;vertical-align:middle;margin-right:4px"></svg> Submit Request`;
+  }
+  lucide.createIcons();
+};
+
+/* ── Password Strength ── */
+window.checkStrength = function(pw) {
+  const segs = ['seg1','seg2','seg3','seg4'];
+  const criteria = [
+    pw.length >= 8,
+    /[A-Z]/.test(pw),
+    /[0-9]/.test(pw),
+    /[^A-Za-z0-9]/.test(pw)
+  ];
+  const score = criteria.filter(Boolean).length;
+  const colors = ['#ef4444','#f97316','#eab308','#22c55e'];
+  segs.forEach((id, i) => {
+    const el = document.getElementById(id);
+    el.style.background = (pw.length > 0 && i < score) ? colors[score - 1] : '';
+  });
+};
+
+/* ── Alerts ── */
+function showError(msg) {
+  // Sanitise: set textContent, not innerHTML, to prevent XSS
+  document.getElementById('alertErrorMsg').textContent = msg;
+  document.getElementById('alertError').classList.add('show');
+  document.getElementById('alertSuccess').classList.remove('show');
+}
+function showSuccess(msg) {
+  document.getElementById('alertSuccessMsg').textContent = msg;
+  document.getElementById('alertSuccess').classList.add('show');
+  document.getElementById('alertError').classList.remove('show');
+}
+function clearAlerts() {
+  document.getElementById('alertError').classList.remove('show');
+  document.getElementById('alertSuccess').classList.remove('show');
+}
+
+/* ── Input sanitisation helper ── */
+function sanitiseText(str) {
+  return String(str).trim().slice(0, 500);
+}
+
+/* ── Build Subjects ── */
+const SUBJECTS = [
+  'Mathematics','English','Physics','Chemistry','Biology',
+  'Literature','Government','CRS','Accounting','Commerce',
+  'Marketing','Programming','Web Dev','AI Tools','Tech Literacy',
+  'Graphic Design','Music','Creative Arts','WAEC Prep','NECO Prep','JAMB Prep'
+];
+(function() {
+  const grid = document.getElementById('subjectsGrid');
+  if (!grid) return;
+  SUBJECTS.forEach((s, i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'subject-chip';
+    const id = 'subj_' + i;
+    // Use textContent for label text to prevent any stored XSS
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.id = id;
+    input.name = 'subject';
+    input.value = s;
+    const label = document.createElement('label');
+    label.htmlFor = id;
+    label.textContent = s;
+    wrap.appendChild(input);
+    wrap.appendChild(label);
+    grid.appendChild(wrap);
+  });
+})();
+
+/* ── Client-side rate limiter ── */
+const RATE_KEY    = 'jdh_submit_times';
+const RATE_LIMIT  = 3;
+const RATE_WINDOW = 60 * 60 * 1000;
+
+function checkRateLimit() {
+  const now = Date.now();
+  let times = [];
+  try { times = JSON.parse(localStorage.getItem(RATE_KEY) || '[]'); } catch(_) {}
+  // Ensure the parsed value is actually an array of numbers
+  if (!Array.isArray(times)) times = [];
+  times = times.filter(t => typeof t === 'number' && now - t < RATE_WINDOW);
+  if (times.length >= RATE_LIMIT) {
+    const waitMins = Math.ceil((RATE_WINDOW - (now - Math.min(...times))) / 60000);
+    return { allowed: false, waitMins };
+  }
+  times.push(now);
+  localStorage.setItem(RATE_KEY, JSON.stringify(times));
+  return { allowed: true };
+}
+</script>
+
+<!-- Firebase Module -->
+<script type="module">
+import { initializeApp, getApps }
+  from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  onAuthStateChanged
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+import {
+  getFirestore, collection, addDoc, doc, setDoc,
+  getDoc, serverTimestamp
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyD_lq2Z4qBrZZkzYmEMPPMtCKQmfSx2rkY",
+  authDomain: "jaystarbliss-studios.firebaseapp.com",
+  projectId: "jaystarbliss-studios",
+  storageBucket: "jaystarbliss-studios.firebasestorage.app",
+  messagingSenderId: "885364100276",
+  appId: "1:885364100276:web:1159c4cbd9159aaa0e1be1"
+};
+
+const app  = getApps().length ? getApps()[0] : initializeApp(FIREBASE_CONFIG);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+let registrationInProgress = false;
+
+onAuthStateChanged(auth, async user => {
+  if (!user || registrationInProgress) return;
+  // Don't redirect if we're already on the registration page
+  if (window.location.pathname.includes('register.html')) return;
+  try {
+    const snap = await getDoc(doc(db, 'users', user.uid));
+    if (!snap.exists()) return;
+    const data = snap.data();
+    const role = data.role;
+
+    // Only store safe, expected values in localStorage
+    const ALLOWED_ROLES = ['admin','staff','parent','student'];
+    if (!ALLOWED_ROLES.includes(role)) return;
+
+    localStorage.setItem('userRole',  role);
+    localStorage.setItem('userId',    user.uid);
+    // Use textContent-safe values — these are display-only, not injected as HTML
+    localStorage.setItem('userEmail', user.email || '');
+    localStorage.setItem('userName',  (data.name || '').slice(0, 120));
+
+    const routes = {
+      admin:   'pages/admin/admin.html',
+      staff:   'pages/staff/staff-portal.html',
+      parent:  'pages/parent/parent-dashboard.html',
+      student: 'pages/student/private-student-portal.html',
+    };
+    if (routes[role]) window.location.href = routes[role];
+  } catch(_) {}
+});
+
+document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  clearAlerts();
+
+  const name  = sanitiseText(document.getElementById('fullName').value);
+  const phone = sanitiseText(document.getElementById('phone').value);
+  const email = sanitiseText(document.getElementById('email').value).toLowerCase();
+  const btn   = document.getElementById('submitBtn');
+
+  if (!name || !phone || !email) { showError('Please fill in all required fields.'); return; }
+
+  // Basic email format guard (Firebase also validates, but fail fast)
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showError('Please enter a valid email address.');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.classList.add('loading');
+
+  /* ── PARENT ── */
+  if (currentMode === 'parent') {
+    const password = document.getElementById('pPassword').value;
+    const confirm  = document.getElementById('pConfirm').value;
+
+    if (!password)           { showError('Please enter a password.'); btn.disabled=false; btn.classList.remove('loading'); return; }
+    if (password.length < 8) { showError('Password must be at least 8 characters.'); btn.disabled=false; btn.classList.remove('loading'); return; }
+    if (password !== confirm) { showError('Passwords do not match.'); btn.disabled=false; btn.classList.remove('loading'); return; }
+
+    registrationInProgress = true;
+
+    try {
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      const uid  = cred.user.uid;
+      await sendEmailVerification(cred.user);
+      const data = {
+        name,
+        email,
+        phone,
+        role: 'parent',
+        children: [],
+        emailVerified: false,
+        createdAt: serverTimestamp()
+      };
+      await setDoc(doc(db, 'parents', uid), data);
+      await setDoc(doc(db, 'users',   uid), data);
+      localStorage.setItem('userId',    uid);
+      localStorage.setItem('userRole',  'parent');
+      localStorage.setItem('userEmail', email);
+      localStorage.setItem('userName',  name);
+      showSuccess('Account created! A verification email has been sent to ' + email + '. You are now logged in. Redirecting to your dashboard...');
+      registrationInProgress = false;
+      setTimeout(() => { window.location.href = 'pages/dashboard/parent-portal.html'; }, 1500);
+      btn.disabled = false; btn.classList.remove('loading');
+    } catch(err) {
+      registrationInProgress = false;
+      let msg = 'Registration failed. Please try again.';
+      // Map Firebase codes to user-friendly messages — never expose raw error details
+      if (err.code === 'auth/email-already-in-use') msg = 'This email is already registered. Try logging in instead.';
+      if (err.code === 'auth/weak-password')         msg = 'Password too weak — use at least 8 characters.';
+      if (err.code === 'auth/invalid-email')         msg = 'Please enter a valid email address.';
+      if (err.code === 'auth/network-request-failed') msg = 'Network error. Please check your connection.';
+      showError(msg);
+      btn.disabled = false; btn.classList.remove('loading');
+    }
+
+  /* ── STUDENT ── */
+  } else {
+    const rate = checkRateLimit();
+    if (!rate.allowed) {
+      showError(`Too many submissions. Please wait ${rate.waitMins} minute(s) before trying again.`);
+      btn.disabled = false; btn.classList.remove('loading');
+      return;
+    }
+
+    const studentClass = sanitiseText(document.getElementById('sClass').value);
+    const parentPhone  = sanitiseText(document.getElementById('sParentPhone').value);
+    const notes        = sanitiseText(document.getElementById('sNotes').value).slice(0, 2000);
+
+    // Validate subjects against the known allowlist to prevent tampering
+    const ALLOWED_SUBJECTS = new Set([
+      'Mathematics','English','Physics','Chemistry','Biology',
+      'Literature','Government','CRS','Accounting','Commerce',
+      'Marketing','Programming','Web Dev','AI Tools','Tech Literacy',
+      'Graphic Design','Music','Creative Arts','WAEC Prep','NECO Prep','JAMB Prep'
+    ]);
+    const subjects = Array.from(document.querySelectorAll('input[name="subject"]:checked'))
+      .map(c => c.value)
+      .filter(v => ALLOWED_SUBJECTS.has(v));
+
+    if (subjects.length === 0) {
+      showError('Please select at least one subject.');
+      btn.disabled = false; btn.classList.remove('loading');
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, 'student_requests'), {
+        name, email, phone,
+        class: studentClass, parentPhone, subjects, notes,
+        status: 'pending', createdAt: serverTimestamp()
+      });
+      showSuccess('Request submitted! An admin will review and email your access code within 24 hours.');
+      document.getElementById('registrationForm').reset();
+      document.querySelectorAll('input[name="subject"]').forEach(c => c.checked = false);
+    } catch(err) {
+      // Don't expose Firestore error details to the user
+      showError('Error submitting request. Please try again or contact support.');
+      console.error('Student request error:', err);
+    } finally {
+      btn.disabled = false; btn.classList.remove('loading');
+    }
+  }
+});
+</script>
+
+<script>
+  lucide.createIcons();
+</script>
+<script type="module">
+  // Simple honeypot anti-spam for all forms
+  document.querySelectorAll('form').forEach(form => {
+    const hp = document.createElement('input');
+    hp.type = 'text';
+    hp.name = 'url_honeypot';
+    hp.autocomplete = 'off';
+    hp.tabIndex = -1;
+    hp.style.cssText = 'position:absolute; left:-9999px; top:-9999px;';
+    form.appendChild(hp);
+  });
+
+  document.addEventListener('submit', function(e) {
+    const form = e.target;
+    if (form.tagName === 'FORM') {
+      const hp = form.querySelector('input[name="url_honeypot"]');
+      if (hp && hp.value.trim() !== '') {
+        e.stopImmediatePropagation();
+        e.preventDefault();
+      }
+    }
+  }, true);
+</script>
+</body>
+</html>

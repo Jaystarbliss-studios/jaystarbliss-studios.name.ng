@@ -1,0 +1,23 @@
+{
+  "console_statements": [
+    {"file": "pages/resources/school-resources.html", "line": 472, "statement": "console.error('Resources error:', e);"},
+    {"file": "pages/resources/school-resources.html", "line": 493, "statement": "console.error('Links error:', e);"},
+    {"file": "pages/resources/school-resources.html", "line": 516, "statement": "console.error('Exams error:', e);"},
+    {"file": "pages/dashboard/student-portal.html", "line": 1000, "statement": "console.error(e);"},
+    {"file": "pages/dashboard/student-portal.html", "line": 1032, "statement": "console.error(e);"},
+    {"file": "pages/dashboard/student-portal.html", "line": 1093, "statement": "console.error(e);"},
+    {"file": "pages/dashboard/student-portal.html", "line": 1106, "statement": "console.log('🚀 Personal Portal initialising...');"},
+    {"file": "pages/features/news.html", "line": 935, "statement": "console.error('Error loading news:', error);"},
+    {"file": "pages/features/news.html", "line": 955, "statement": "console.error('Error updating views:', error);"},
+    {"file": "pages/dashboard/staff-portal.html", "line": 1689, "statement": "console.error(e);"},
+    {"file": "pages/dashboard/staff-portal.html", "line": 1800, "statement": "console.error(e);"},
+    {"file": "pages/features/MAGIC-PARTICLES.html", "line": 736, "statement": "console.error('Camera access denied:', err);"},
+    {"file": "pages/dashboard/school-portal.html", "line": 1367, "statement": "console.error('Resources error:', e);"},
+    {"file": "pages/dashboard/school-portal.html", "line": 1399, "statement": "console.error('Exams error:', e);"},
+    {"file": "pages/dashboard/school-portal.html", "line": 1481, "statement": "console.error('Notifications error:', e);"},
+    {"file": "pages/features/games.html", "line": 439, "statement": "console.log(\"Autoplay blocked until user interacts.\");"},
+    {"file": "pages/auth/debuglogin.html", "line": 327, "statement": "console.log(message);"},
+    {"file": "pages/dashboard/admin-dashboard.html", "line": 1339, "statement": "console.error('loadStats:', e);"},
+    {"file": "pages/dashboard/admin-dashboard.html", "line": 1687, "statement": "console.error('loadStudentsDropdown:', e);"}
+  ]
+}

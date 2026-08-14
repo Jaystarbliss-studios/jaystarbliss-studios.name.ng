@@ -1,0 +1,460 @@
+};
+
+// ════════════════════════════════════════════════════
+// SCHOOL RESOURCES
+// ════════════════════════════════════════════════════
+document.getElementById('schoolResourceForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  var resourceType = document.getElementById('schoolResourceType').value;
+  var colName  = resourceType === 'link' ? 'schoolLinks' : 'schoolResources';
+  var urlField = resourceType === 'link' ? 'url' : 'fileUrl';
+  try {
+    await addDoc(collection(db, colName), {
+      schoolId:    document.getElementById('schoolResourceSchool').value,
+      title:       document.getElementById('schoolResourceTitle').value.trim(),
+      [urlField]:  document.getElementById('schoolResourceUrl').value.trim(),
+      description: document.getElementById('schoolResourceDescription').value.trim(),
+      timestamp:   serverTimestamp()
+    });
+    showSuccess('schoolResourceSuccess');
+    this.reset();
+    loadSchoolResources();
+  } catch(e) { alert('Error: ' + e.message); }
+});
+
+async function loadSchoolResources() {
+  var grid = document.getElementById('schoolResourcesGrid');
+  grid.innerHTML = '';
+  try {
+    var [rSnap, lSnap] = await Promise.all([
+      getDocs(query(collection(db, 'schoolResources'), orderBy('timestamp', 'desc'))),
+      getDocs(query(collection(db, 'schoolLinks'),     orderBy('timestamp', 'desc')))
+    ]);
+    var all = [];
+    rSnap.forEach(function(d) { all.push({ id:d.id, data:d.data(), type:'resource', col:'schoolResources' }); });
+    lSnap.forEach(function(d) { all.push({ id:d.id, data:d.data(), type:'link',     col:'schoolLinks'     }); });
+    all.sort(function(a, b) {
+      return (b.data.timestamp?.toDate() || new Date(0)) - (a.data.timestamp?.toDate() || new Date(0));
+    });
+    if (!all.length) { grid.innerHTML = emptyMsg('No school resources posted yet'); return; }
+    all.forEach(function(item) {
+      var data = item.data;
+      var url  = item.type === 'link' ? data.url : data.fileUrl;
+      var card = document.createElement('div');
+      card.className = 'bg-surface-container-low p-6 rounded-2xl border border-outline-variant flex flex-col gap-4 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group';
+      var iconName = item.type === 'link' ? 'link' : 'file-text';
+      var badgeColor = item.type === 'link' ? 'bg-primary-container text-on-primary-container' : 'bg-secondary-container text-on-secondary-container';
+      
+      card.innerHTML = `
+        <div class="flex items-start justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg ${badgeColor} flex items-center justify-center flex-shrink-0">
+              <i data-lucide="${iconName}" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg text-on-surface m-0 leading-tight">${data.title}</h3>
+              <div class="flex items-center gap-2 mt-1 text-xs text-on-surface-variant font-medium">
+                <span class="flex items-center gap-1 bg-surface-container py-0.5 px-2 rounded-full"><i data-lucide="school" class="w-3 h-3"></i> ${SCHOOL_NAMES[data.schoolId] || data.schoolId}</span>
+                <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-3 h-3"></i> ${fmtDate(data.timestamp)}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="text-sm text-on-surface-variant leading-relaxed m-0 line-clamp-3">${data.description || 'No description provided.'}</p>
+        <div class="mt-auto pt-4 flex flex-col gap-2 border-t border-outline-variant">
+          ${url ? `<a href="${url}" target="_blank" class="flex items-center gap-2 text-sm text-primary font-medium hover:underline w-fit"><i data-lucide="${item.type === 'link' ? 'external-link' : 'paperclip'}" class="w-4 h-4"></i> ${item.type === 'link' ? 'View External Link' : 'Open Attached File'}</a>` : ''}
+          <div class="flex justify-end mt-2">
+            <button class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md bg-error/10 text-error hover:bg-error hover:text-white transition-colors" onclick="deleteSchoolResource('${item.id}', '${item.col}')">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Delete
+            </button>
+          </div>
+        </div>
+      `;
+      setTimeout(() => lucide.createIcons({ root: card }), 0);
+      grid.appendChild(card);
+    });
+  } catch(e) { console.error(e); grid ? (grid.innerHTML = '<pre>' + e.stack + '</pre>') : (container.innerHTML = '<pre>' + e.stack + '</pre>'); grid.innerHTML = emptyMsg('Error loading school resources'); }
+}
+loadSchoolResources();
+
+window.deleteSchoolResource = async function(id, colName) {
+  if (!confirm('Delete this school resource?')) return;
+  await deleteDoc(doc(db, colName, id));
+  loadSchoolResources();
+};
+
+// ════════════════════════════════════════════════════
+// MANAGE SCHOOLS
+// ════════════════════════════════════════════════════
+window.updateSchoolCode = async function(schoolId) {
+  var input = document.getElementById(schoolId + 'Code');
+  if (!input.value.trim()) { alert('Please enter an access code'); return; }
+  try {
+    await setDoc(doc(db, 'schools', schoolId), { accessCode: input.value.trim(), updatedAt: serverTimestamp() });
+    showSuccess('schoolManageSuccess');
+    input.value = '';
+  } catch(e) { alert('Error: ' + e.message); }
+};
+
+// ════════════════════════════════════════════════════
+
+window.upgradeToFirebaseAuth = async function(docId) {
+  if (!confirm('Upgrade this student to Firebase Auth? They will receive a temporary password.')) return;
+  try {
+    const { httpsCallable } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-functions.js');
+    const { functions } = await import('../../assets/js/jdh-firebase-modules.js');
+    const upgradeFunc = httpsCallable(functions, 'createFirebaseAccountForStudent');
+    const res = await upgradeFunc({ studentId: docId });
+    if (res.data.success) {
+      alert('Upgraded! Temp Password: ' + res.data.tempPassword);
+      loadStudentsList();
+    } else {
+      alert('Upgrade failed: ' + res.data.message);
+    }
+  } catch(e) {
+    alert('Error: ' + e.message);
+  }
+};
+
+// MANAGE STUDENTS
+// ════════════════════════════════════════════════════
+document.getElementById('addStudentForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  var fullName = document.getElementById('newStudentName').value.trim();
+  var username = document.getElementById('newStudentUsername').value.trim();
+  var email    = document.getElementById('newStudentEmail').value.trim();
+  var code     = document.getElementById('newStudentCode').value.trim();
+  try {
+    var existing = await getDocs(query(collection(db, 'students'), where('username', '==', username)));
+    if (!existing.empty) { alert('Username already exists! Choose another.'); return; }
+    await addDoc(collection(db, 'students'), {
+      fullName, username, email, accessCode: code, registeredAt: serverTimestamp()
+    });
+    showSuccess('studentAddSuccess');
+    this.reset();
+    loadStudentsList();
+    loadStudentsDropdown();
+    loadStats();
+  } catch(e) { alert('Error: ' + e.message); }
+});
+
+async function loadStudentsList() {
+  var container = document.getElementById('studentsListContainer');
+  container.innerHTML = '';
+  try {
+    var snap = await getDocs(collection(db, 'students'));
+    if (snap.empty) { container.innerHTML = '<div style="padding:2rem;color:var(--text-dim);font-size:.75rem;text-align:center;font-family:var(--mono);">No students registered yet</div>'; return; }
+    snap.forEach(function(docSnap) {
+      var data = docSnap.data();
+      var card = document.createElement('div'); card.className = 'person-card';
+      card.innerHTML =
+        '<div style="display:flex;justify-content:space-between;align-items:start;gap:.5rem;margin-bottom:.6rem;flex-wrap:wrap;">'
+        + '<div><h3>👤 ' + (data.fullName || data.username) + '</h3>'
+        + '<p><strong>Username:</strong> ' + data.username + '<br>'
+        + (data.email ? '<strong>Email:</strong> ' + data.email + '<br>' : '')
+        + '<strong>Code:</strong> <span style="font-family:var(--mono);color:var(--crimson);">' + data.accessCode + '</span><br>'
+        + (data.authType === 'firebase' ? '<span style="color:var(--green); font-size:0.8rem; border: 1px solid var(--green); padding: 2px 4px; border-radius: 4px;">Firebase Auth Active</span><br>' : '<button class="btn btn-secondary btn-sm" onclick="upgradeToFirebaseAuth(\'' + docSnap.id + '\')" style="margin-top: 5px;">Upgrade to Firebase Auth</button><br>')
+
+        + '<strong>Registered:</strong> ' + fmtDate(data.registeredAt) + '</p></div>'
+        + '<button class="btn btn-danger btn-sm" onclick="deleteStudent(\'' + docSnap.id + '\')">DELETE</button>'
+        + '</div>'
+        + '<div class="form-group" style="margin-bottom:.4rem;"><label>Update Access Code</label>'
+        + '<input type="text" id="code_' + docSnap.id + '" value="' + data.accessCode + '" placeholder="New access code">'
+        + '</div>'
+        + '<button class="btn btn-primary btn-sm" onclick="updateStudentCode(\'' + docSnap.id + '\')">UPDATE CODE</button>';
+      container.appendChild(card);
+    });
+  } catch(e) { console.error(e); grid ? (grid.innerHTML = '<pre>' + e.stack + '</pre>') : (container.innerHTML = '<pre>' + e.stack + '</pre>'); container.innerHTML = emptyMsg('Error loading students'); }
+}
+loadStudentsList();
+
+window.updateStudentCode = async function(docId) {
+  const newCode = document.getElementById('code_' + docId).value.trim();
+  if (!newCode) { alert('Enter an access code'); return; }
+  try {
+    const studentSnap = await getDoc(doc(db, 'students', docId));
+    if (!studentSnap.exists()) { alert('Student record not found.'); return; }
+    const studentData = studentSnap.data();
+    const username = studentData.username;
+    const fakeEmail = studentAuthEmail(username);
+
+    await setDoc(doc(db, 'students', docId), { accessCode: newCode }, { merge: true });
+
+    try {
+      let authUser;
+      try {
+        const cred = await signInWithEmailAndPassword(adminAuth, fakeEmail, studentData.accessCode);
+        authUser = cred.user;
+      } catch(signInErr) {
+        if (
+          signInErr.code === 'auth/user-not-found' ||
+          signInErr.code === 'auth/invalid-credential' ||
+          signInErr.code === 'auth/wrong-password'
+        ) {
+          const cred = await createUserWithEmailAndPassword(adminAuth, fakeEmail, newCode);
+          authUser = cred.user;
+          await setDoc(doc(db, 'students', docId), {
+            firebaseUid: authUser.uid,
+            authEmail: fakeEmail
+          }, { merge: true });
+        } else {
+          throw signInErr;
+        }
+      }
+
+      await updatePassword(authUser, newCode);
+      await adminAuth.signOut();
+
+      alert('✅ Access code updated in both Firestore and Firebase Auth!\n\nNew code: ' + newCode);
+    } catch(authErr) {
+      console.warn('[JDH] Auth password sync failed (Firestore was updated):', authErr.message);
+      alert(
+        '⚠️ Access code saved in Firestore, but Firebase Auth sync failed.\n\n' +
+        'The student may need to re-register or contact support.\n\n' +
+        'Error: ' + authErr.message
+      );
+    }
+
+    loadStudentsList();
+  } catch(e) {
+    alert('Error updating access code: ' + e.message);
+  }
+};
+
+window.deleteStudent = async function(docId) {
+  if (!confirm('Delete this student and all their resources?')) return;
+  try {
+    const studentSnap = await getDoc(doc(db, 'students', docId));
+    const studentData = studentSnap.exists() ? studentSnap.data() : null;
+
+    await deleteDoc(doc(db, 'students', docId));
+
+    const [rSnap, lSnap] = await Promise.all([
+      getDocs(query(collection(db, 'personalResources'), where('studentId', '==', docId))),
+      getDocs(query(collection(db, 'personalLinks'),     where('studentId', '==', docId)))
+    ]);
+    const dels = [];
+    rSnap.forEach(function(d) { dels.push(deleteDoc(d.ref)); });
+    lSnap.forEach(function(d) { dels.push(deleteDoc(d.ref)); });
+    await Promise.all(dels);
+
+    if (studentData && studentData.username) {
+      const fakeEmail = studentAuthEmail(studentData.username);
+      try {
+        const cred = await signInWithEmailAndPassword(adminAuth, fakeEmail, studentData.accessCode);
+        await cred.user.delete();
+        console.log('[JDH] Firebase Auth account deleted for', studentData.username);
+      } catch(authErr) {
+        console.warn('[JDH] Could not delete Auth account (may not exist):', authErr.message);
+      }
+    }
+
+    loadStudentsList();
+    loadStudentsDropdown();
+    loadStats();
+  } catch(e) {
+    alert('Error deleting student: ' + e.message);
+  }
+};
+
+async function loadStudentsDropdown() {
+  var dd = document.getElementById('targetStudent');
+  dd.innerHTML = '<option value="">Choose Student</option>';
+  try {
+    var snap = await getDocs(collection(db, 'students'));
+    snap.forEach(function(d) {
+      var data = d.data();
+      var opt  = document.createElement('option');
+      opt.value       = d.id;
+      opt.textContent = (data.fullName || data.username) + ' (@' + data.username + ')';
+      dd.appendChild(opt);
+    });
+  } catch(e) { console.error('loadStudentsDropdown:', e); }
+}
+loadStudentsDropdown();
+
+// ════════════════════════════════════════════════════
+// SEND RESOURCES TO STUDENT
+// ════════════════════════════════════════════════════
+document.getElementById('studentResourceForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  var studentId = document.getElementById('targetStudent').value;
+  var type      = document.getElementById('resourceType').value;
+  var title     = document.getElementById('studentResourceTitle').value.trim();
+  var url       = document.getElementById('studentResourceUrl').value.trim();
+  var desc      = document.getElementById('studentResourceDescription').value.trim();
+  var colName   = type === 'link' ? 'personalLinks' : 'personalResources';
+  var urlField  = type === 'link' ? 'url' : 'fileUrl';
+  try {
+    await addDoc(collection(db, colName), {
+      studentId, title, [urlField]: url, description: desc, timestamp: serverTimestamp()
+    });
+    showSuccess('studentResourceSuccess');
+    this.reset();
+    loadStudentResources();
+  } catch(e) { alert('Error: ' + e.message); }
+});
+
+async function loadStudentResources() {
+  var grid = document.getElementById('studentResourcesGrid');
+  grid.innerHTML = '';
+  try {
+    var all = [];
+    for (var colName of ['personalResources', 'personalLinks']) {
+      var snap = await getDocs(query(collection(db, colName), orderBy('timestamp', 'desc')));
+      snap.forEach(function(d) { all.push({ id:d.id, col:colName, ...d.data() }); });
+    }
+    all.sort(function(a, b) { return (b.timestamp?.toDate() || 0) - (a.timestamp?.toDate() || 0); });
+    if (!all.length) { grid.innerHTML = emptyMsg('No resources sent yet'); return; }
+    for (var res of all.slice(0, 10)) {
+      var sDoc  = await getDoc(doc(db, 'students', res.studentId));
+      var sName = sDoc.exists() ? (sDoc.data().fullName || sDoc.data().username) : 'Unknown';
+      var card  = document.createElement('div'); card.className = 'post-card';
+      card.innerHTML =
+        '<h3>' + res.title + '</h3>'
+        + '<div class="post-meta"><span>👤 ' + sName + '</span><span>' + fmtDate(res.timestamp) + '</span></div>'
+        + '<p>' + res.description + '</p>'
+        + '<p><strong>🔗:</strong> <a href="' + (res.url || res.fileUrl) + '" target="_blank">View</a></p>'
+        + '<div class="post-actions"><button class="btn btn-danger btn-sm" onclick="deleteStudentResource(\'' + res.id + '\',\'' + res.col + '\')">DELETE</button></div>';
+      grid.appendChild(card);
+    }
+  } catch(e) { console.error(e); grid ? (grid.innerHTML = '<pre>' + e.stack + '</pre>') : (container.innerHTML = '<pre>' + e.stack + '</pre>'); grid.innerHTML = emptyMsg('Error loading resources'); }
+}
+loadStudentResources();
+
+window.deleteStudentResource = async function(id, colName) {
+  if (confirm('Delete this resource?')) {
+    await deleteDoc(doc(db, colName, id));
+    loadStudentResources();
+  }
+};
+
+// ════════════════════════════════════════════════════
+// MANAGE STAFF
+// ════════════════════════════════════════════════════
+document.getElementById('addStaffForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  var name  = document.getElementById('staffName').value.trim();
+  var email = document.getElementById('staffEmail').value.trim();
+  try {
+    await addDoc(collection(db, 'pendingStaff'), {
+      email, name, invitedAt: serverTimestamp(),
+      invitedBy: localStorage.getItem('userId')
+    });
+    await setDoc(doc(db, 'staffRegistration', 'code'), { code:'JAYSTAR2024', updatedAt: serverTimestamp() });
+    showSuccess('staffAddSuccess');
+    alert('✅ Staff invitation created!\n\nSend to ' + name + ':\nEmail: ' + email + '\n🔑 Code: JAYSTAR2024\n🔗 Link: ' + window.location.origin + '/staff-register.html');
+    this.reset();
+    loadStaffList();
+  } catch(e) { alert('Error: ' + e.message); }
+});
+
+async function loadStaffList() {
+  var container = document.getElementById('staffListContainer');
+  container.innerHTML = '<div style="padding:1rem;color:var(--text-dim);font-size:.75rem;font-family:var(--mono);">Loading...</div>';
+  try {
+    var snap = await getDocs(query(collection(db, 'users'), where('role', '==', 'staff')));
+    if (snap.empty) { container.innerHTML = '<div style="padding:1.5rem;color:var(--text-dim);font-size:.75rem;text-align:center;font-family:var(--mono);">No staff members yet</div>'; return; }
+    container.innerHTML = '';
+    snap.forEach(function(docSnap) {
+      var data = docSnap.data();
+      var card = document.createElement('div'); card.className = 'person-card';
+      card.innerHTML =
+        '<div style="display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:.5rem;">'
+        + '<div><h3>👨‍🏫 ' + data.name + '</h3>'
+        + '<p><strong>Email:</strong> ' + data.email + '<br>'
+        + '<strong>Added:</strong> ' + fmtDate(data.createdAt) + '</p></div>'
+        + '<button class="btn btn-danger btn-sm" onclick="deleteStaff(\'' + docSnap.id + '\')">REMOVE</button>'
+        + '</div>';
+      container.appendChild(card);
+    });
+  } catch(e) { console.error(e); grid ? (grid.innerHTML = '<pre>' + e.stack + '</pre>') : (container.innerHTML = '<pre>' + e.stack + '</pre>'); container.innerHTML = emptyMsg('Error loading staff'); }
+}
+loadStaffList();
+
+window.deleteStaff = async function(id) {
+  if (!confirm('Remove this staff member?')) return;
+  try {
+    await deleteDoc(doc(db, 'users', id));
+    loadStaffList();
+    loadStats();
+  } catch(e) { alert('Error: ' + e.message); }
+};
+
+// ════════════════════════════════════════════════════
+// STAFF RESOURCES
+// ════════════════════════════════════════════════════
+document.getElementById('staffResourceForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  try {
+    await addDoc(collection(db, 'staffGeneralResources'), {
+      title:       document.getElementById('staffResTitle').value.trim(),
+      url:         document.getElementById('staffResUrl').value.trim(),
+      description: document.getElementById('staffResDescription').value.trim(),
+      timestamp:   serverTimestamp()
+    });
+    showSuccess('staffResourceSuccess');
+    this.reset();
+    loadStaffResources();
+  } catch(e) { alert('Error: ' + e.message); }
+});
+
+async function loadStaffResources() {
+  var grid = document.getElementById('staffResourcesGrid');
+  grid.innerHTML = '';
+  try {
+    var snap = await getDocs(query(collection(db, 'staffGeneralResources'), orderBy('timestamp', 'desc')));
+    if (snap.empty) { grid.innerHTML = emptyMsg('No resources posted yet'); return; }
+    snap.forEach(function(docSnap) {
+      var data = docSnap.data();
+      var card = document.createElement('div');
+      card.className = 'bg-surface-container-low p-6 rounded-2xl border border-outline-variant flex flex-col gap-4 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group';
+      var iconName = item.type === 'link' ? 'link' : 'file-text';
+      var badgeColor = item.type === 'link' ? 'bg-primary-container text-on-primary-container' : 'bg-secondary-container text-on-secondary-container';
+      
+      card.innerHTML = `
+        <div class="flex items-start justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg ${badgeColor} flex items-center justify-center flex-shrink-0">
+              <i data-lucide="${iconName}" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg text-on-surface m-0 leading-tight">${data.title}</h3>
+              <div class="flex items-center gap-2 mt-1 text-xs text-on-surface-variant font-medium">
+                <span class="flex items-center gap-1 bg-surface-container py-0.5 px-2 rounded-full"><i data-lucide="school" class="w-3 h-3"></i> ${SCHOOL_NAMES[data.schoolId] || data.schoolId}</span>
+                <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-3 h-3"></i> ${fmtDate(data.timestamp)}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="text-sm text-on-surface-variant leading-relaxed m-0 line-clamp-3">${data.description || 'No description provided.'}</p>
+        <div class="mt-auto pt-4 flex flex-col gap-2 border-t border-outline-variant">
+          ${url ? `<a href="${url}" target="_blank" class="flex items-center gap-2 text-sm text-primary font-medium hover:underline w-fit"><i data-lucide="${item.type === 'link' ? 'external-link' : 'paperclip'}" class="w-4 h-4"></i> ${item.type === 'link' ? 'View External Link' : 'Open Attached File'}</a>` : ''}
+          <div class="flex justify-end mt-2">
+            <button class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md bg-error/10 text-error hover:bg-error hover:text-white transition-colors" onclick="deleteSchoolResource('${item.id}', '${item.col}')">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Delete
+            </button>
+          </div>
+        </div>
+      `;
+      setTimeout(() => lucide.createIcons({ root: card }), 0);
+      grid.appendChild(card);
+    });
+  } catch(e) { console.error(e); grid ? (grid.innerHTML = '<pre>' + e.stack + '</pre>') : (container.innerHTML = '<pre>' + e.stack + '</pre>'); grid.innerHTML = emptyMsg('Error loading staff resources'); }
+}
+loadStaffResources();
+
+window.deleteStaffResource = async function(id) {
+  if (confirm('Delete this resource?')) {
+    await deleteDoc(doc(db, 'staffGeneralResources', id));
+    loadStaffResources();
+  }
+};
+
+// ════════════════════════════════════════════════════
+// STAFF SCHOOL ACCESS
+// ════════════════════════════════════════════════════
+document.getElementById('updateAccessCodeBtn').addEventListener('click', async function() {
+  var code = document.getElementById('schoolAccessCodeInput').value.trim();
+  if (!code) { alert('Please enter a code'); return; }
+  try {

@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <link rel="icon" type="image/x-icon" href="../../assets/img/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/favicon.png">
+  <link rel="apple-touch-icon" href="../../assets/img/favicon.ico">
+  <title>School Resources — Jaystarbliss Dynamic Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+:root {
+  --outline: #737784;
+  --on-tertiary-container: #ccced0;
+  --inverse-primary: #b0c6ff;
+  --surface-container-lowest: #ffffff;
+  --inverse-on-surface: #eaf1ff;
+  --on-tertiary-fixed-variant: #444749;
+  --on-surface: #0b1c30;
+  --on-primary-fixed: #001945;
+  --on-tertiary-fixed: #191c1e;
+  --primary-fixed-dim: #b0c6ff;
+  --primary-fixed: #d9e2ff;
+  --on-secondary-fixed: #00201c;
+  --on-surface-variant: #434653;
+  --secondary: #006b5f;
+  --on-error: #ffffff;
+  --tertiary-fixed: #e0e3e5;
+  --inverse-surface: #213145;
+  --on-secondary: #ffffff;
+  --surface-container-high: #dce9ff;
+  --secondary-fixed-dim: #3cddc7;
+  --primary-container: #0f52ba;
+  --error-container: #ffdad6;
+  --surface: #f8f9ff;
+  --secondary-container: #62fae3;
+  --on-background: #0b1c30;
+  --tertiary: #3d4143;
+  --error: #ba1a1a;
+  --on-primary-container: #bcceff;
+  --surface-dim: #cbdbf5;
+  --on-secondary-container: #007165;
+  --tertiary-container: #55585a;
+  --surface-bright: #f8f9ff;
+  --on-error-container: #93000a;
+  --outline-variant: #c3c6d5;
+  --on-secondary-fixed-variant: #005047;
+  --background: #f8f9ff;
+  --tertiary-fixed-dim: #c4c7c9;
+  --surface-container: #e5eeff;
+  --on-tertiary: #ffffff;
+  --surface-tint: #1d59c1;
+  --on-primary-fixed-variant: #00419c;
+  --surface-container-highest: #d3e4fe;
+  --secondary-fixed: #62fae3;
+  --on-primary: #ffffff;
+  --primary: #003c90;
+  --surface-variant: #d3e4fe;
+  --surface-container-low: #eff4ff;
+}
+
+[data-theme='dark'] {
+  --primary: #b0c6ff;
+  --on-primary: #002868;
+  --primary-container: #1d59c1;
+  --on-primary-container: #d9e2ff;
+  --secondary: #62fae3;
+  --on-secondary: #003730;
+  --secondary-container: #005047;
+  --on-secondary-container: #7ffdf1;
+  --tertiary: #c4c7c9;
+  --on-tertiary: #2d3133;
+  --tertiary-container: #444749;
+  --on-tertiary-container: #e0e3e5;
+  --error: #ffb4ab;
+  --on-error: #690005;
+  --error-container: #93000a;
+  --on-error-container: #ffdad6;
+  --background: #0A0A0A;
+  --on-background: #F0F0F0;
+  --surface: #0A0A0A;
+  --on-surface: #F0F0F0;
+  --surface-variant: #222222;
+  --on-surface-variant: #B3B3B3;
+  --outline: #8c909f;
+  --outline-variant: #333333;
+  --inverse-surface: #F0F0F0;
+  --inverse-on-surface: #0A0A0A;
+  --surface-container-lowest: #050505;
+  --surface-container-low: #111111;
+  --surface-container: #181818;
+  --surface-container-high: #222222;
+  --surface-container-highest: #2D2D2D;
+  --surface-dim: #0A0A0A;
+  --surface-bright: #3A3A3A;
+  --inverse-primary: #b0c6ff;
+  --on-tertiary-fixed-variant: #444749;
+  --on-primary-fixed: #001945;
+  --on-tertiary-fixed: #191c1e;
+  --primary-fixed-dim: #b0c6ff;
+  --primary-fixed: #d9e2ff;
+  --on-secondary-fixed: #00201c;
+  --tertiary-fixed: #e0e3e5;
+  --secondary-fixed-dim: #3cddc7;
+  --on-secondary-fixed-variant: #005047;
+  --tertiary-fixed-dim: #c4c7c9;
+  --surface-tint: #1d59c1;
+  --on-primary-fixed-variant: #00419c;
+  --secondary-fixed: #62fae3;
+}
+
+  /* ══════════════════════════════════════════
+     CSS VARIABLES
+  ══════════════════════════════════════════ */
+  :root {
+    --crimson:#D93B22; --crimson-dark:#D93B22; --crimson-glow:rgba(217,59,34,0.4);
+    --obsidian:#050505; --surface:rgba(15,15,17,0.92); --surface-2:rgba(20,20,22,0.95);
+    --border:rgba(230,25,5,0.18); --border-bright:rgba(230,25,5,0.5);
+    --text:#f1f5f9; --text-muted:#94a3b8; --text-dim:rgba(230,25,5,0.4);
+    --gold:#FFD700; --gold-dim:#b89d00;
+    --green:#22c55e; --blue:#38bdf8;
+    --field-bg:rgba(5,5,5,0.8); --field-border:rgba(230,25,5,0.2);
+    --sans:'Poppins',sans-serif; --mono:'Space Mono',monospace;
+    --topbar-h:56px;
+    --glass-bg:rgba(15,15,17,0.75); --glass-blur:blur(14px);
+    --radius:10px; --radius-sm:6px;
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  [data-theme="light"] {
+    --crimson:#C41203; --crimson-dark:#8f0d02; --crimson-glow:rgba(196,18,3,0.25);
+    --obsidian:#f0f0f2; --surface:rgba(255,255,255,0.95); --surface-2:rgba(240,240,242,0.97);
+    --border:rgba(196,18,3,0.15); --border-bright:rgba(196,18,3,0.4);
+    --text:#0f0f10; --text-muted:#3d3d45; --text-dim:rgba(196,18,3,0.45);
+    --gold:#b8860b; --gold-dim:#8a6508;
+    --green:#16a34a; --blue:#0369a1;
+    --field-bg:rgba(255,255,255,0.92); --field-border:rgba(196,18,3,0.18);
+    --glass-bg:rgba(255,255,255,0.82); --glass-blur:blur(14px);
+  }
+
+  /* ══════════════════════════════════════════
+     RESET & BASE
+  ══════════════════════════════════════════ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: clamp(14px, 1.8vw, 16px); -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: var(--sans);
+    background: var(--obsidian);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(ellipse at 10% 20%, rgba(230,25,5,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 80%, rgba(230,25,5,0.04) 0%, transparent 50%);
+    transition: background .25s, color .25s;
+  }
+  [data-theme="light"] body {
+    background-image:
+      radial-gradient(ellipse at 10% 20%, rgba(196,18,3,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 80%, rgba(196,18,3,0.03) 0%, transparent 50%);
+  }
+
+  /* Lucide icon base */
+  [data-lucide] {
+    display: inline-block; vertical-align: middle;
+    flex-shrink: 0; stroke: currentColor;
+    fill: none; stroke-width: 2;
+    stroke-linecap: round; stroke-linejoin: round;
+  }
+
+  /* ══════════════════════════════════════════
+     TOPBAR
+  ══════════════════════════════════════════ */
+  .topbar {
+    background: var(--surface);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center;
+    padding: 0 1rem; gap: .65rem;
+    height: var(--topbar-h);
+    position: sticky; top: 0; z-index: 200;
+    box-shadow: 0 2px 24px rgba(0,0,0,0.5);
+  }
+
+  /* ── Brand mark — clipped polygon, favicon inside, "J" fallback ── */
+  .topbar-brand { display: flex; align-items: center; gap: .55rem; flex-shrink: 0; }
+  .brand-mark {
+    width: 28px; height: 28px;
+    background: var(--crimson);
+    display: grid; place-items: center;
+    font-family: var(--mono); font-size: .7rem; font-weight: 700; color: #fff;
+    clip-path: polygon(0 0, 90% 0, 100% 10%, 100% 100%, 10% 100%, 0 90%);
+    overflow: hidden; flex-shrink: 0;
+    text-decoration: none;
+  }
+  .brand-mark img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .brand-name {
+    font-family: var(--mono); font-size: .7rem; font-weight: 700;
+    color: var(--text); text-transform: uppercase; white-space: nowrap;
+  }
+  .topbar-divider { width: 1px; height: 22px; background: var(--border); flex-shrink: 0; }
+  .topbar-breadcrumb {
+    font-family: var(--mono); font-size: .67rem; color: var(--text-muted);
+    display: flex; align-items: center; gap: .35rem;
+    overflow: hidden; min-width: 0;
+  }
+  .topbar-breadcrumb .bc-school {
+    color: var(--gold); overflow: hidden;
+    text-overflow: ellipsis; white-space: nowrap; max-width: 220px;
+  }
+  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: .45rem; flex-shrink: 0; }
+
+  /* icon button */
+  .icon-btn {
+    width: 32px; height: 32px;
+    background: transparent; border: 1px solid var(--border);
+    color: var(--text-muted); border-radius: 6px;
+    display: grid; place-items: center; cursor: pointer;
+    transition: all .15s; -webkit-tap-highlight-color: transparent;
+  }
+  .icon-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .icon-btn [data-lucide] { width: 15px; height: 15px; }
+
+  /* buttons */
+  .btn {
+    display: inline-flex; align-items: center; gap: .4rem;
+    padding: .45rem .9rem;
+    font-family: var(--mono); font-size: .6rem; font-weight: 700;
+    letter-spacing: .05em; text-transform: uppercase;
+    border: none; cursor: pointer; transition: all .15s;
+    text-decoration: none; border-radius: var(--radius-sm);
+    white-space: nowrap; -webkit-tap-highlight-color: transparent;
+  }
+  .btn [data-lucide] { width: 13px; height: 13px; }
+  .btn-ghost  { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
+  .btn-ghost:hover, .btn-ghost:active  { border-color: var(--crimson); color: var(--crimson); }
+  .btn-primary { background: rgba(230,25,5,0.15); border: 1px solid rgba(230,25,5,0.4); color: var(--crimson); }
+  .btn-primary:hover, .btn-primary:active { background: var(--crimson); color: #fff; box-shadow: 0 4px 12px rgba(230,25,5,0.3); }
+  .btn-sm { padding: .3rem .65rem; font-size: .57rem; }
+
+  /* ══════════════════════════════════════════
+     SCHOOL HERO
+  ══════════════════════════════════════════ */
+  .school-hero {
+    background: var(--surface);
+    backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+    border-bottom: 1px solid var(--border);
+    padding: 1.1rem 1.4rem;
+    position: relative; overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+  }
+  .school-hero::before {
+    content: 'JDH';
+    position: absolute; right: 1.5rem; top: 50%; transform: translateY(-50%);
+    font-family: var(--mono); font-size: 4.5rem; font-weight: 700;
+    color: rgba(230,25,5,0.05); pointer-events: none; line-height: 1; user-select: none;
+  }
+  .school-hero-inner { display: flex; align-items: center; gap: 1rem; }
+
+  /* School icon — same clipped polygon, crimson gradient, lucide icon */
+  .school-icon {
+    width: 46px; height: 46px;
+    background: linear-gradient(135deg, var(--crimson-dark), var(--crimson));
+    display: grid; place-items: center; flex-shrink: 0;
+    clip-path: polygon(0 0, 88% 0, 100% 12%, 100% 100%, 12% 100%, 0 88%);
+    box-shadow: 0 0 16px var(--crimson-glow);
+  }
+  .school-icon [data-lucide] { width: 22px; height: 22px; stroke: #fff; }
+
+  .school-meta { flex: 1; min-width: 0; }
+  .school-label {
+    font-family: var(--mono); font-size: .52rem; color: var(--text-dim);
+    text-transform: uppercase; letter-spacing: .12em; margin-bottom: .2rem;
+  }
+  .school-name {
+    font-family: var(--mono); font-size: 1rem; font-weight: 700; color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .school-name span { color: var(--gold); }
+  .school-status {
+    display: inline-flex; align-items: center; gap: .35rem;
+    margin-top: .3rem; font-family: var(--mono); font-size: .56rem;
+    text-transform: uppercase; letter-spacing: .06em; color: var(--green);
+  }
+  .school-status::before {
+    content: ''; width: 6px; height: 6px; background: var(--green);
+    border-radius: 50%; display: inline-block;
+    box-shadow: 0 0 6px rgba(34,197,94,0.6); animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+  /* ══════════════════════════════════════════
+     TAB BAR
+  ══════════════════════════════════════════ */
+  .tab-bar-wrap {
+    background: var(--surface);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: var(--topbar-h); z-index: 140;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+  }
+  .tab-bar {
+    display: flex; overflow-x: auto; overflow-y: hidden;
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+    padding: 0 1rem;
+  }
+  .tab-bar::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    padding: .72rem 1.1rem;
+    font-family: var(--mono); font-size: .6rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .05em;
+    color: var(--text-dim); background: none; border: none; cursor: pointer;
+    border-bottom: 2px solid transparent; margin-bottom: -1px;
+    transition: all .15s; white-space: nowrap; flex-shrink: 0;
+    display: flex; align-items: center; gap: .42rem;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tab-btn [data-lucide] { width: 14px; height: 14px; }
+  .tab-btn:hover { color: var(--text-muted); }
+  .tab-btn.active { color: var(--crimson); border-bottom-color: var(--crimson); }
+  .tab-count {
+    background: var(--crimson); color: #fff;
+    font-family: var(--mono); font-size: .53rem; font-weight: 700;
+    padding: .1rem .4rem; border-radius: 4px; display: none;
+  }
+  .tab-count.show { display: inline-block; }
+  .tab-pane { display: none; }
+  .tab-pane.active { display: block; animation: fadeUp .22s ease both; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ══════════════════════════════════════════
+     MAIN
+  ══════════════════════════════════════════ */
+  .main {
+    padding: 1.4rem 1.5rem calc(1.4rem + var(--safe-bottom));
+    max-width: 1280px; margin: 0 auto;
+    background-image: radial-gradient(ellipse at 80% 20%, rgba(230,25,5,0.04) 0%, transparent 40%);
+  }
+
+  /* ══════════════════════════════════════════
+     SECTION HEADER
+  ══════════════════════════════════════════ */
+  .section-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1.1rem; padding-bottom: .8rem;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap; gap: .65rem;
+  }
+  .section-title {
+    font-family: var(--mono); font-size: .65rem; font-weight: 700;
+    color: var(--text); text-transform: uppercase; letter-spacing: .06em;
+    display: flex; align-items: center; gap: .45rem;
+  }
+  .section-title::before {
+    content: ''; display: inline-block; width: 6px; height: 6px;
+    background: var(--crimson); border-radius: 50%;
+    box-shadow: 0 0 6px var(--crimson-glow); flex-shrink: 0;
+  }
+  .section-meta { font-family: var(--mono); font-size: .6rem; color: var(--text-dim); }
+
+  /* ══════════════════════════════════════════
+     SEARCH
+  ══════════════════════════════════════════ */
+  .search-bar { margin-bottom: 1.1rem; }
+  .search-wrap {
+    position: relative; display: inline-flex; align-items: center;
+    width: 100%; max-width: 360px;
+  }
+  .search-icon {
+    position: absolute; left: .65rem; pointer-events: none;
+    color: var(--text-dim); display: flex; align-items: center; top: 50%; transform: translateY(-50%);
+  }
+  .search-icon [data-lucide] { width: 14px; height: 14px; }
+  .form-control {
+    background: var(--field-bg); border: 1px solid var(--field-border);
+    color: var(--text); padding: .46rem .78rem .46rem 2.1rem;
+    font-family: var(--sans); font-size: .8rem;
+    border-radius: var(--radius-sm); outline: none; width: 100%;
+    transition: border-color .15s; appearance: none; -webkit-appearance: none;
+  }
+  .form-control:focus { border-color: var(--crimson); box-shadow: 0 0 0 2px rgba(230,25,5,0.12); }
+  .form-control::placeholder { color: rgba(230,25,5,0.2); }
+
+  /* ══════════════════════════════════════════
+     RESOURCE GRID & CARDS
+  ══════════════════════════════════════════ */
+  .resource-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1px; background: var(--border);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .resource-card {
+    background: var(--glass-bg); backdrop-filter: var(--glass-blur);
+    padding: 1.1rem; display: flex; flex-direction: column; gap: .5rem;
+    transition: all .2s; position: relative; overflow: hidden;
+    animation: fadeUp .28s ease both;
+  }
+  .resource-card:nth-child(2){animation-delay:.04s}
+  .resource-card:nth-child(3){animation-delay:.08s}
+  .resource-card:nth-child(4){animation-delay:.12s}
+  .resource-card:nth-child(5){animation-delay:.16s}
+  .resource-card:nth-child(6){animation-delay:.20s}
+  .resource-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background: linear-gradient(90deg, var(--crimson), rgba(230,25,5,0.05));
+  }
+  .resource-card:hover { background: rgba(20,20,22,0.98); box-shadow: inset 0 0 0 1px rgba(230,25,5,0.25); }
+  [data-theme="light"] .resource-card:hover { background: rgba(255,255,255,0.99); }
+
+  .resource-type {
+    font-family: var(--mono); font-size: .56rem; color: var(--text-dim);
+    text-transform: uppercase; letter-spacing: .08em;
+    display: flex; align-items: center; gap: .32rem;
+  }
+  .resource-type [data-lucide] { width: 12px; height: 12px; }
+  .resource-name { font-size: .82rem; font-weight: 600; color: var(--text); line-height: 1.38; }
+  .resource-desc { font-size: .72rem; color: var(--text-muted); line-height: 1.55; flex: 1; }
+  .resource-meta {
+    font-family: var(--mono); font-size: .58rem; color: var(--text-dim);
+    margin-top: auto; display: flex; align-items: center; gap: .3rem;
+  }
+  .resource-meta [data-lucide] { width: 11px; height: 11px; }
+  .card-btn-group { display: flex; flex-direction: column; gap: .38rem; margin-top: auto; padding-top: .3rem; }
+
+  /* card action buttons */
+  .download-btn, .read-btn, .open-btn {
+    width: 100%; padding: .52rem; border-radius: 4px;
+    font-family: var(--mono); font-size: .6rem; font-weight: 700; text-transform: uppercase;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: .4rem;
+    transition: all .15s; -webkit-tap-highlight-color: transparent;
+  }
+  .download-btn [data-lucide], .read-btn [data-lucide], .open-btn [data-lucide] { width: 13px; height: 13px; }
+
+  .download-btn { background: rgba(230,25,5,0.15); color: var(--crimson); border: 1px solid rgba(230,25,5,0.3); }
+  .download-btn:hover,.download-btn:active { background: var(--crimson); color:#fff; box-shadow: 0 4px 12px rgba(230,25,5,0.3); }
+
+  .read-btn { background: rgba(34,197,94,0.1); color: var(--green); border: 1px solid rgba(34,197,94,0.25); }
+  .read-btn:hover,.read-btn:active { background: var(--green); color:#000; }
+
+  .open-btn { background: rgba(255,215,0,0.08); color: var(--gold); border: 1px solid rgba(255,215,0,0.25); }
+  .open-btn:hover,.open-btn:active { background: rgba(255,215,0,0.18); }
+
+  /* ══════════════════════════════════════════
+     SHIMMER LOADING
+  ══════════════════════════════════════════ */
+  .shimmer-card {
+    background: var(--glass-bg); padding: 1.1rem;
+    display: flex; flex-direction: column; gap: .6rem;
+  }
+  .shimmer-line {
+    height: 10px; border-radius: 4px;
+    background: linear-gradient(90deg, var(--border) 25%, rgba(230,25,5,0.08) 50%, var(--border) 75%);
+    background-size: 200% 100%; animation: shimmer 1.4s infinite;
+  }
+  .shimmer-line.short { width: 45%; }
+  .shimmer-line.long  { width: 85%; }
+  .shimmer-line.tall  { height: 18px; }
+  .shimmer-line.block { height: 52px; }
+  @keyframes shimmer { from{background-position:200% 0} to{background-position:-200% 0} }
+
+  /* ══════════════════════════════════════════
+     EMPTY & ERROR STATES
+  ══════════════════════════════════════════ */
+  .empty-state {
+    grid-column: 1 / -1; text-align: center; padding: 3.5rem 1rem;
+    display: flex; flex-direction: column; align-items: center; gap: .7rem;
+  }
+  .empty-state [data-lucide] { width: 40px; height: 40px; stroke: var(--text-dim); opacity: .5; }
+  .empty-msg { font-family: var(--mono); font-size: .68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em; }
+  .empty-sub { font-family: var(--mono); font-size: .58rem; color: var(--text-dim); }
+  .empty-state.is-error [data-lucide] { stroke: var(--crimson); opacity:.8; }
+  .empty-state.is-error .empty-msg { color: var(--crimson); }
+
+  /* ══════════════════════════════════════════
+     DOCUMENT READER MODAL
+  ══════════════════════════════════════════ */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+    display: grid; place-items: center; z-index: 800;
+    opacity: 0; pointer-events: none; transition: opacity .2s;
+    backdrop-filter: blur(4px); padding: 1rem;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: rgba(10,10,12,0.98);
+    border: 1px solid var(--border-bright); border-radius: var(--radius);
+    width: 100%; max-width: 860px; max-height: 90vh;
+    display: flex; flex-direction: column;
+    box-shadow: 0 0 60px rgba(230,25,5,0.2);
+    animation: modalIn .22s ease;
+  }
+  [data-theme="light"] .modal { background: rgba(255,255,255,0.98); }
+  @keyframes modalIn { from{opacity:0;transform:scale(.96)} to{opacity:1;transform:scale(1)} }
+  .modal-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: .9rem 1.1rem; border-bottom: 1px solid var(--border); gap: .7rem;
+  }
+  .modal-title {
+    font-family: var(--mono); font-size: .7rem; font-weight: 700;
+    color: var(--text); text-transform: uppercase; letter-spacing: .06em;
+    display: flex; align-items: center; gap: .4rem; min-width: 0;
+  }
+  .modal-title [data-lucide] { width: 15px; height: 15px; stroke: var(--crimson); flex-shrink: 0; }
+  .modal-title-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .modal-actions { display: flex; align-items: center; gap: .4rem; flex-shrink: 0; }
+  .reader-loading {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 1rem; padding: 3rem; flex: 1;
+    font-family: var(--mono); font-size: .7rem; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: .1em;
+  }
+  .reader-loading [data-lucide] { width: 36px; height: 36px; stroke: var(--crimson); animation: pulse 1.5s infinite; }
+  .reader-fallback {
+    display: none; flex: 1; flex-direction: column; align-items: center;
+    justify-content: center; gap: 1rem; padding: 2rem; text-align: center;
+  }
+  .reader-fallback [data-lucide] { width: 42px; height: 42px; stroke: var(--gold); }
+  .reader-fallback p { font-family: var(--mono); font-size: .7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; max-width: 340px; line-height: 1.8; }
+
+  /* ══════════════════════════════════════════
+     RESPONSIVE
+  ══════════════════════════════════════════ */
+  @media (max-width: 768px) {
+    .main { padding: 1rem 1rem calc(1rem + var(--safe-bottom)); }
+    .resource-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+    .topbar { padding: 0 .75rem; gap: .5rem; }
+    .brand-name { display: none; }
+    .topbar-divider { display: none; }
+    .topbar-breadcrumb .bc-sep,
+    .topbar-breadcrumb .bc-label { display: none; }
+    .school-hero { padding: .85rem 1rem; }
+    .school-hero::before { display: none; }
+    .school-name { font-size: .82rem; }
+    .tab-btn { padding: .65rem .85rem; font-size: .56rem; }
+    .modal { max-height: 95vh; }
+  }
+  @media (max-width: 480px) {
+    html { font-size: 15px; }
+    .main { padding: .85rem .85rem calc(.85rem + var(--safe-bottom)); }
+    .resource-grid { grid-template-columns: 1fr; }
+    .resource-card { padding: .95rem; }
+    .school-icon { width: 38px; height: 38px; }
+    .school-icon [data-lucide] { width: 18px; height: 18px; }
+    .school-name { font-size: .76rem; }
+    .search-wrap { max-width: 100%; }
+    .modal-title-text { max-width: 160px; }
+  }
+  @media (min-width: 1280px) {
+    .resource-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+  }
+  @media print {
+    .topbar, .tab-bar-wrap, .school-hero { display: none !important; }
+    .main { padding: 0; }
+  }
+  </style>
+<script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
+
+    <script>
+        const savedTheme = localStorage.getItem('jdh-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        if (savedTheme === 'dark') document.documentElement.classList.add('dark');
+        
+        window.toggleTheme = function() {
+            const h = document.documentElement;
+            const isDark = h.getAttribute('data-theme') === 'dark';
+            const n = isDark ? 'light' : 'dark';
+            h.setAttribute('data-theme', n);
+            localStorage.setItem('jdh-theme', n);
+            if (n === 'dark') h.classList.add('dark'); else h.classList.remove('dark');
+        };
+    </script>
+    
+</head>
+<body>
+
+<!-- ═══════════════════════════════════
+     TOPBAR
+═══════════════════════════════════ -->
+<header class="topbar">
+  <div class="topbar-brand">
+    <!-- JDH Brand Mark: clipped polygon shape, favicon image, "J" text fallback -->
+    <div class="brand-mark">
+      <img src="../../assets/img/favicon.png" alt="JDH"
+           onerror="this.style.display='none';this.parentElement.textContent='J'">
+    </div>
+    <span class="brand-name">Jaystarbliss</span>
+  </div>
+  <div class="topbar-divider"></div>
+  <nav class="topbar-breadcrumb">
+    <span class="bc-label">Student Portal</span>
+    <span class="bc-sep"> › </span>
+    <span class="bc-school" id="breadcrumbSchool">School Resources</span>
+  </nav>
+  <div class="topbar-right">
+    <button class="icon-btn" id="themeToggleBtn" title="Toggle Theme">
+      <i data-lucide="sun-moon"></i>
+    </button>
+    <button class="btn btn-ghost btn-sm" id="backBtn">
+      <i data-lucide="arrow-left"></i> Back
+    </button>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════
+     SCHOOL HERO
+═══════════════════════════════════ -->
+<div class="school-hero">
+  <div class="school-hero-inner">
+    <div class="school-icon">
+      <i data-lucide="school"></i>
+    </div>
+    <div class="school-meta">
+      <div class="school-label">Affiliated School</div>
+      <div class="school-name"><span id="schoolNameEl">Loading…</span></div>
+      <div class="school-status">Portal Active</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     TAB BAR
+═══════════════════════════════════ -->
+<div class="tab-bar-wrap">
+  <div class="tab-bar">
+    <button class="tab-btn active" data-target="tab-resources">
+      <i data-lucide="book-open"></i>
+      Resources <span class="tab-count" id="countResources">0</span>
+    </button>
+    <button class="tab-btn" data-target="tab-links">
+      <i data-lucide="link-2"></i>
+      Links <span class="tab-count" id="countLinks">0</span>
+    </button>
+    <button class="tab-btn" data-target="tab-exams">
+      <i data-lucide="file-text"></i>
+      Exams <span class="tab-count" id="countExams">0</span>
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     MAIN
+═══════════════════════════════════ -->
+<main class="main">
+
+  <!-- RESOURCES TAB -->
+  <div class="tab-pane active" id="tab-resources">
+    <div class="section-head">
+      <div class="section-title">Learning Resources</div>
+      <div class="section-meta" id="metaResources">Loading…</div>
+    </div>
+    <div class="search-bar">
+      <div class="search-wrap">
+        <span class="search-icon"><i data-lucide="search"></i></span>
+        <input class="form-control" type="text" placeholder="Search resources…"
+               id="searchResources" inputmode="search">
+      </div>
+    </div>
+    <div class="resource-grid" id="resourcesGrid">
+      <div class="shimmer-card"><div class="shimmer-line short"></div><div class="shimmer-line tall long"></div><div class="shimmer-line"></div><div class="shimmer-line block"></div></div>
+      <div class="shimmer-card"><div class="shimmer-line short"></div><div class="shimmer-line tall long"></div><div class="shimmer-line"></div><div class="shimmer-line block"></div></div>
+      <div class="shimmer-card"><div class="shimmer-line short"></div><div class="shimmer-line tall long"></div><div class="shimmer-line"></div><div class="shimmer-line block"></div></div>
+    </div>
+  </div>
+
+  <!-- LINKS TAB -->
+  <div class="tab-pane" id="tab-links">
+    <div class="section-head">
+      <div class="section-title">School Links</div>
+      <div class="section-meta" id="metaLinks">Loading…</div>
+    </div>
+    <div class="search-bar">
+      <div class="search-wrap">
+        <span class="search-icon"><i data-lucide="search"></i></span>
+        <input class="form-control" type="text" placeholder="Search links…"
+               id="searchLinks" inputmode="search">
+      </div>
+    </div>
+    <div class="resource-grid" id="linksGrid">
+      <div class="shimmer-card"><div class="shimmer-line short"></div><div class="shimmer-line tall long"></div><div class="shimmer-line"></div><div class="shimmer-line block"></div></div>
+      <div class="shimmer-card"><div class="shimmer-line short"></div><div class="shimmer-line tall long"></div><div class="shimmer-line"></div><div class="shimmer-line block"></div></div>
+      <div class="shimmer-card"><div class="shimmer-line short"></div><div class="shimmer-line tall long"></div><div class="shimmer-line"></div><div class="shimmer-line block"></div></div>
+    </div>
+  </div>
+
+  <!-- EXAMS TAB -->
+  <div class="tab-pane" id="tab-exams">
+    <div class="section-head">
+      <div class="section-title">Examination Questions</div>
+      <div class="section-meta" id="metaExams">Loading…</div>
+    </div>
+    <div class="resource-grid" id="examsGrid">
+      <div class="shimmer-card"><div class="shimmer-line short"></div><div class="shimmer-line tall long"></div><div class="shimmer-line"></div><div class="shimmer-line block"></div></div>
+      <div class="shimmer-card"><div class="shimmer-line short"></div><div class="shimmer-line tall long"></div><div class="shimmer-line"></div><div class="shimmer-line block"></div></div>
+      <div class="shimmer-card"><div class="shimmer-line short"></div><div class="shimmer-line tall long"></div><div class="shimmer-line"></div><div class="shimmer-line block"></div></div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ═══════════════════════════════════
+     DOCUMENT READER MODAL
+═══════════════════════════════════ -->
+<div class="modal-overlay" id="readerModal">
+  <div class="modal" style="height:88vh;">
+    <div class="modal-head">
+      <div class="modal-title">
+        <i data-lucide="book-open"></i>
+        <span class="modal-title-text" id="readerTitle">Document Viewer</span>
+      </div>
+      <div class="modal-actions">
+        <a id="readerDownloadBtn" href="#" target="_blank" class="btn btn-primary btn-sm">
+          <i data-lucide="download"></i> Download
+        </a>
+        <button class="btn btn-ghost btn-sm" id="readerCloseBtn">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+    </div>
+    <div class="reader-loading" id="readerLoading">
+      <i data-lucide="loader-2"></i>
+      Loading document…
+    </div>
+    <iframe
+      id="readerFrame"
+      style="flex:1;border:none;display:none;width:100%;background:var(--surface-2);"
+      allow="autoplay; fullscreen" allowfullscreen loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      title="Document viewer">
+    </iframe>
+    <div class="reader-fallback" id="readerFallback">
+      <i data-lucide="info"></i>
+      <p>This file cannot be previewed directly.<br>Use the Download button to open it.</p>
+      <a id="readerFallbackBtn" href="#" target="_blank" class="btn btn-primary">
+        <i data-lucide="external-link"></i> Open in New Tab
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     UI SCRIPT
+══════════════════════════════════════════ -->
+<script>
+  /* ─── Theme ─── */
+  window.toggleTheme = function() {
+    var html = document.documentElement;
+    html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('jdh-theme', html.dataset.theme);
+  };
+  var saved = localStorage.getItem('jdh-theme');
+  if (saved) document.documentElement.dataset.theme = saved;
+
+  /* ─── Tabs ─── */
+  window.switchTab = function(name) {
+    document.querySelectorAll('.tab-pane').forEach(function(p) {
+      p.classList.toggle('active', p.id === name);
+    });
+    document.querySelectorAll('.tab-btn').forEach(function(b) {
+      b.classList.toggle('active', b.dataset.target === name);
+    });
+    window.scrollTo(0, 0);
+  };
+
+  /* ─── Document Reader ─── */
+  window.openReader = function(url, title) {
+    var frame   = document.getElementById('readerFrame');
+    var loading = document.getElementById('readerLoading');
+    var fallback= document.getElementById('readerFallback');
+    var dlBtn   = document.getElementById('readerDownloadBtn');
+    var fbBtn   = document.getElementById('readerFallbackBtn');
+    document.getElementById('readerTitle').textContent = title || 'Document Viewer';
+    frame.style.display = 'none';
+    loading.style.display = 'flex';
+    fallback.style.display = 'none';
+    frame.src = '';
+    dlBtn.href = url; fbBtn.href = url;
+    var previewUrl = url;
+    var gdMatch = url.match(/drive\.google\.com\/file\/d\/([^\/\?]+)/);
+    if (gdMatch) previewUrl = 'https://docs.google.com/viewer?url=' + encodeURIComponent('https://drive.google.com/uc?export=download&id=' + gdMatch[1]) + '&embedded=true';
+    var gdOpen = url.match(/drive\.google\.com\/open\?id=([^&]+)/);
+    if (gdOpen) previewUrl = 'https://drive.google.com/file/d/' + gdOpen[1] + '/preview';
+    if (url.includes('dropbox.com') && !url.includes('dropboxusercontent.com'))
+      previewUrl = url.replace('www.dropbox.com','dl.dropboxusercontent.com').replace('?dl=0','');
+    if (url.includes('1drv.ms') || url.includes('onedrive.live.com'))
+      previewUrl = 'https://view.officeapps.live.com/op/embed.aspx?src=' + encodeURIComponent(url);
+    frame.src = previewUrl;
+    document.getElementById('readerModal').classList.add('open');
+    frame.onload  = function() { loading.style.display='none'; frame.style.display='block'; };
+    frame.onerror = function() { loading.style.display='none'; fallback.style.display='flex'; };
+    setTimeout(function() {
+      if (loading.style.display !== 'none') { loading.style.display='none'; frame.style.display='block'; }
+    }, 10000);
+  };
+
+  window.closeReader = function() {
+    document.getElementById('readerModal').classList.remove('open');
+    document.getElementById('readerFrame').src = '';
+  };
+
+  document.addEventListener('DOMContentLoaded', function() {
+    lucide.createIcons();
+
+    document.getElementById('themeToggleBtn').addEventListener('click', window.toggleTheme);
+    document.getElementById('backBtn').addEventListener('click', function() {
+      window.location.href = '../dashboard/school-portal.html';
+    });
+    document.querySelectorAll('.tab-btn').forEach(function(b) {
+      b.addEventListener('click', function() { window.switchTab(b.dataset.target); });
+    });
+    document.getElementById('readerCloseBtn').addEventListener('click', window.closeReader);
+    document.getElementById('readerModal').addEventListener('click', function(e) {
+      if (e.target === this) window.closeReader();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') window.closeReader();
+    });
+  });
+</script>
+
+<!-- ══════════════════════════════════════════
+     FIREBASE SCRIPT
+══════════════════════════════════════════ -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+  import { getFirestore, collection, getDocs, query, where }
+    from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+  const firebaseConfig = {
+  apiKey: "AIzaSyD_lq2Z4qBrZZkzYmEMPPMtCKQmfSx2rkY",
+  authDomain: "jaystarbliss-studios.firebaseapp.com",
+  projectId: "jaystarbliss-studios",
+  storageBucket: "jaystarbliss-studios.firebasestorage.app",
+  messagingSenderId: "885364100276",
+  appId: "1:885364100276:web:1159c4cbd9159aaa0e1be1"
+};
+
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+
+  const schoolId   = localStorage.getItem('schoolId');
+  const schoolName = localStorage.getItem('schoolName');
+
+  if (!schoolId) {
+    alert('No school selected. Redirecting...');
+    window.location.href = '../dashboard/school-portal.html';
+  }
+
+  const schoolNames = {
+    peniel:       'Peniel Lily Montessori School',
+    southgold:    'South Gold Montessori School',
+    sapphire:     'Sapphire Explorer Montessori School',
+    easystars:    'Easy Stars Early Years Academy',
+    christycaleb: 'Christy Caleb International School',
+    royalbreed:   'Royal Breed Academy'
+  };
+
+  const displayName = schoolNames[schoolId] || schoolName || 'School Resources';
+  document.getElementById('schoolNameEl').textContent     = displayName;
+  document.getElementById('breadcrumbSchool').textContent = displayName;
+  document.title = displayName + ' — Jaystarbliss Dynamic Hub';
+
+  const fmtDate = ts => {
+    if (!ts) return 'Recent';
+    const d = ts.toDate ? ts.toDate() : new Date(ts);
+    return d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
+  };
+
+  const escAttr = s => (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;');
+
+  /* Re-run Lucide after any innerHTML injection */
+  function refreshIcons() { if (window.lucide) lucide.createIcons(); }
+
+  function setCount(id, c) {
+    const el = document.getElementById(id);
+    el.textContent = c;
+    if (c > 0) el.classList.add('show');
+  }
+
+  /* ── Card builder — Lucide icons in type, meta & buttons ── */
+  function buildCard(data, kind) {
+    const isLink = kind === 'link', isExam = kind === 'exam';
+    const url        = escAttr(data.url || data.fileUrl || '#');
+    const title      = data.title || 'Untitled';
+    const safeTitle  = escAttr(title);
+    const typeIcon   = isExam ? 'file-text' : isLink ? 'link-2' : 'file';
+    const typeLabel  = isExam ? 'Exam' : isLink ? 'Link' : 'Resource';
+
+    let actions = '';
+    if (!isLink && !isExam) {
+      actions = `<div class="card-btn-group">
+        <button class="read-btn" onclick="window.openReader('${url}','${safeTitle}')">
+          <i data-lucide="book-open"></i> Read Now
+        </button>
+        <button class="download-btn" onclick="window.open('${url}','_blank')">
+          <i data-lucide="download"></i> Download
+        </button>
+      </div>`;
+    } else if (isExam) {
+      actions = `<div class="card-btn-group">
+        <button class="download-btn" onclick="window.open('${url}','_blank')">
+          <i data-lucide="external-link"></i> Take Exam →
+        </button>
+      </div>`;
+    } else {
+      actions = `<div class="card-btn-group">
+        <button class="open-btn" onclick="window.open('${url}','_blank')">
+          <i data-lucide="external-link"></i> Open Link ↗
+        </button>
+      </div>`;
+    }
+
+    return `<div class="resource-card">
+      <div class="resource-type"><i data-lucide="${typeIcon}"></i> ${typeLabel}</div>
+      <div class="resource-name">${title}</div>
+      ${data.description ? `<div class="resource-desc">${data.description}</div>` : ''}
+      <div class="resource-meta"><i data-lucide="calendar"></i> ${fmtDate(data.timestamp)}</div>
+      ${actions}
+    </div>`;
+  }
+
+  function emptyState(msg, sub) {
+    return `<div class="empty-state">
+      <i data-lucide="inbox"></i>
+      <div class="empty-msg">${msg}</div>
+      ${sub ? `<div class="empty-sub">${sub}</div>` : ''}
+    </div>`;
+  }
+
+  function errorState(msg) {
+    return `<div class="empty-state is-error">
+      <i data-lucide="alert-triangle"></i>
+      <div class="empty-msg">Error loading data</div>
+      <div class="empty-sub">${msg}</div>
+    </div>`;
+  }
+
+  function attachSearch(inputId, gridId, docs, kind) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    input.addEventListener('input', function() {
+      const q = this.value.toLowerCase();
+      const grid = document.getElementById(gridId);
+      const f = docs.filter(d =>
+        (d.title||'').toLowerCase().includes(q) ||
+        (d.description||'').toLowerCase().includes(q)
+      );
+      grid.innerHTML = f.length
+        ? f.map(d => buildCard(d, kind)).join('')
+        : emptyState('No matches found', 'Try a different keyword');
+      refreshIcons();
+    });
+  }
+
+  async function loadResources() {
+    const grid = document.getElementById('resourcesGrid');
+    try {
+      const snap = await getDocs(query(collection(db,'schoolResources'), where('schoolId','==',schoolId)));
+      let docs = [];
+      snap.forEach(d => docs.push({ id:d.id, ...d.data() }));
+      docs.sort((a,b) => (b.timestamp?.toDate()||new Date(0)) - (a.timestamp?.toDate()||new Date(0)));
+      setCount('countResources', docs.length);
+      document.getElementById('metaResources').textContent = docs.length + ' item' + (docs.length!==1?'s':'') + ' available';
+      grid.innerHTML = docs.length ? docs.map(d => buildCard(d,'resource')).join('') : emptyState('No resources yet for your school','Your teacher will upload resources soon!');
+      refreshIcons();
+      attachSearch('searchResources','resourcesGrid', docs,'resource');
+    } catch(e) { grid.innerHTML = errorState(e.message); refreshIcons(); }
+  }
+
+  async function loadLinks() {
+    const grid = document.getElementById('linksGrid');
+    try {
+      const snap = await getDocs(query(collection(db,'schoolLinks'), where('schoolId','==',schoolId)));
+      let docs = [];
+      snap.forEach(d => docs.push({ id:d.id, ...d.data() }));
+      docs.sort((a,b) => (b.timestamp?.toDate()||new Date(0)) - (a.timestamp?.toDate()||new Date(0)));
+      setCount('countLinks', docs.length);
+      document.getElementById('metaLinks').textContent = docs.length + ' link' + (docs.length!==1?'s':'') + ' available';
+      grid.innerHTML = docs.length ? docs.map(d => buildCard(d,'link')).join('') : emptyState('No links yet for your school','Check back later!');
+      refreshIcons();
+      attachSearch('searchLinks','linksGrid', docs,'link');
+    } catch(e) { grid.innerHTML = errorState(e.message); refreshIcons(); }
+  }
+
+  async function loadExams() {
+    const grid = document.getElementById('examsGrid');
+    try {
+      const snap = await getDocs(collection(db,'schoolExams'));
+      let docs = [];
+      snap.forEach(d => { const data = d.data(); if (data.schoolId===schoolId) docs.push({id:d.id,...data}); });
+      docs.sort((a,b) => (b.timestamp?.toDate()||new Date(0)) - (a.timestamp?.toDate()||new Date(0)));
+      setCount('countExams', docs.length);
+      document.getElementById('metaExams').textContent = docs.length + ' exam' + (docs.length!==1?'s':'') + ' available';
+      grid.innerHTML = docs.length ? docs.map(d => buildCard(d,'exam')).join('') : emptyState('No exams yet','Your teacher will upload exams soon!');
+      refreshIcons();
+    } catch(e) { grid.innerHTML = errorState(e.message); refreshIcons(); }
+  }
+
+  loadResources();
+  loadLinks();
+  loadExams();
+</script>
+
+
+<script>
+window.switchTab = function(name, btn) {
+    console.log("Switching to tab:", name);
+    document.querySelectorAll('.sidebar-menu .nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelectorAll('.tab-pane, .tab-content').forEach(p => p.classList.remove('active'));
+    
+    let targetBtn = btn || document.querySelector('.sidebar-menu .nav-item[data-tab="' + name + '"]');
+    if(targetBtn) targetBtn.classList.add('active');
+    
+    // Some buttons might pass data-tab="null" but pass 'name' as first argument.
+    // We try to find the button by onclick if we couldn't find it
+    if(!targetBtn) {
+        let allBtns = document.querySelectorAll('.sidebar-menu .nav-item');
+        for(let i=0; i<allBtns.length; i++) {
+            let attr = allBtns[i].getAttribute('onclick') || '';
+            if(attr.includes("'" + name + "'")) {
+                allBtns[i].classList.add('active');
+                break;
+            }
+        }
+    }
+    
+    const pane = document.getElementById(name);
+    if(pane) pane.classList.add('active');
+    
+    document.querySelector('main')?.scrollTo(0, 0);
+};
+window.toggleSidebar = function() {
+    const sb = document.getElementById('sidebar');
+    if(sb) sb.classList.toggle('-translate-x-full');
+};
+</script>
+
+</body>
+</html>

@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kids Game World - Jaystarbliss Studios</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <style>
+:root {
+  --outline: #737784;
+  --on-tertiary-container: #ccced0;
+  --inverse-primary: #b0c6ff;
+  --surface-container-lowest: #ffffff;
+  --inverse-on-surface: #eaf1ff;
+  --on-tertiary-fixed-variant: #444749;
+  --on-surface: #0b1c30;
+  --on-primary-fixed: #001945;
+  --on-tertiary-fixed: #191c1e;
+  --primary-fixed-dim: #b0c6ff;
+  --primary-fixed: #d9e2ff;
+  --on-secondary-fixed: #00201c;
+  --on-surface-variant: #434653;
+  --secondary: #006b5f;
+  --on-error: #ffffff;
+  --tertiary-fixed: #e0e3e5;
+  --inverse-surface: #213145;
+  --on-secondary: #ffffff;
+  --surface-container-high: #dce9ff;
+  --secondary-fixed-dim: #3cddc7;
+  --primary-container: #0f52ba;
+  --error-container: #ffdad6;
+  --surface: #f8f9ff;
+  --secondary-container: #62fae3;
+  --on-background: #0b1c30;
+  --tertiary: #3d4143;
+  --error: #ba1a1a;
+  --on-primary-container: #bcceff;
+  --surface-dim: #cbdbf5;
+  --on-secondary-container: #007165;
+  --tertiary-container: #55585a;
+  --surface-bright: #f8f9ff;
+  --on-error-container: #93000a;
+  --outline-variant: #c3c6d5;
+  --on-secondary-fixed-variant: #005047;
+  --background: #f8f9ff;
+  --tertiary-fixed-dim: #c4c7c9;
+  --surface-container: #e5eeff;
+  --on-tertiary: #ffffff;
+  --surface-tint: #1d59c1;
+  --on-primary-fixed-variant: #00419c;
+  --surface-container-highest: #d3e4fe;
+  --secondary-fixed: #62fae3;
+  --on-primary: #ffffff;
+  --primary: #003c90;
+  --surface-variant: #d3e4fe;
+  --surface-container-low: #eff4ff;
+}
+
+[data-theme='dark'] {
+  --primary: #b0c6ff;
+  --on-primary: #002868;
+  --primary-container: #1d59c1;
+  --on-primary-container: #d9e2ff;
+  --secondary: #62fae3;
+  --on-secondary: #003730;
+  --secondary-container: #005047;
+  --on-secondary-container: #7ffdf1;
+  --tertiary: #c4c7c9;
+  --on-tertiary: #2d3133;
+  --tertiary-container: #444749;
+  --on-tertiary-container: #e0e3e5;
+  --error: #ffb4ab;
+  --on-error: #690005;
+  --error-container: #93000a;
+  --on-error-container: #ffdad6;
+  --background: #0A0A0A;
+  --on-background: #F0F0F0;
+  --surface: #0A0A0A;
+  --on-surface: #F0F0F0;
+  --surface-variant: #222222;
+  --on-surface-variant: #B3B3B3;
+  --outline: #8c909f;
+  --outline-variant: #333333;
+  --inverse-surface: #F0F0F0;
+  --inverse-on-surface: #0A0A0A;
+  --surface-container-lowest: #050505;
+  --surface-container-low: #111111;
+  --surface-container: #181818;
+  --surface-container-high: #222222;
+  --surface-container-highest: #2D2D2D;
+  --surface-dim: #0A0A0A;
+  --surface-bright: #3A3A3A;
+  --inverse-primary: #b0c6ff;
+  --on-tertiary-fixed-variant: #444749;
+  --on-primary-fixed: #001945;
+  --on-tertiary-fixed: #191c1e;
+  --primary-fixed-dim: #b0c6ff;
+  --primary-fixed: #d9e2ff;
+  --on-secondary-fixed: #00201c;
+  --tertiary-fixed: #e0e3e5;
+  --secondary-fixed-dim: #3cddc7;
+  --on-secondary-fixed-variant: #005047;
+  --tertiary-fixed-dim: #c4c7c9;
+  --surface-tint: #1d59c1;
+  --on-primary-fixed-variant: #00419c;
+  --secondary-fixed: #62fae3;
+}
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #1a0033, #4a0e78, #2d0055);
+            background-attachment: fixed;
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+
+        /* Floating Emoji Background */
+        .floating {
+            position: fixed;
+            top: -50px;
+            pointer-events: none;
+            animation: fall linear infinite;
+            z-index: 0;
+            opacity: 0.2;
+            font-size: 24px;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.4;
+            }
+            100% {
+                transform: translateY(110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+         .container::before {
+            content: '🎄';
+            position: absolute;
+            font-size: 150px;
+            opacity: 1;
+            top: 7%;
+            right: 10%;
+            animation: float 8s ease-in-out infinite;
+        }
+
+    .rand{
+            content: '🎄';
+            position: absolute;
+            font-size: 150px;
+            opacity: 1;
+            top: 7%;
+            left: 10%;
+            animation: float 8s ease-in-out infinite;
+        }
+
+
+        .container::after {
+            content: '🎄';
+            position: absolute;
+            font-size: 150px;
+            opacity: 1;
+            top: 7%;
+            left: 7%;
+            z-index: -1;
+            animation: float 10s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(15deg); }
+            66% { transform: translate(-20px, 20px) rotate(-15deg); }
+        }
+
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(to right, #ff6ec7, #b06aff, #ff6ec7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.85;
+        }
+
+        /* Back Button */
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 25px;
+            background: rgba(255, 255, 255, 0.12);
+            padding: 10px 24px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.18);
+            transform: translateX(-5px);
+        }
+
+        /* Game Cards Grid */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .game-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            opacity: 0;
+            transform: translateY(40px);
+            animation: floatUp 0.7s ease-out forwards;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .game-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(255, 110, 199, 0.3);
+        }
+
+        @keyframes floatUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .game-card:nth-child(1) { animation-delay: 0.1s; }
+        .game-card:nth-child(2) { animation-delay: 0.2s; }
+        .game-card:nth-child(3) { animation-delay: 0.3s; }
+        .game-card:nth-child(4) { animation-delay: 0.4s; }
+        .game-card:nth-child(5) { animation-delay: 0.5s; }
+
+        .game-icon {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .game-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #ffb3ff;
+        }
+
+        .game-description {
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            opacity: 0.88;
+            min-height: 72px;
+        }
+
+        .game-creator {
+            font-size: 13px;
+            opacity: 0.65;
+            font-style: italic;
+            margin-bottom: 20px;
+            color: #d4a5ff;
+        }
+
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, #ff3fb9, #8b1fff);
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 63, 185, 0.4);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #ff5fc9, #a03fff);
+            box-shadow: 0 6px 20px rgba(255, 63, 185, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Game Display Section */
+        .game-display {
+            display: none;
+            background: rgba(0, 0, 0, 0.35);
+            padding: 30px;
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .game-display.active {
+            display: block;
+        }
+
+        .game-display h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #ffb3ff;
+        }
+
+        .game-frame-container {
+            background: black;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 55vh;
+            max-height: 500px;
+            min-height: 350px;
+            border: none;
+            display: block;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 36px;
+            }
+
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+
+            iframe {
+                height: 45vh;
+                min-height: 300px;
+            }
+        }
+    </style>
+
+<script>
+  (function() {
+    const t = localStorage.getItem('jdh-theme');
+    if (t === 'dark') { document.documentElement.classList.add('dark'); document.documentElement.setAttribute('data-theme', 'dark'); }
+    else if (t === 'light') { document.documentElement.classList.remove('dark'); document.documentElement.setAttribute('data-theme', 'light'); }
+  })();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
+
+    <script>
+        const savedTheme = localStorage.getItem('jdh-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        if (savedTheme === 'dark') document.documentElement.classList.add('dark');
+        
+        window.toggleTheme = function() {
+            const h = document.documentElement;
+            const isDark = h.getAttribute('data-theme') === 'dark';
+            const n = isDark ? 'light' : 'dark';
+            h.setAttribute('data-theme', n);
+            localStorage.setItem('jdh-theme', n);
+            if (n === 'dark') h.classList.add('dark'); else h.classList.remove('dark');
+        };
+    </script>
+    
+</head>
+
+<body>
+
+    <!-- Floating Emoji Background -->
+    <script>
+        function createFloatingEmoji() {
+            const emojiList = ["❄", "❄", "❄", "❄", "❄", "❄", "❄", "❄", "❄"];            
+            const emoji = document.createElement("div");
+            emoji.className = "floating";
+            emoji.textContent = emojiList[Math.floor(Math.random() * emojiList.length)];
+            emoji.style.fontSize = (Math.random() * 100 + 18) + "px";
+            emoji.style.left = Math.random() * 100 + "vw";
+            emoji.style.animationDuration = (4 + Math.random() * 4) + "s";
+            document.body.appendChild(emoji);
+            setTimeout(() => emoji.remove(), 9000);
+        }
+        setInterval(createFloatingEmoji, 300);
+    </script>
+
+    <div class="container">
+        <!-- Back Button -->
+        <a href="../../programming.html" class="back-btn">← Back to Home</a>
+
+        <!--MAGIC-->
+        <a href="MAGIC-PARTICLES.html" class="back-btn">Magic? 😎</a>
+
+        <!-- Header -->
+        <div class="header">
+            <h1>🎮 Kids Game Zone</h1>
+            <p>Play amazing Scratch games created by talented young developers!</p>
+            <p style="font-size: 14px;">⚠ Disclaimer! This page is only meant for PC's and Tablets ⚠</p>
+        </div>
+
+        <!-- Games Grid -->
+        <div id="gamesContainer" class="games-grid"></div>
+        
+		<!--MUSIC SECTION-->
+	<!--	<audio id="bg-music" src="../../assets/audio/jingle-bells.mp3" preload="auto"></audio>-->
+        
+        <!-- Game Display Section -->
+        <div id="gameDisplay" class="game-display">
+            <h2 id="currentGameTitle"></h2>
+            <div class="game-frame-container">
+                <iframe id="gameFrame" allowfullscreen></iframe>
+            </div>
+            <button onclick="closeGame()" class="btn">← Back to All Games</button>
+        </div>
+    </div>
+
+    <script>
+        // Game Database
+        const games = [
+            {
+                icon: "🎮",
+                title: "Funfinity",
+                description: "A game of games! This project contains seven different games in one. From shooting, to car racing, boat racing, puzzles, horror hide and seek and more!",
+                creator: "sarah_playzcraft (Age 11)",
+                embedUrl: "https://scratch.mit.edu/projects/1236660351/embed"
+            },
+            {
+                icon: "🔫",
+                title: "Blue vs Red",
+                description: "Defend yourself from alien invaders! Use your gun to blast through waves of enemies in this action-packed game.",
+                creator: "sarah_Playzcraft (Age 11)",
+                embedUrl: "https://scratch.mit.edu/projects/1249342539/embed"
+            },
+            {
+                icon: "🦜",
+                title: "Flappy parrot",
+                description: "Keep clicking to fly and make sure not to hit the obstacles lest you die. Happy gaming!!!",
+                creator: "nel-jdn (Age 13)",
+                embedUrl: "https://scratch.mit.edu/projects/1247225428/embed"
+            },
+            {
+                icon: "🧠",
+                title: "Dragon Minds",
+                description: "A Goku themed calculator developed to make calculations more fun!",
+                creator: "nel-jdn (Age 13)",
+                embedUrl: "https://scratch.mit.edu/projects/1236645755/embed"
+            },
+            {
+                icon: "🎨",
+                title: "Art Studio",
+                description: "Create beautiful pixel art and animations! Save your masterpieces and share them with friends.",
+                creator: "Maya (Age 12)",
+                embedUrl: ""
+            },
+            
+           {
+                icon: "🦖",
+                title: "Dino Run",
+                description: "A fun game to play. Use the space bar/tap to jump. Avoid all obstacles! 🙃",
+                creator: "nel_jdn(Age 13)",
+                embedUrl: "https://scratch.mit.edu/projects/1249354249/embed"
+            },
+
+            {
+                icon: "👻",
+                title: "Shadow Bounce (Christmas Edition)",
+                description: "Right in the shadows, the enemies appear... Try to kill as many as you can before your life runs out! 😲 ",
+                creator: "Sarah_playzcraft(Age 11)",
+                embedUrl: "https://scratch.mit.edu/projects/1249354249/embed"
+            }
+        ];
+
+        // Generate Game Cards
+        const container = document.getElementById('gamesContainer');
+        
+        games.forEach((game, index) => {
+            const card = document.createElement('div');
+            card.className = 'game-card';
+            
+            card.innerHTML = `
+                <div class="game-icon">${game.icon}</div>
+                <div class="game-title">${game.title}</div>
+                <div class="game-description">${game.description}</div>
+                <div class="game-creator">Created by ${game.creator}</div>
+                <button class="btn" onclick="playGame(${index})">▶ Play Game</button>
+            `;
+            
+            container.appendChild(card);
+        });
+        
+        //MUSIC SCROLL DETECTOR FUNCTION
+			document.addEventListener("DOMContentLoaded", () => {
+    const audio = document.getElementById("bg-music");
+    let fadeInterval;
+    let inactivityTimeout;
+
+    // Initial settings
+    audio.volume = 0; 
+    audio.loop = true;
+
+    // Try to auto-play
+    audio.play().catch(() => {
+        // Autoplay may be blocked; start when user scrolls
+        console.log("Autoplay blocked until user interacts.");
+    });
+
+    function fadeIn() {
+        clearInterval(fadeInterval);
+        fadeInterval = setInterval(() => {
+            if (audio.volume < 0.4) { 
+                audio.volume += 0.02;
+            } else {
+                clearInterval(fadeInterval);
+            }
+        }, 100);
+    }
+
+    function fadeOut() {
+        clearInterval(fadeInterval);
+        fadeInterval = setInterval(() => {
+            if (audio.volume > 0) {
+                audio.volume -= 0.02;
+            } else {
+                clearInterval(fadeInterval);
+            }
+        }, 100);
+    }
+
+    function resetFadeOutTimer() {
+        clearTimeout(inactivityTimeout);
+        inactivityTimeout = setTimeout(() => {
+            fadeOut();
+        }, 5000); // 5 seconds of no scrolling
+    }
+
+    // Trigger fade in when scrolling
+    window.addEventListener("scroll", () => {
+        audio.play(); 
+        fadeIn();
+        resetFadeOutTimer();
+    });
+
+    // Start music immediately on load
+    fadeIn();
+    resetFadeOutTimer();
+});
+
+        // Play Game Function
+        function playGame(index) {
+            const game = games[index];
+            document.getElementById('currentGameTitle').textContent = game.icon + " " + game.title;
+            document.getElementById('gameFrame').src = game.embedUrl;
+            document.getElementById('gamesContainer').style.display = 'none';
+            document.getElementById('gameDisplay').classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Close Game Function
+        function closeGame() {
+            document.getElementById('gameDisplay').classList.remove('active');
+            document.getElementById('gamesContainer').style.display = 'grid';
+            document.getElementById('gameFrame').src = '';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+    <script>lucide.createIcons();</script>
+
+
+<script>
+window.switchTab = function(name, btn) {
+    console.log("Switching to tab:", name);
+    document.querySelectorAll('.sidebar-menu .nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelectorAll('.tab-pane, .tab-content').forEach(p => p.classList.remove('active'));
+    
+    let targetBtn = btn || document.querySelector('.sidebar-menu .nav-item[data-tab="' + name + '"]');
+    if(targetBtn) targetBtn.classList.add('active');
+    
+    // Some buttons might pass data-tab="null" but pass 'name' as first argument.
+    // We try to find the button by onclick if we couldn't find it
+    if(!targetBtn) {
+        let allBtns = document.querySelectorAll('.sidebar-menu .nav-item');
+        for(let i=0; i<allBtns.length; i++) {
+            let attr = allBtns[i].getAttribute('onclick') || '';
+            if(attr.includes("'" + name + "'")) {
+                allBtns[i].classList.add('active');
+                break;
+            }
+        }
+    }
+    
+    const pane = document.getElementById(name);
+    if(pane) pane.classList.add('active');
+    
+    document.querySelector('main')?.scrollTo(0, 0);
+};
+window.toggleSidebar = function() {
+    const sb = document.getElementById('sidebar');
+    if(sb) sb.classList.toggle('-translate-x-full');
+};
+</script>
+
+</body>
+</html>

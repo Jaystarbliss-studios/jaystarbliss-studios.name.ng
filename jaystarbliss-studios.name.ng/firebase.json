@@ -1,0 +1,11 @@
+{
+  "functions": [
+    {
+      "source": "functions"
+    }
+  ],
+  "firestore": {
+    "rules": "htdocs/pages/dashboard/firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
+}

@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" type="image/x-icon" href="../../assets/img/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/favicon.png">
+<link rel="apple-touch-icon" href="../../assets/img/favicon.ico">
+<title>Access Initialization Protocol - Jaystarbliss Dynamic Institute</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+:root {
+  --outline: #737784;
+  --on-tertiary-container: #ccced0;
+  --inverse-primary: #b0c6ff;
+  --surface-container-lowest: #ffffff;
+  --inverse-on-surface: #eaf1ff;
+  --on-tertiary-fixed-variant: #444749;
+  --on-surface: #0b1c30;
+  --on-primary-fixed: #001945;
+  --on-tertiary-fixed: #191c1e;
+  --primary-fixed-dim: #b0c6ff;
+  --primary-fixed: #d9e2ff;
+  --on-secondary-fixed: #00201c;
+  --on-surface-variant: #434653;
+  --secondary: #006b5f;
+  --on-error: #ffffff;
+  --tertiary-fixed: #e0e3e5;
+  --inverse-surface: #213145;
+  --on-secondary: #ffffff;
+  --surface-container-high: #dce9ff;
+  --secondary-fixed-dim: #3cddc7;
+  --primary-container: #0f52ba;
+  --error-container: #ffdad6;
+  --surface: #f8f9ff;
+  --secondary-container: #62fae3;
+  --on-background: #0b1c30;
+  --tertiary: #3d4143;
+  --error: #ba1a1a;
+  --on-primary-container: #bcceff;
+  --surface-dim: #cbdbf5;
+  --on-secondary-container: #007165;
+  --tertiary-container: #55585a;
+  --surface-bright: #f8f9ff;
+  --on-error-container: #93000a;
+  --outline-variant: #c3c6d5;
+  --on-secondary-fixed-variant: #005047;
+  --background: #f8f9ff;
+  --tertiary-fixed-dim: #c4c7c9;
+  --surface-container: #e5eeff;
+  --on-tertiary: #ffffff;
+  --surface-tint: #1d59c1;
+  --on-primary-fixed-variant: #00419c;
+  --surface-container-highest: #d3e4fe;
+  --secondary-fixed: #62fae3;
+  --on-primary: #ffffff;
+  --primary: #003c90;
+  --surface-variant: #d3e4fe;
+  --surface-container-low: #eff4ff;
+}
+
+[data-theme='dark'] {
+  --primary: #b0c6ff;
+  --on-primary: #002868;
+  --primary-container: #1d59c1;
+  --on-primary-container: #d9e2ff;
+  --secondary: #62fae3;
+  --on-secondary: #003730;
+  --secondary-container: #005047;
+  --on-secondary-container: #7ffdf1;
+  --tertiary: #c4c7c9;
+  --on-tertiary: #2d3133;
+  --tertiary-container: #444749;
+  --on-tertiary-container: #e0e3e5;
+  --error: #ffb4ab;
+  --on-error: #690005;
+  --error-container: #93000a;
+  --on-error-container: #ffdad6;
+  --background: #0A0A0A;
+  --on-background: #F0F0F0;
+  --surface: #0A0A0A;
+  --on-surface: #F0F0F0;
+  --surface-variant: #222222;
+  --on-surface-variant: #B3B3B3;
+  --outline: #8c909f;
+  --outline-variant: #333333;
+  --inverse-surface: #F0F0F0;
+  --inverse-on-surface: #0A0A0A;
+  --surface-container-lowest: #050505;
+  --surface-container-low: #111111;
+  --surface-container: #181818;
+  --surface-container-high: #222222;
+  --surface-container-highest: #2D2D2D;
+  --surface-dim: #0A0A0A;
+  --surface-bright: #3A3A3A;
+  --inverse-primary: #b0c6ff;
+  --on-tertiary-fixed-variant: #444749;
+  --on-primary-fixed: #001945;
+  --on-tertiary-fixed: #191c1e;
+  --primary-fixed-dim: #b0c6ff;
+  --primary-fixed: #d9e2ff;
+  --on-secondary-fixed: #00201c;
+  --tertiary-fixed: #e0e3e5;
+  --secondary-fixed-dim: #3cddc7;
+  --on-secondary-fixed-variant: #005047;
+  --tertiary-fixed-dim: #c4c7c9;
+  --surface-tint: #1d59c1;
+  --on-primary-fixed-variant: #00419c;
+  --secondary-fixed: #62fae3;
+}
+
+:root {
+  --cr:#ff2e00; --cr-g:#ff4d26; --cr-d:#8b1a00; --cr-dk:#3a0900;
+  --gold:#FFD700; --gold-d:#b89d00;
+  --bg:#050505; --surface:#0e0e0e; --surf2:#161616;
+  --border:rgba(255,46,0,0.18); --border2:rgba(255,46,0,0.35);
+  --text:#f0ece8; --muted:#8a7f7a; --dim:#3d3530; --green:#2ecc71;
+  --mono:'Space Mono',monospace; --sans:'Poppins',sans-serif; --r:18px;
+}
+[data-theme="light"] {
+  --bg:#f5ece8; --surface:#fff8f5; --surf2:#f0e8e4;
+  --border:rgba(255,46,0,0.15); --border2:rgba(255,46,0,0.35);
+  --text:#1a0e0a; --muted:#5a4a42; --dim:#b0a09a;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:clamp(14px,1.8vw,16px)}
+body{font-family:var(--sans);min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:1.5rem;background:var(--bg);position:relative;overflow-x:hidden;overflow-y:auto;transition:background 0.3s;}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(rgba(255,46,0,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,46,0,0.04) 1px,transparent 1px);background-size:40px 40px;}
+[data-theme="light"] body::after{background-image:linear-gradient(rgba(255,46,0,0.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,46,0,0.06) 1px,transparent 1px);}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 70% 60% at 20% 30%,rgba(139,26,0,0.45) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 80% 75%,rgba(255,215,0,0.08) 0%,transparent 60%),radial-gradient(ellipse 50% 50% at 75% 10%,rgba(255,46,0,0.12) 0%,transparent 70%);}
+[data-theme="light"] body::before{background:radial-gradient(ellipse 70% 60% at 20% 30%,rgba(255,46,0,0.12) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 80% 75%,rgba(255,215,0,0.12) 0%,transparent 60%);}
+.scanlines{position:fixed;inset:0;pointer-events:none;z-index:1;background:linear-gradient(rgba(0,0,0,0) 50%,rgba(0,0,0,0.18) 50%);background-size:100% 3px;opacity:0.25;}
+[data-theme="light"] .scanlines{opacity:0.07;}
+.card{position:relative;z-index:2;display:flex;width:100%;max-width:900px;min-height:560px;border-radius:var(--r);overflow:hidden;border:1px solid var(--border2);box-shadow:0 0 0 1px rgba(255,46,0,0.08),0 32px 80px rgba(0,0,0,0.6),0 0 60px rgba(255,46,0,0.08);animation:cardIn 0.55s cubic-bezier(0.22,1,0.36,1) both;}
+@keyframes cardIn{from{opacity:0;transform:translateY(28px) scale(0.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+.deco-panel{width:42%;flex-shrink:0;background:linear-gradient(160deg,#1a0200 0%,#0a0000 60%,#1a0a00 100%);position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:2rem;border-right:1px solid var(--border);}
+.deco-panel::before{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;background-image:repeating-linear-gradient(135deg,rgba(0,0,0,0.08) 0px,rgba(0,0,0,0.08) 1px,transparent 1px,transparent 28px);}
+.orbital-wrap{position:absolute;top:50%;left:50%;transform:translate(-50%,-56%);width:280px;height:280px;display:flex;align-items:center;justify-content:center;z-index:2;}
+.ring{position:absolute;border-radius:50%;border:1.5px solid transparent;}
+.ring-1{width:100%;height:100%;border-color:rgba(255,46,0,0.12);border-top-color:var(--cr);animation:spin1 10s linear infinite;}
+.ring-2{width:76%;height:76%;border-color:rgba(255,46,0,0.08);border-bottom-color:var(--cr-g);animation:spin2 7s linear infinite;}
+.ring-4{width:76%;height:76%;border-color:rgba(255,215,0,0.06);border-top-color:rgba(255,215,0,0.55);animation:spin1 9s linear infinite;transform:rotate(90deg);}
+.ring::after{content:'';position:absolute;width:7px;height:7px;border-radius:50%;top:-3.5px;left:50%;transform:translateX(-50%);}
+.ring-1::after{background:var(--cr);box-shadow:0 0 8px var(--cr);}
+.ring-2::after{background:var(--cr-g);box-shadow:0 0 6px var(--cr-g);top:auto;bottom:-3.5px;}
+.ring-4::after{background:var(--gold);box-shadow:0 0 6px var(--gold);top:-3.5px;left:50%;transform:translateX(-50%);}
+.ring-3::after{background:var(--gold);box-shadow:0 0 6px var(--gold);top:50%;left:-3.5px;transform:translateY(-50%);}
+@keyframes spin1{to{transform:rotate(360deg)}}
+@keyframes spin2{to{transform:rotate(-360deg)}}
+.orbital-core{position:relative;z-index:3;width:68px;height:68px;border-radius:50%;background:rgba(255,46,0,0.08);border:1px solid var(--cr);display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(255,46,0,0.4),inset 0 0 20px rgba(255,46,0,0.05);}
+.orbital-core svg{color:var(--cr);}
+.deco-brand{position:absolute;top:2rem;left:2rem;z-index:3;display:flex;align-items:center;gap:0.65rem;}
+.brand-mark{width:32px;height:32px;background:var(--cr);display:grid;place-items:center;clip-path:polygon(0 0,88% 0,100% 12%,100% 100%,12% 100%,0 88%);flex-shrink:0;overflow:hidden;}
+.brand-mark img{width:100%;height:100%;object-fit:cover;}
+.brand-mark-fallback{font-family:var(--mono);font-size:0.6rem;font-weight:700;color:#fff;}
+.brand-name{font-family:var(--mono);font-size:0.58rem;font-weight:700;color:rgba(255,255,255,0.75);text-transform:uppercase;letter-spacing:0.05em;line-height:1.4;}
+.deco-content{position:relative;z-index:3;}
+.deco-tagline{font-family:var(--mono);font-size:1.1rem;font-weight:700;color:#fff;line-height:1.35;margin-bottom:0.5rem;}
+.deco-tagline span{color:var(--cr);}
+.sys-stats{position:relative;z-index:3;margin-top:1rem;display:flex;flex-direction:column;gap:0.25rem;}
+.sys-stat{font-family:var(--mono);font-size:0.58rem;color:rgba(255,46,0,0.5);text-transform:uppercase;letter-spacing:0.04em;}
+.sys-stat::before{content:'> ';}
+.form-panel{flex:1;background:var(--surface);display:flex;flex-direction:column;overflow-y:auto;transition:background 0.3s;}
+.role-tabs{display:flex;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--surf2);}
+.role-tab{flex:1;padding:0.85rem 0.5rem 0.75rem;font-family:var(--mono);font-size:0.55rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--dim);background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.15s;display:flex;flex-direction:column;align-items:center;gap:0.3rem;}
+.role-tab .tab-ico{display:flex;align-items:center;justify-content:center;opacity:0.5;}
+.role-tab:hover{color:var(--muted);background:rgba(255,46,0,0.04);}
+.role-tab:hover .tab-ico{opacity:0.8;}
+.role-tab.active{color:var(--cr);border-bottom-color:var(--cr);}
+.role-tab.active .tab-ico{opacity:1;}
+.form-body{flex:1;padding:1.8rem 2rem;overflow-y:auto;}
+.pane{display:none;animation:paneIn 0.2s ease both;}
+.pane.active{display:block;}
+@keyframes paneIn{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:translateX(0)}}
+.form-title{font-family:var(--mono);font-size:1rem;font-weight:700;color:var(--text);margin-bottom:0.3rem;line-height:1;transition:color 0.3s;}
+.form-title em{color:var(--cr);font-style:normal;}
+.form-sub{font-size:0.74rem;color:var(--muted);margin-bottom:1.4rem;}
+.msg{padding:0.55rem 0.85rem;font-size:0.72rem;margin-bottom:1rem;display:none;border-left:2px solid;border-radius:0 4px 4px 0;line-height:1.4;}
+.msg.show{display:block;animation:shake 0.28s ease;}
+.msg-error{background:rgba(255,46,0,0.07);color:#ff6a50;border-color:var(--cr);}
+.msg-success{background:rgba(46,204,113,0.07);color:var(--green);border-color:var(--green);}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.info-box{padding:0.6rem 0.85rem;background:rgba(255,215,0,0.05);border-left:2px solid var(--gold-d);font-size:0.72rem;color:var(--muted);margin-bottom:1.2rem;line-height:1.5;}
+.info-box strong{color:var(--gold);}
+.field{margin-bottom:1rem;}
+.field label{display:block;margin-bottom:0.3rem;font-family:var(--mono);font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--cr);}
+.opt-label{font-family:var(--sans);font-size:0.62rem;color:var(--muted);font-weight:400;margin-left:0.3rem;text-transform:none;letter-spacing:0;}
+.input-wrap{position:relative;}
+.input-icon{position:absolute;left:0.85rem;top:50%;transform:translateY(-50%);color:var(--dim);pointer-events:none;display:flex;align-items:center;}
+.field input{width:100%;padding:0.68rem 0.9rem 0.68rem 2.5rem;background:rgba(0,0,0,0.35);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--sans);font-size:0.85rem;outline:none;transition:border-color 0.15s,box-shadow 0.15s;}
+[data-theme="light"] .field input{background:rgba(255,46,0,0.03);}
+.field input:focus{border-color:var(--cr);box-shadow:0 0 0 3px rgba(255,46,0,0.12);}
+.field input::placeholder{color:var(--dim);}
+.pw-eye{position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--dim);display:flex;align-items:center;padding:0.2rem;transition:color 0.15s;}
+.pw-eye:hover{color:var(--gold);}
+.field input.has-eye{padding-right:2.5rem;}
+
+/* ── PRIMARY BUTTON ── */
+.submit-btn{width:100%;padding:0.82rem;background:linear-gradient(135deg,var(--cr-g),var(--cr-d));color:#fff;border:none;border-radius:8px;font-family:var(--mono);font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;cursor:pointer;box-shadow:0 4px 20px rgba(255,46,0,0.35);transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.5rem;margin-top:0.4rem;}
+.submit-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 28px rgba(255,46,0,0.5);background:linear-gradient(135deg,#ff5a36,#b02200);}
+.submit-btn:active:not(:disabled){transform:translateY(0);}
+.submit-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+
+/* ── GOOGLE BUTTON ── */
+.google-btn{width:100%;padding:0.78rem;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.13);color:var(--text);border-radius:8px;font-family:var(--sans);font-size:0.78rem;font-weight:500;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:0.6rem;margin-top:0;}
+.google-btn:hover:not(:disabled){background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.25);transform:translateY(-1px);}
+.google-btn:active:not(:disabled){transform:translateY(0);}
+.google-btn:disabled{opacity:0.5;cursor:not-allowed;}
+[data-theme="light"] .google-btn{background:rgba(0,0,0,0.04);border-color:rgba(0,0,0,0.12);}
+[data-theme="light"] .google-btn:hover:not(:disabled){background:rgba(0,0,0,0.08);}
+.google-btn svg{flex-shrink:0;}
+
+/* ── DIVIDER ── */
+.auth-divider{display:flex;align-items:center;gap:0.75rem;margin:0.9rem 0;font-family:var(--mono);font-size:0.55rem;color:var(--dim);text-transform:uppercase;letter-spacing:0.1em;}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* ── SPINNERS ── */
+.btn-spinner{width:13px;height:13px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:bspin 0.7s linear infinite;display:none;}
+.submit-btn.loading .btn-spinner,.google-btn.loading .btn-spinner{display:block;}
+.submit-btn.loading .btn-text,.google-btn.loading .btn-text{opacity:0.65;}
+@keyframes bspin{to{transform:rotate(360deg)}}
+
+.toggle-link{text-align:center;margin-top:1rem;font-size:0.72rem;color:var(--muted);}
+.toggle-link button{background:none;border:none;cursor:pointer;color:var(--gold);font-size:0.72rem;font-weight:600;padding:0;text-decoration:underline;transition:color 0.15s;}
+.toggle-link button:hover{color:var(--cr);}
+.form-foot{padding:0.85rem 2rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:var(--surf2);transition:background 0.3s;min-height:52px;}
+.back-link{font-family:var(--mono);font-size:0.58rem;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:0.35rem;transition:color 0.15s;}
+.back-link:hover{color:var(--gold);background-color:#8b0909b6;padding:6px;border-radius:10px;}
+.theme-btn{width:28px;height:28px;background:var(--surface);border:1px solid var(--border);color:var(--muted);display:grid;place-items:center;cursor:pointer;font-size:0.8rem;border-radius:6px;transition:all 0.15s;}
+.theme-btn:hover{border-color:var(--gold);color:var(--gold);}
+.sub-view-head{display:flex;align-items:center;gap:0.5rem;margin-bottom:1.2rem;}
+.sub-back-btn{background:none;border:none;cursor:pointer;color:var(--muted);font-size:0.72rem;display:flex;align-items:center;gap:0.25rem;padding:0;transition:color 0.15s;font-family:var(--mono);}
+.sub-back-btn:hover{color:var(--gold);}
+.sub-title{font-family:var(--mono);font-size:0.9rem;font-weight:700;color:var(--text);line-height:1;}
+
+@media(max-width:700px){
+  body{padding:0;align-items:flex-start;}
+  .card{flex-direction:column;max-width:100%;width:100%;min-height:100dvh;border-radius:0;border-left:none;border-right:none;}
+  .deco-panel{width:100%;min-height:170px;padding:1.2rem 1.4rem;flex-direction:row;align-items:center;justify-content:space-between;border-right:none;border-bottom:1px solid var(--border);}
+  .deco-brand{position:static;margin-bottom:0;align-self:flex-start;}
+  .deco-left-col{display:flex;flex-direction:column;gap:0.55rem;flex:1;min-width:0;}
+  .deco-tagline{font-size:0.82rem;white-space:nowrap;line-height:1;margin-bottom:0;}
+  .deco-tagline br{display:none;}
+  .sys-stats{display:none;}
+  .deco-content{margin:0;}
+  .orbital-wrap{position:relative;top:auto;left:auto;transform:none;width:130px;height:130px;flex-shrink:0;margin-left:1rem;align-self:center;}
+  .orbital-core{width:44px;height:44px;}
+  .orbital-core svg{width:18px;height:18px;}
+  .ring::after{width:5px;height:5px;top:-2.5px;}
+  .ring-2::after{bottom:-2.5px;top:auto;}
+  .ring-4::after{top:-2.5px;}
+  .ring-3::after{top:50%;left:-2.5px;transform:translateY(-50%);}
+  .form-panel{flex:1;display:flex;flex-direction:column;overflow:visible;}
+  .form-body{padding:1.3rem 1.4rem;flex:1;}
+  .form-foot{padding:0.8rem 1.4rem;position:sticky;bottom:0;z-index:10;}
+  .role-tab{font-size:0.48rem;padding:0.75rem 0.25rem 0.65rem;}
+}
+@media(max-width:380px){
+  .deco-panel{min-height:150px;}
+  .orbital-wrap{width:110px;height:110px;}
+  .deco-tagline{font-size:0.72rem;}
+  .role-tab{font-size:0.44rem;}
+}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/bcryptjs@2.4.3/dist/bcrypt.min.js"></script>
+
+    <script>
+        const savedTheme = localStorage.getItem('jdh-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        if (savedTheme === 'dark') document.documentElement.classList.add('dark');
+        
+        window.toggleTheme = function() {
+            const h = document.documentElement;
+            const isDark = h.getAttribute('data-theme') === 'dark';
+            const n = isDark ? 'light' : 'dark';
+            h.setAttribute('data-theme', n);
+            localStorage.setItem('jdh-theme', n);
+            if (n === 'dark') h.classList.add('dark'); else h.classList.remove('dark');
+        };
+    </script>
+    
+</head>
+<body>
+<div class="scanlines"></div>
+<div class="card">
+
+  <div class="deco-panel">
+    <div class="deco-left-col">
+      <div class="deco-brand">
+        <div class="brand-mark">
+          <img src="../../assets/img/favicon.png" alt="JDH" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
+          <span class="brand-mark-fallback" style="display:none;width:100%;height:100%;align-items:center;justify-content:center;">J</span>
+        </div>
+        <div class="brand-name">Jaystarbliss<br>Dynamic Hub</div>
+      </div>
+      <div class="deco-content">
+        <div class="deco-tagline">Learn.<span class="tag-sep"> </span><br><span>Grow.</span><span class="tag-sep"> </span><br>Thrive.</div>
+      </div>
+      <div class="sys-stats">
+        <span class="sys-stat">Protocol: AES-256-GCM</span>
+        <span class="sys-stat">Status: Surveillance Active</span>
+        <span class="sys-stat">Node: 0xFF-JDH-init</span>
+      </div>
+    </div>
+    <div class="orbital-wrap">
+      <div class="ring ring-1"></div><div class="ring ring-2"></div>
+      <div class="ring ring-4"></div><div class="ring ring-3"></div>
+      <div class="orbital-core">
+        <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-panel">
+    <div class="role-tabs">
+      <button class="role-tab active" data-pane="pane-school">
+        <span class="tab-ico"><i data-lucide="school" style="width:16px;height:16px;"></i></span>Schools
+      </button>
+      <button class="role-tab" data-pane="pane-student">
+        <span class="tab-ico"><i data-lucide="graduation-cap" style="width:16px;height:16px;"></i></span>Students
+      </button>
+      <button class="role-tab" data-pane="pane-parent">
+        <span class="tab-ico"><i data-lucide="users" style="width:16px;height:16px;"></i></span>Parents
+      </button>
+      <button class="role-tab" data-pane="pane-staff">
+        <span class="tab-ico"><i data-lucide="shield-check" style="width:16px;height:16px;"></i></span>Staff
+      </button>
+    </div>
+
+    <div class="form-body">
+
+      <!-- SCHOOL -->
+      <div class="pane active" id="pane-school">
+        <div class="form-title">Welcome <em>Back</em></div>
+        <div class="form-sub">Sign in with your school credentials</div>
+        <div class="msg msg-error" id="err-school"></div>
+        <form id="form-school" autocomplete="on">
+          <div class="field"><label>Terminal ID (Email)</label>
+            <div class="input-wrap"><span class="input-icon"><i data-lucide="mail" style="width:15px;height:15px;"></i></span>
+              <input type="text" id="school-email" placeholder="school@example.com" required autocomplete="email"/>
+            </div>
+          </div>
+          <div class="field"><label>Access Code (Password)</label>
+            <div class="input-wrap"><span class="input-icon"><i data-lucide="lock" style="width:15px;height:15px;"></i></span>
+              <input type="password" id="school-pw" class="has-eye" placeholder="••••••••" required autocomplete="current-password"/>
+              <button type="button" class="pw-eye" data-target="school-pw"><i data-lucide="eye" style="width:15px;height:15px;"></i></button>
+            </div>
+          </div>
+          
+            <div class="field" style="display:flex; align-items:center; gap:0.5rem; margin-top:-0.5rem;">
+              <input type="checkbox" id="rememberMe" onchange="localStorage.setItem('jdh_remember_me', this.checked)" style="width:auto;">
+              <label for="rememberMe" style="margin:0; font-size:0.85rem; font-weight:normal;">Remember me for 30 days</label>
+            </div>
+<button type="submit" class="submit-btn" id="btn-school"><div class="btn-spinner"></div><span class="btn-text">Initialize Access →</span></button>
+        </form>
+      </div>
+
+      <!-- STUDENT -->
+      <div class="pane" id="pane-student">
+        <div id="student-login-view">
+          <div class="form-title">Student <em>Login</em></div>
+          <div class="form-sub">Enter your email or username and password</div>
+          <div class="msg msg-error" id="err-student"></div>
+          <form id="form-student" autocomplete="on">
+            <div class="field"><label>Email or Username</label>
+              <div class="input-wrap"><span class="input-icon"><i data-lucide="user" style="width:15px;height:15px;"></i></span>
+                <input type="text" id="student-user" placeholder="Your email or username" required autocomplete="email"/>
+              </div>
+            </div>
+            <div class="field"><label>Password</label>
+              <div class="input-wrap"><span class="input-icon"><i data-lucide="lock" style="width:15px;height:15px;"></i></span>
+                <input type="password" id="student-code" class="has-eye" placeholder="Your password" required autocomplete="current-password"/>
+                <button type="button" class="pw-eye" data-target="student-code"><i data-lucide="eye" style="width:15px;height:15px;"></i></button>
+              </div>
+            </div>
+            
+            <div class="field" style="display:flex; align-items:center; gap:0.5rem; margin-top:-0.5rem;">
+              <input type="checkbox" id="rememberMe" onchange="localStorage.setItem('jdh_remember_me', this.checked)" style="width:auto;">
+              <label for="rememberMe" style="margin:0; font-size:0.85rem; font-weight:normal;">Remember me for 30 days</label>
+            </div>
+<button type="submit" class="submit-btn" id="btn-student"><div class="btn-spinner"></div><span class="btn-text">Initialize Access →</span></button>
+          </form>
+          <div class="toggle-link">New student? <button id="showRegister">Request Enrollment →</button></div>
+        </div>
+
+        <div id="student-register-view" style="display:none;">
+          <div class="sub-view-head"><button class="sub-back-btn" id="showLogin">← Back</button><div class="sub-title">Enrollment</div></div>
+          <div class="info-box"><strong>Note:</strong> Your access code is provided by your instructor.</div>
+          <div class="msg msg-error" id="err-student-reg"></div>
+          <div class="msg msg-success" id="ok-student-reg"></div>
+          <form id="form-student-reg" autocomplete="on">
+            <div class="field"><label>Full Identity</label>
+              <div class="input-wrap"><span class="input-icon"><i data-lucide="user" style="width:15px;height:15px;"></i></span>
+                <input type="text" id="reg-fullname" placeholder="Your full name" required autocomplete="name"/>
+              </div>
+            </div>
+            <div class="field"><label>Email or Username</label>
+              <div class="input-wrap"><span class="input-icon"><i data-lucide="at-sign" style="width:15px;height:15px;"></i></span>
+                <input type="text" id="reg-username" placeholder="Choose a username" required autocomplete="username"/>
+              </div>
+            </div>
+            <div class="field"><label>Email Endpoint <span class="opt-label">(optional)</span></label>
+              <div class="input-wrap"><span class="input-icon"><i data-lucide="mail" style="width:15px;height:15px;"></i></span>
+                <input type="text" id="reg-email" placeholder="your@email.com" autocomplete="email"/>
+              </div>
+            </div>
+            <div class="field"><label>Password</label>
+              <div class="input-wrap"><span class="input-icon"><i data-lucide="key" style="width:15px;height:15px;"></i></span>
+                <input type="password" id="reg-code" class="has-eye" placeholder="From your instructor" required autocomplete="new-password"/>
+                <button type="button" class="pw-eye" data-target="reg-code"><i data-lucide="eye" style="width:15px;height:15px;"></i></button>
+              </div>
+            </div>
+            
+            <div class="field" style="display:flex; align-items:center; gap:0.5rem; margin-top:-0.5rem;">
+              <input type="checkbox" id="rememberMe" onchange="localStorage.setItem('jdh_remember_me', this.checked)" style="width:auto;">
+              <label for="rememberMe" style="margin:0; font-size:0.85rem; font-weight:normal;">Remember me for 30 days</label>
+            </div>
+<button type="submit" class="submit-btn" id="btn-student-reg"><div class="btn-spinner"></div><span class="btn-text">Execute Enrollment →</span></button>
+          </form>
+        </div>
+      </div>
+
+      <!-- PARENT -->
+      <div class="pane" id="pane-parent">
+        <div class="form-title">Parent <em>Login</em></div>
+        <div class="form-sub">Access your family dashboard</div>
+        <div class="msg msg-error" id="err-parent"></div>
+        <form id="form-parent" autocomplete="on">
+          <div class="field"><label>Email or Username</label>
+            <div class="input-wrap"><span class="input-icon"><i data-lucide="mail" style="width:15px;height:15px;"></i></span>
+              <input type="text" id="parent-email" placeholder="parent@example.com" required autocomplete="email"/>
+            </div>
+          </div>
+          <div class="field"><label>Password</label>
+            <div class="input-wrap"><span class="input-icon"><i data-lucide="lock" style="width:15px;height:15px;"></i></span>
+              <input type="password" id="parent-pw" class="has-eye" placeholder="••••••••" required autocomplete="current-password"/>
+              <button type="button" class="pw-eye" data-target="parent-pw"><i data-lucide="eye" style="width:15px;height:15px;"></i></button>
+            </div>
+          </div>
+          
+            <div class="field" style="display:flex; align-items:center; gap:0.5rem; margin-top:-0.5rem;">
+              <input type="checkbox" id="rememberMe" onchange="localStorage.setItem('jdh_remember_me', this.checked)" style="width:auto;">
+              <label for="rememberMe" style="margin:0; font-size:0.85rem; font-weight:normal;">Remember me for 30 days</label>
+            </div>
+<button type="submit" class="submit-btn" id="btn-parent"><div class="btn-spinner"></div><span class="btn-text">Access Dashboard →</span></button>
+        </form>
+        <div class="auth-divider">or</div>
+        <!-- Google button for parents -->
+        <button class="google-btn" id="btn-google-parent" type="button">
+          <div class="btn-spinner"></div>
+          <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
+            <path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.5 29.3 35 24 35c-6.1 0-11-4.9-11-11s4.9-11 11-11c2.8 0 5.3 1 7.2 2.7l5.7-5.7C33.5 7.1 29 5 24 5 12.9 5 4 13.9 4 25s8.9 20 20 20c10.8 0 19.6-8.5 19.6-20 0-1.3-.1-2.6-.4-3.9z"/>
+            <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 13 24 13c2.8 0 5.3 1 7.2 2.7l5.7-5.7C33.5 7.1 29 5 24 5 16.3 5 9.7 9 6.3 14.7z"/>
+            <path fill="#4CAF50" d="M24 45c4.9 0 9.3-1.8 12.7-4.8l-5.9-5c-1.8 1.3-4 2-6.8 2-5.2 0-9.6-3.5-11.2-8.2l-6.5 5C9.5 41 16.2 45 24 45z"/>
+            <path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.2-2.2 4-4.1 5.3l5.9 5C36.7 39.8 44 34.3 44 25c0-1.3-.1-2.6-.4-3.9z"/>
+          </svg>
+          <span class="btn-text">Continue with Google</span>
+        </button>
+        <div class="toggle-link">No account yet? <button onclick="window.location.href='../../register.html'">Register as Parent →</button></div>
+      </div>
+
+      <!-- STAFF -->
+      <div class="pane" id="pane-staff">
+        <div id="staff-login-view">
+          <div class="form-title">Staff <em>Login</em></div>
+          <div class="form-sub">Sign in with your staff credentials</div>
+          <div class="msg msg-error" id="err-staff"></div>
+          <form id="form-staff" autocomplete="on">
+            <div class="field"><label>Terminal ID (Email)</label>
+              <div class="input-wrap"><span class="input-icon"><i data-lucide="mail" style="width:15px;height:15px;"></i></span>
+                <input type="text" id="staff-email" placeholder="staff@jaystarbliss.ng" required autocomplete="email"/>
+              </div>
+            </div>
+            <div class="field"><label>Access Code (Password)</label>
+              <div class="input-wrap"><span class="input-icon"><i data-lucide="lock" style="width:15px;height:15px;"></i></span>
+                <input type="password" id="staff-pw" class="has-eye" placeholder="••••••••" required autocomplete="current-password"/>
+                <button type="button" class="pw-eye" data-target="staff-pw"><i data-lucide="eye" style="width:15px;height:15px;"></i></button>
+              </div>
+            </div>
+            
+            <div class="field" style="display:flex; align-items:center; gap:0.5rem; margin-top:-0.5rem;">
+              <input type="checkbox" id="rememberMe" onchange="localStorage.setItem('jdh_remember_me', this.checked)" style="width:auto;">
+              <label for="rememberMe" style="margin:0; font-size:0.85rem; font-weight:normal;">Remember me for 30 days</label>
+            </div>
+<button type="submit" class="submit-btn" id="btn-staff"><div class="btn-spinner"></div><span class="btn-text">Initialize Access →</span></button>
+          </form>
+          <div class="auth-divider">or</div>
+          <!-- Google button for staff -->
+          <button class="google-btn" id="btn-google-staff" type="button">
+            <div class="btn-spinner"></div>
+            <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
+              <path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.5 29.3 35 24 35c-6.1 0-11-4.9-11-11s4.9-11 11-11c2.8 0 5.3 1 7.2 2.7l5.7-5.7C33.5 7.1 29 5 24 5 12.9 5 4 13.9 4 25s8.9 20 20 20c10.8 0 19.6-8.5 19.6-20 0-1.3-.1-2.6-.4-3.9z"/>
+              <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 13 24 13c2.8 0 5.3 1 7.2 2.7l5.7-5.7C33.5 7.1 29 5 24 5 16.3 5 9.7 9 6.3 14.7z"/>
+              <path fill="#4CAF50" d="M24 45c4.9 0 9.3-1.8 12.7-4.8l-5.9-5c-1.8 1.3-4 2-6.8 2-5.2 0-9.6-3.5-11.2-8.2l-6.5 5C9.5 41 16.2 45 24 45z"/>
+              <path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.2-2.2 4-4.1 5.3l5.9 5C36.7 39.8 44 34.3 44 25c0-1.3-.1-2.6-.4-3.9z"/>
+            </svg>
+            <span class="btn-text">Continue with Google</span>
+          </button>
+          <div class="toggle-link">New operative? <button id="showStaffReg">Request Enrollment →</button></div>
+        </div>
+
+        <div id="staff-register-view" style="display:none;">
+          <div class="sub-view-head"><button class="sub-back-btn" id="showStaffLogin">← Back</button><div class="sub-title">Staff Registration</div></div>
+          <div class="info-box"><strong>Staff only.</strong> You'll need the admin registration code to proceed.</div>
+          <div class="msg msg-error" id="err-staff-reg"></div>
+          <div class="msg msg-success" id="ok-staff-reg"></div>
+          <form id="form-staff-reg" autocomplete="on">
+            <div class="field"><label>Registration Code</label>
+              <div class="input-wrap"><span class="input-icon"><i data-lucide="key" style="width:15px;height:15px;"></i></span>
+                <input type="text" id="sreg-code" placeholder="Code from admin" required/>
+              </div>
+            </div>
+            <div class="field"><label>Full Identity</label>
+              <div class="input-wrap"><span class="input-icon"><i data-lucide="user" style="width:15px;height:15px;"></i></span>
+                <input type="text" id="sreg-name" placeholder="Your full name" required autocomplete="name"/>
+              </div>
+            </div>
+            <div class="field"><label>Email Endpoint</label>
+              <div class="input-wrap"><span class="input-icon"><i data-lucide="mail" style="width:15px;height:15px;"></i></span>
+                <input type="text" id="sreg-email" placeholder="your@email.com" required autocomplete="email"/>
+              </div>
+            </div>
+            <div class="field"><label>Set Access Code</label>
+              <div class="input-wrap"><span class="input-icon"><i data-lucide="lock" style="width:15px;height:15px;"></i></span>
+                <input type="password" id="sreg-pw" class="has-eye" placeholder="Create a strong password" required autocomplete="new-password"/>
+                <button type="button" class="pw-eye" data-target="sreg-pw"><i data-lucide="eye" style="width:15px;height:15px;"></i></button>
+              </div>
+            </div>
+            <div class="field"><label>Confirm Access Code</label>
+              <div class="input-wrap"><span class="input-icon"><i data-lucide="lock" style="width:15px;height:15px;"></i></span>
+                <input type="password" id="sreg-pw2" class="has-eye" placeholder="Re-enter password" required autocomplete="new-password"/>
+                <button type="button" class="pw-eye" data-target="sreg-pw2"><i data-lucide="eye" style="width:15px;height:15px;"></i></button>
+              </div>
+            </div>
+            
+            <div class="field" style="display:flex; align-items:center; gap:0.5rem; margin-top:-0.5rem;">
+              <input type="checkbox" id="rememberMe" onchange="localStorage.setItem('jdh_remember_me', this.checked)" style="width:auto;">
+              <label for="rememberMe" style="margin:0; font-size:0.85rem; font-weight:normal;">Remember me for 30 days</label>
+            </div>
+<button type="submit" class="submit-btn" id="btn-staff-reg"><div class="btn-spinner"></div><span class="btn-text">Execute Enrollment →</span></button>
+          </form>
+        </div>
+      </div>
+
+    </div><!-- /form-body -->
+
+    <div class="form-foot">
+      <a href="../../index.html" class="back-link"><i data-lucide="arrow-left" style="width:14px;height:14px;"></i>Main Site</a>
+      <a href="../../programming.html" class="back-link"><i data-lucide="arrow-up" style="width:14px;height:14px;"></i>Programming Site</a>
+      <div style="display:flex;align-items:center;gap:0.5rem;">
+        <span style="font-family:var(--mono);font-size:0.55rem;color:var(--dim);text-transform:uppercase;letter-spacing:0.05em;">Build v4.4.0</span>
+        <button class="theme-btn" id="themeToggleBtn" title="Toggle theme"><i data-lucide="sun" style="width:14px;height:14px;"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- UI SCRIPT -->
+<script>
+  window.toggleTheme = function() {
+    var html = document.documentElement;
+    html.dataset.theme = html.dataset.theme === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('jdh-theme', html.dataset.theme);
+  };
+  function togglePw(id) {
+    var inp = document.getElementById(id);
+    if (inp) inp.type = inp.type === 'password' ? 'text' : 'password';
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    lucide.createIcons();
+    var saved = localStorage.getItem('jdh-theme');
+    if (saved) document.documentElement.dataset.theme = saved;
+    document.getElementById('themeToggleBtn').addEventListener('click', window.toggleTheme);
+    document.querySelectorAll('.role-tab').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.role-tab').forEach(function(b) { b.classList.remove('active'); });
+        document.querySelectorAll('.pane').forEach(function(p) { p.classList.remove('active'); });
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.pane).classList.add('active');
+      });
+    });
+    document.querySelectorAll('.pw-eye').forEach(function(btn) {
+      btn.addEventListener('click', function() { togglePw(btn.dataset.target); });
+    });
+    document.getElementById('showRegister').addEventListener('click', function() {
+      document.getElementById('student-login-view').style.display    = 'none';
+      document.getElementById('student-register-view').style.display = 'block';
+    });
+    document.getElementById('showLogin').addEventListener('click', function() {
+      document.getElementById('student-register-view').style.display = 'none';
+      document.getElementById('student-login-view').style.display    = 'block';
+    });
+    document.getElementById('showStaffReg').addEventListener('click', function() {
+      document.getElementById('staff-login-view').style.display    = 'none';
+      document.getElementById('staff-register-view').style.display = 'block';
+    });
+    document.getElementById('showStaffLogin').addEventListener('click', function() {
+      document.getElementById('staff-register-view').style.display = 'none';
+      document.getElementById('staff-login-view').style.display    = 'block';
+    });
+  });
+</script>
+
+<!-- FIREBASE MODULE -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+  import {
+    getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
+    GoogleAuthProvider, signInWithPopup
+  } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+  import {
+    getFirestore, doc, getDoc, setDoc, collection,
+    addDoc, getDocs, query, where, serverTimestamp, updateDoc
+  } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+  const firebaseConfig = {
+  apiKey: "AIzaSyD_lq2Z4qBrZZkzYmEMPPMtCKQmfSx2rkY",
+  authDomain: "jaystarbliss-studios.firebaseapp.com",
+  projectId: "jaystarbliss-studios",
+  storageBucket: "jaystarbliss-studios.firebasestorage.app",
+  messagingSenderId: "885364100276",
+  appId: "1:885364100276:web:1159c4cbd9159aaa0e1be1"
+};
+
+  const app  = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
+
+  const googleProvider = new GoogleAuthProvider();
+  googleProvider.addScope('email');
+
+
+  import { loginWithAccessCode } from '../../assets/js/jdh-firebase-modules.js';
+
+  const STAFF_REG_CODE_FALLBACK = 'JAYSTAR2024';
+
+  const REDIRECTS = {
+    admin:             '../dashboard/admin-dashboard.html',
+    school:            '../dashboard/school-portal.html',
+    schoolAdmin:       '../school/school-admin-portal.html',
+    staff:             '../dashboard/staff-portal.html',
+    parent:            '../dashboard/parent-portal.html',
+    individualStudent: '../dashboard/student-portal.html',
+  };
+
+  // ── Helpers ──
+  function showMsg(id, text, type) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = text;
+    el.className = 'msg msg-' + type + ' show';
+  }
+  function hideMsg(id) {
+    var el = document.getElementById(id);
+    if (el) el.className = 'msg msg-error';
+  }
+  function setBtnLoading(id, on) {
+    var btn = document.getElementById(id);
+    if (!btn) return;
+    btn.disabled = on;
+    btn.classList.toggle('loading', on);
+  }
+  function writeSession(role, uid, email, name, extra) {
+    localStorage.setItem('userRole',  role);
+    localStorage.setItem('userId',    uid);
+    localStorage.setItem('userEmail', email || '');
+    localStorage.setItem('userName',  name  || '');
+    if (extra) Object.entries(extra).forEach(([k,v]) => localStorage.setItem(k, v));
+  }
+  // Derives a deterministic internal Firebase Auth email from a student username.
+  // Never exposed to users.
+  function studentAuthEmail(username) {
+    return username.toLowerCase().replace(/[^a-z0-9]/g, '') + '@jdh-student.local';
+  }
+
+  // ══════════════════════════════════════════════════════
+  // GOOGLE LOGIN  (parent + staff)
+  // ══════════════════════════════════════════════════════
+  async function googleLogin(expectedRole, errId, btnId) {
+    hideMsg(errId);
+    setBtnLoading(btnId, true);
+    try {
+      const result   = await signInWithPopup(auth, googleProvider);
+      const user     = result.user;
+      const userSnap = await getDoc(doc(db, 'users', user.uid));
+
+      if (!userSnap.exists()) {
+        // No Firestore record — auto-create for first-time parent Google sign-in
+        if (expectedRole === 'parent') {
+          await setDoc(doc(db, 'users', user.uid), {
+            email: user.email, name: user.displayName || '',
+            role: 'parent', createdAt: serverTimestamp()
+          });
+          writeSession('parent', user.uid, user.email, user.displayName || '');
+          window.location.href = REDIRECTS.parent;
+          return;
+        }
+        throw new Error('No account found. Please register first or contact your admin.');
+      }
+
+      const userData = userSnap.data();
+      const role     = userData.role;
+
+      if (role === 'admin') {
+        writeSession('admin', user.uid, user.email, userData.name || '');
+        window.location.href = REDIRECTS.admin;
+        return;
+      }
+      if (role === 'schoolAdmin' && expectedRole === 'school') expectedRole = 'schoolAdmin'; // Allow school admin to login via school tab
+      if (role !== expectedRole) {
+        throw new Error('This Google account is registered as "' + role + '". Please use the correct tab.');
+      }
+      writeSession(role, user.uid, user.email, userData.name || '',
+        userData.name ? { staffName: userData.name } : null);
+      window.location.href = REDIRECTS[role] || REDIRECTS.school;
+
+    } catch(e) {
+      let msg = 'Google sign-in failed. Please try again.';
+      if (e.code === 'auth/popup-closed-by-user') msg = 'Sign-in cancelled.';
+      else if (e.code === 'auth/popup-blocked')   msg = 'Popup blocked — please allow popups and retry.';
+      else if (e.message) msg = e.message;
+      showMsg(errId, msg, 'error');
+      setBtnLoading(btnId, false);
+    }
+  }
+
+  document.getElementById('btn-google-parent').addEventListener('click', () =>
+    googleLogin('parent', 'err-parent', 'btn-google-parent'));
+  document.getElementById('btn-google-staff').addEventListener('click', () =>
+    googleLogin('staff', 'err-staff', 'btn-google-staff'));
+
+  // ══════════════════════════════════════════════════════
+  // EMAIL LOGIN  (school, staff, parent, admin)
+  // ══════════════════════════════════════════════════════
+  async function emailLogin(email, password, expectedRole, errId, btnId) {
+    hideMsg(errId);
+    setBtnLoading(btnId, true);
+    try {
+      const cred     = await signInWithEmailAndPassword(auth, email, password);
+      const userSnap = await getDoc(doc(db, 'users', cred.user.uid));
+      const userData = userSnap.exists() ? userSnap.data() : {};
+      const role     = userData.role;
+
+      if (role === 'admin') {
+        writeSession('admin', cred.user.uid, email, userData.name || '');
+        window.location.href = REDIRECTS.admin;
+        return;
+      }
+      if (role !== expectedRole) {
+        throw new Error('Wrong tab for this account. Please use the ' + role + ' tab.');
+      }
+      writeSession(role, cred.user.uid, email, userData.name || '',
+        userData.name ? { staffName: userData.name } : null);
+      window.location.href = REDIRECTS[role] || REDIRECTS.school;
+
+    } catch(e) {
+      let msg = 'Invalid credentials. Please try again.';
+      if (e.code === 'auth/user-not-found' || e.code === 'auth/invalid-credential' || e.code === 'auth/invalid-login-credentials') msg = 'No account found with that email.';
+      if (e.code === 'auth/wrong-password')    msg = 'Incorrect password.';
+      if (e.code === 'auth/invalid-email')     msg = 'Invalid email address.';
+      if (e.code === 'auth/too-many-requests') msg = 'Too many attempts. Please wait a moment.';
+      if (e.message && (e.message.includes('tab') || e.message.includes('role'))) msg = e.message;
+      showMsg(errId, msg, 'error');
+      setBtnLoading(btnId, false);
+    }
+  }
+
+  document.getElementById('form-school').addEventListener('submit', function(e) {
+    e.preventDefault();
+    emailLogin(document.getElementById('school-email').value.trim(), document.getElementById('school-pw').value, 'school', 'err-school', 'btn-school');
+  });
+  document.getElementById('form-parent').addEventListener('submit', function(e) {
+    e.preventDefault();
+    emailLogin(document.getElementById('parent-email').value.trim(), document.getElementById('parent-pw').value, 'parent', 'err-parent', 'btn-parent');
+  });
+  document.getElementById('form-staff').addEventListener('submit', function(e) {
+    e.preventDefault();
+    emailLogin(document.getElementById('staff-email').value.trim(), document.getElementById('staff-pw').value, 'staff', 'err-staff', 'btn-staff');
+  });
+
+  // ══════════════════════════════════════════════════════
+  // STUDENT LOGIN
+  //
+  // Students see only username + access code.
+  // Internally we sign them into Firebase Auth with a derived
+  // email so Firestore security rules work via request.auth.uid.
+  //
+  // CRITICAL SESSION KEYS:
+  //   studentDocId = Firestore doc ID → used for resource queries
+  //   userId       = Firebase Auth UID → used for auth/rules checks
+  //
+  // These are DIFFERENT values and must both be stored.
+  // ══════════════════════════════════════════════════════
+  
+  
+  document.getElementById('form-student').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    hideMsg('err-student');
+    setBtnLoading('btn-student', true);
+
+    const email = document.getElementById('student-user').value.trim();
+    const codeOrPassword = document.getElementById('student-code').value.trim();
+    
+    try {
+      let firebaseUid = null;
+      let isFirebaseAuth = false; let internalAuthEmail = "";
+      
+      // Try Firebase Auth First
+      try {
+        const { signInWithEmailAndPassword } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+        
+        const cred = await signInWithEmailAndPassword(auth, email, codeOrPassword);
+        firebaseUid = cred.user.uid;
+        isFirebaseAuth = true;
+      } catch(authErr) {
+        // Fall back to access code logic
+      }
+      
+      if (isFirebaseAuth) {
+        // First check 'users' collection (admins, tutors, schoolAdmins, staff)
+        const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+        const userDoc = await getDoc(doc(db, 'users', firebaseUid));
+        if (userDoc.exists()) {
+           const role = userDoc.data().role;
+           localStorage.setItem('userRole', role);
+           localStorage.setItem('userId', firebaseUid);
+           localStorage.setItem('userEmail', email);
+           
+           if (role === 'admin') {
+              window.location.href = '../dashboard/admin-dashboard.html';
+           } else if (role === 'tutor') {
+              window.location.href = '../dashboard/tutor-portal.html';
+           } else if (role === 'schoolAdmin') {
+              window.location.href = '../dashboard/school-portal.html';
+           } else if (role === 'staff') {
+              window.location.href = '../dashboard/staff-portal.html';
+           } else {
+              window.location.href = '../dashboard/student-portal.html';
+           }
+           return;
+        }
+
+        // If not in users, check 'students' doc
+        const snap = await getDocs(query(collection(db, 'students'), where('uid', '==', firebaseUid)));
+        if (!snap.empty) {
+            const studentData = snap.docs[0].data();
+            
+            localStorage.setItem('userRole', 'student');
+            localStorage.setItem('userId', firebaseUid);
+            localStorage.setItem('studentDocId', snap.docs[0].id);
+            localStorage.setItem('userEmail', studentData.email || email);
+            localStorage.setItem('userName', studentData.name || studentData.fullName || '');
+            localStorage.setItem('studentType', studentData.studentType || 'private');
+            
+            if (studentData.studentType === 'school') {
+              window.location.href = REDIRECTS.individualStudent; // student-portal.html
+            } else {
+              window.location.href = '../dashboard/private-student-portal.html';
+            }
+            return;
+        }
+        
+        throw new Error('Account found, but no role assigned. Contact admin.');
+      }
+
+      // Access Code Fallback
+      const studentData = await loginWithAccessCode(email, codeOrPassword);
+      if (!studentData) {
+         throw new Error('Invalid email, password, or access code.');
+      }
+      if (studentData.error) {
+         throw new Error(studentData.error);
+      }
+      
+      localStorage.setItem('userRole', 'student');
+      localStorage.setItem('userId', studentData.id);
+      localStorage.setItem('studentDocId', studentData.id);
+      localStorage.setItem('userEmail', studentData.email || email);
+      localStorage.setItem('userName', studentData.name || studentData.fullName || '');
+      localStorage.setItem('studentType', studentData.studentType || 'private');
+      
+      if (studentData.studentType === 'school') {
+        window.location.href = REDIRECTS.individualStudent;
+      } else {
+        window.location.href = '../dashboard/private-student-portal.html';
+      }
+    } catch(e) {
+      showMsg('err-student', e.message || 'Login failed.', 'error');
+      setBtnLoading('btn-student', false);
+    }
+  });
+
+  // ══════════════════════════════════════════════════════
+  // STUDENT REGISTRATION
+  // ══════════════════════════════════════════════════════
+  document.getElementById('form-student-reg').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    hideMsg('err-student-reg'); hideMsg('ok-student-reg');
+    setBtnLoading('btn-student-reg', true);
+
+    const fullName = document.getElementById('reg-fullname').value.trim();
+    const username = document.getElementById('reg-username').value.trim();
+    const email    = document.getElementById('reg-email').value.trim();
+    const code     = document.getElementById('reg-code').value.trim();
+
+    try {
+      const usernameSnap = await getDocs(query(collection(db,'students'), where('username','==',username)));
+      if (!usernameSnap.empty) throw new Error('Username already taken. Choose another.');
+
+      const codeSnap = await getDocs(query(collection(db,'students'), where('accessCode','==',code)));
+      if (codeSnap.empty) throw new Error('Invalid access code. Please get your code from your instructor.');
+
+      const fakeEmail = studentAuthEmail(username);
+      let firebaseUid;
+      try {
+        const cred  = await createUserWithEmailAndPassword(auth, fakeEmail, code);
+        firebaseUid = cred.user.uid;
+      } catch(authErr) {
+        if (authErr.code === 'auth/email-already-in-use') throw new Error('Username already registered. Try logging in instead.');
+        throw authErr;
+      }
+
+      await addDoc(collection(db, 'students'), {
+        fullName, username, email: email || '',
+        accessCode: code, firebaseUid, authEmail: fakeEmail,
+        registeredAt: serverTimestamp()
+      });
+
+      showMsg('ok-student-reg', '✓ Account created! You can now log in.', 'success');
+      document.getElementById('form-student-reg').reset();
+      setTimeout(function() {
+        document.getElementById('student-register-view').style.display = 'none';
+        document.getElementById('student-login-view').style.display    = 'block';
+      }, 1800);
+    } catch(e) {
+      showMsg('err-student-reg', e.message || 'Registration failed.', 'error');
+    }
+    setBtnLoading('btn-student-reg', false);
+  });
+
+  // ══════════════════════════════════════════════════════
+  // STAFF REGISTRATION
+  // ══════════════════════════════════════════════════════
+  document.getElementById('form-staff-reg').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    hideMsg('err-staff-reg'); hideMsg('ok-staff-reg');
+    setBtnLoading('btn-staff-reg', true);
+
+    const regCode = document.getElementById('sreg-code').value.trim();
+    const name    = document.getElementById('sreg-name').value.trim();
+    const email   = document.getElementById('sreg-email').value.trim();
+    const pw      = document.getElementById('sreg-pw').value;
+    const pw2     = document.getElementById('sreg-pw2').value;
+
+    if (pw !== pw2)    { showMsg('err-staff-reg','Passwords do not match.','error'); setBtnLoading('btn-staff-reg',false); return; }
+    if (pw.length < 6) { showMsg('err-staff-reg','Password must be at least 6 characters.','error'); setBtnLoading('btn-staff-reg',false); return; }
+
+    try {
+      const codeSnap  = await getDoc(doc(db,'staffRegistration','code'));
+      const validCode = codeSnap.exists() ? codeSnap.data().code : STAFF_REG_CODE_FALLBACK;
+      if (regCode !== validCode) throw new Error('Invalid registration code. Contact your admin.');
+
+      const cred = await createUserWithEmailAndPassword(auth, email, pw);
+      await setDoc(doc(db,'users',cred.user.uid), { email, name, role:'staff', createdAt:serverTimestamp() });
+
+      showMsg('ok-staff-reg','✓ Account created! You can now log in.','success');
+      document.getElementById('form-staff-reg').reset();
+      setTimeout(function() {
+        document.getElementById('staff-register-view').style.display = 'none';
+        document.getElementById('staff-login-view').style.display    = 'block';
+      }, 2000);
+    } catch(e) {
+      let txt = 'Registration failed.';
+      if (e.code === 'auth/email-already-in-use') txt = 'Email already registered. Try logging in.';
+      else if (e.code === 'auth/invalid-email')   txt = 'Invalid email address.';
+      else if (e.code === 'auth/weak-password')   txt = 'Password is too weak (min 6 chars).';
+      else if (e.message) txt = e.message;
+      showMsg('err-staff-reg', txt, 'error');
+    }
+    setBtnLoading('btn-staff-reg', false);
+  });
+</script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const remember = localStorage.getItem('jdh_remember_me') === 'true';
+      document.querySelectorAll('input[type="checkbox"][id="rememberMe"]').forEach(cb => {
+        cb.checked = remember;
+      });
+    });
+  </script>
+
+<script>
+window.switchTab = function(name, btn) {
+    console.log("Switching to tab:", name);
+    document.querySelectorAll('.sidebar-menu .nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelectorAll('.tab-pane, .tab-content').forEach(p => p.classList.remove('active'));
+    
+    let targetBtn = btn || document.querySelector('.sidebar-menu .nav-item[data-tab="' + name + '"]');
+    if(targetBtn) targetBtn.classList.add('active');
+    
+    // Some buttons might pass data-tab="null" but pass 'name' as first argument.
+    // We try to find the button by onclick if we couldn't find it
+    if(!targetBtn) {
+        let allBtns = document.querySelectorAll('.sidebar-menu .nav-item');
+        for(let i=0; i<allBtns.length; i++) {
+            let attr = allBtns[i].getAttribute('onclick') || '';
+            if(attr.includes("'" + name + "'")) {
+                allBtns[i].classList.add('active');
+                break;
+            }
+        }
+    }
+    
+    const pane = document.getElementById(name);
+    if(pane) pane.classList.add('active');
+    
+    document.querySelector('main')?.scrollTo(0, 0);
+};
+window.toggleSidebar = function() {
+    const sb = document.getElementById('sidebar');
+    if(sb) sb.classList.toggle('-translate-x-full');
+};
+</script>
+
+</body>
+</html>

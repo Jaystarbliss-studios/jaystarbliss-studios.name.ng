@@ -1,0 +1,6 @@
+{
+  "name": "Jaystarbliss Dynamic Hub",
+  "description": "Tech Education & Coding Classes for Kids in Lagos, Nigeria.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
