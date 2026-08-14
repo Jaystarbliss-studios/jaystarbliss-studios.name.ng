@@ -2,9 +2,9 @@
 <html class="light" lang="en">
 <head>
     <!-- Favicons -->
-    <link rel="icon" type="image/x-icon" href="./assets/img/favicon.ico">
-    <link rel="icon" type="image/png" sizes="32x32" href="./assets/img/favicon.png">
-    <link rel="apple-touch-icon" href="./assets/img/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/favicon.ico">
 
                 
 <meta charset="utf-8"/>
@@ -2680,6 +2680,11 @@ document.addEventListener('DOMContentLoaded', () => {
 window.addEventListener('popstate', e => {
   const hash = window.location.hash.replace('#','') || 'home';
   const valid = ['home','programs','about','teach','contact'];
+  if (valid.includes(hash)) showSPA(hash);
+});
+window.addEventListener("DOMContentLoaded", () => {
+  const hash = window.location.hash.replace("#","") || "home";
+  const valid = ["home","programs","about","teach","contact"];
   if (valid.includes(hash)) showSPA(hash);
 });
 </script>
