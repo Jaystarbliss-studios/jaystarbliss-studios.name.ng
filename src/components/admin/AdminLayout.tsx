@@ -1,4 +1,4 @@
-import jaystarblissLogo from '../../assets/jaystarbliss-logo.png';
+import jaystarblissLogo from '../../assets/favicon.png';
 import React, { useState } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
 import { 

@@ -1,4 +1,4 @@
-import jaystarblissLogo from '../../assets/jaystarbliss-logo.png';
+import jaystarblissLogo from '../../assets/favicon.png';
 import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Book, Settings, LogOut, LayoutDashboard, User, Calendar } from 'lucide-react';

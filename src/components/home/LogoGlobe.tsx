@@ -1,4 +1,4 @@
-import jaystarblissLogo from "../../assets/jaystarbliss-logo.png";
+import jaystarblissLogo from "../../assets/favicon.png";
 import React, { useRef, useState, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";

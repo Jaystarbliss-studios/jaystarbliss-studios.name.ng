@@ -1,4 +1,4 @@
-import jaystarblissLogo from '../../assets/jaystarbliss-logo.png';
+import jaystarblissLogo from '../../assets/favicon.png';
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronRight, Sun, Moon } from 'lucide-react';

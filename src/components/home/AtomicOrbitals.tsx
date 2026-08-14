@@ -1,6 +1,6 @@
 import React from 'react';
 import { Paintbrush, Cpu, Hash, Type } from 'lucide-react';
-import jaystarblissLogo from '../../assets/jaystarbliss-logo.png';
+import jaystarblissLogo from '../../assets/favicon.png';
 
 interface OrbitProps {
   rotationZ: number;

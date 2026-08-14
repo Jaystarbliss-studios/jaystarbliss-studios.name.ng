@@ -8,7 +8,7 @@ import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '../lib/firebase';
 import { useTheme } from '../contexts/ThemeContext';
-import jaystarblissLogo from '../assets/jaystarbliss-logo.png';
+import jaystarblissLogo from '../assets/favicon.png';
 import './Portal.css'; // Import custom styling
 
 type Role = 'school' | 'student' | 'parent' | 'staff';
