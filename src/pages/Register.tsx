@@ -1,384 +1,416 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { Mail, Lock, Eye, EyeOff, Users, User, ArrowLeft, Sun, GraduationCap, Phone, UserPlus, BookOpen, FileText } from 'lucide-react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { Link, useNavigate } from 'react-router-dom';
+import { 
+  Sun, Moon, CheckCircle2, Users, GraduationCap, AlertCircle, 
+  User, Phone, Mail, Lock, ShieldCheck, BookOpen, Contact, UserPlus, Send 
+} from 'lucide-react';
 import { auth, db } from '../lib/firebase';
-import jaystarblissLogo from '../assets/jaystarbliss-logo.png';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
+import { collection, addDoc, doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { useTheme } from '../contexts/ThemeContext';
+import './Register.css';
 
-type Role = 'student' | 'parent' | 'staff';
 
-const Register: React.FC = () => {
+const SUBJECTS = [
+  'Mathematics','English','Physics','Chemistry','Biology',
+  'Literature','Government','CRS','Accounting','Commerce',
+  'Marketing','Programming','Web Dev','AI Tools','Tech Literacy',
+  'Graphic Design','Music','Creative Arts','WAEC Prep','NECO Prep','JAMB Prep'
+];
+
+const Register = () => {
+  const { theme, toggleTheme } = useTheme();
+  const isDarkMode = theme === 'dark';
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<Role>('student');
-  const [showPassword, setShowPassword] = useState(false);
+  
+  const [mode, setMode] = useState<'parent' | 'student'>('parent');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-
+  const [success, setSuccess] = useState('');
+  
   // Common Fields
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
+  
+  // Parent Fields
   const [password, setPassword] = useState('');
-
+  const [confirmPassword, setConfirmPassword] = useState('');
+  
   // Student Fields
-  const [grade, setGrade] = useState('');
+  const [studentClass, setStudentClass] = useState('');
   const [parentPhone, setParentPhone] = useState('');
-  const [goals, setGoals] = useState('');
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
+  const [notes, setNotes] = useState('');
 
-  // Staff Fields
-  const [subjectFocus, setSubjectFocus] = useState('');
-  const [resumeLink, setResumeLink] = useState('');
+  // Password Strength
+  const checkStrength = (pw: string) => {
+    const criteria = [
+      pw.length >= 8,
+      /[A-Z]/.test(pw),
+      /[0-9]/.test(pw),
+      /[^A-Za-z0-9]/.test(pw)
+    ];
+    return criteria.filter(Boolean).length;
+  };
 
-  const handleRegister = async (e: React.FormEvent) => {
+  const pwScore = checkStrength(password);
+  const pwColors = ['#ef4444','#f97316','#eab308','#22c55e'];
+
+  const handleSubjectChange = (subject: string) => {
+    setSelectedSubjects(prev => 
+      prev.includes(subject) ? prev.filter(s => s !== subject) : [...prev, subject]
+    );
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setSuccess('');
+
+    if (!fullName || !phone || !email) {
+      return setError('Please fill in all required fields.');
+    }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      return setError('Please enter a valid email address.');
+    }
+
     setLoading(true);
 
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
-      const baseUserData = {
-        fullName,
-        phone,
-        email,
-        role: activeTab,
-        status: 'pending',
-        createdAt: serverTimestamp(),
-      };
-
-      let specificData = {};
-      if (activeTab === 'student') {
-        specificData = { grade, parentPhone, goals };
-      } else if (activeTab === 'staff') {
-        specificData = { subjectFocus, resumeLink };
+    if (mode === 'parent') {
+      if (!password) {
+        setLoading(false);
+        return setError('Please enter a password.');
+      }
+      if (password.length < 8) {
+        setLoading(false);
+        return setError('Password must be at least 8 characters.');
+      }
+      if (password !== confirmPassword) {
+        setLoading(false);
+        return setError('Passwords do not match.');
       }
 
-      await setDoc(doc(db, 'users', user.uid), {
-        ...baseUserData,
-        ...specificData
-      });
+      try {
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        await sendEmailVerification(cred.user);
+        
+        const data = {
+          name: fullName,
+          email: email.toLowerCase(),
+          phone,
+          role: 'parent',
+          children: [],
+          emailVerified: false,
+          createdAt: serverTimestamp()
+        };
+        
+        await setDoc(doc(db, 'parents', cred.user.uid), data);
+        await setDoc(doc(db, 'users', cred.user.uid), data);
+        
+        localStorage.setItem('userId', cred.user.uid);
+        localStorage.setItem('userRole', 'parent');
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('userName', fullName);
+        
+        setSuccess('Account created! A verification email has been sent. Redirecting to dashboard...');
+        
+        setTimeout(() => {
+          navigate('/portal/parent');
+        }, 1500);
+      } catch (err: any) {
+        let msg = 'Registration failed. Please try again.';
+        if (err.code === 'auth/email-already-in-use') msg = 'This email is already registered. Try logging in instead.';
+        if (err.code === 'auth/weak-password') msg = 'Password too weak — use at least 8 characters.';
+        if (err.code === 'auth/invalid-email') msg = 'Please enter a valid email address.';
+        if (err.code === 'auth/network-request-failed') msg = 'Network error. Please check your connection.';
+        setError(msg);
+        setLoading(false);
+      }
+    } else {
+      // Student Request
+      if (selectedSubjects.length === 0) {
+        setLoading(false);
+        return setError('Please select at least one subject.');
+      }
 
-      // Navigate based on role or to login
-      navigate(`/portal`);
-    } catch (err: any) {
-      console.error(err);
-      setError(err.message || 'Failed to create account.');
-    } finally {
-      setLoading(false);
+      try {
+        await addDoc(collection(db, 'student_requests'), {
+          name: fullName,
+          email: email.toLowerCase(),
+          phone,
+          class: studentClass,
+          parentPhone,
+          subjects: selectedSubjects,
+          notes,
+          status: 'pending',
+          createdAt: serverTimestamp()
+        });
+        
+        setSuccess('Request submitted! An admin will review and email your access code within 24 hours.');
+        // Clear form
+        setFullName(''); setPhone(''); setEmail(''); setStudentClass(''); setParentPhone('');
+        setSelectedSubjects([]); setNotes('');
+      } catch (err) {
+        setError('Error submitting request. Please try again or contact support.');
+        console.error('Student request error:', err);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
-  const tabs: { id: Role; label: string; icon: React.ReactNode }[] = [
-    { id: 'student', label: 'STUDENTS', icon: <GraduationCap size={18} /> },
-    { id: 'parent', label: 'PARENTS', icon: <Users size={18} /> },
-    { id: 'staff', label: 'STAFF / TUTOR', icon: <User size={18} /> },
-  ];
-
   return (
-    <div className="min-h-screen bg-[#FDF8F5] relative flex items-center justify-center p-4 sm:p-8">
-      {/* Grid Background */}
-      <div 
-        className="absolute inset-0 pointer-events-none opacity-20"
-        style={{
-          backgroundImage: `linear-gradient(#f05637 1px, transparent 1px), linear-gradient(90deg, #f05637 1px, transparent 1px)`,
-          backgroundSize: '40px 40px'
-        }}
-      ></div>
-
-      <div className="w-full max-w-[1000px] h-[800px] max-h-[90vh] flex flex-col md:flex-row bg-[#FAFAFA] rounded-[32px] shadow-2xl overflow-hidden relative z-10 border border-red-100/50">
-        
-        {/* LEFT SIDE (DARK) */}
-        <div className="md:w-[40%] bg-[#0A0706] p-10 flex flex-col justify-between relative overflow-hidden hidden md:flex">
-          <div className="flex items-center gap-4 relative z-10">
-            <div className="w-10 h-10 bg-black rounded flex items-center justify-center overflow-hidden border border-gray-800">
-              <img src={jaystarblissLogo} alt="Logo" className="w-8 h-8 object-contain" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-white text-xs font-bold tracking-[0.2em] font-mono leading-tight">JAYSTARBLISS</span>
-              <span className="text-white text-xs font-bold tracking-[0.2em] font-mono leading-tight">DYNAMIC HUB</span>
-            </div>
-          </div>
-
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] h-[320px] z-0 flex items-center justify-center">
-            <div className="absolute w-full h-full rounded-full border border-[#f05637]/10 animate-[spin_20s_linear_infinite]">
-              <div className="absolute top-[15%] left-[10%] w-1.5 h-1.5 bg-[#f05637] rounded-full shadow-[0_0_15px_#f05637]"></div>
-            </div>
-            <div className="absolute w-[220px] h-[220px] rounded-full border border-[#f05637]/20 animate-[spin_15s_linear_infinite_reverse]">
-              <div className="absolute top-[10%] -right-1 w-2 h-2 bg-[#f97316] rounded-full shadow-[0_0_15px_#f97316]"></div>
-            </div>
-            <div className="absolute w-[140px] h-[140px] rounded-full border border-[#f05637]/30"></div>
-            
-            <div className="absolute w-24 h-24 bg-[#f05637]/20 rounded-full blur-xl"></div>
-            <div className="relative z-10 w-16 h-16 rounded-full border border-[#f05637] flex items-center justify-center bg-[#0A0706]">
-              <UserPlus className="text-[#f05637] w-6 h-6" />
-            </div>
-          </div>
-
-          <div className="relative z-10 mt-auto">
-            <h2 className="text-[32px] font-extrabold text-white mb-8 font-mono tracking-tighter leading-[1.1]">
-              Initialize.<br/>
-              <span className="text-[#f05637]">Connect.</span><br/>
-              Thrive.
-            </h2>
-            <div className="text-[#888888] font-mono text-[10px] space-y-1.5 uppercase tracking-widest">
-              <p>&gt; PROTOCOL: NEW-NODE-REG</p>
-              <p className="text-[#993311]">&gt; STATUS: AWAITING INPUT</p>
-              <p>&gt; NODE: 0XFF-JDH-NEW</p>
-            </div>
+    <div className="register-page">
+      {/* NAV */}
+      <nav className="reg-nav">
+        <div className="reg-nav-inner">
+          <Link to="/" className="reg-nav-brand">
+            <img className="reg-nav-brand-icon" src="/favicon-16x16.png" alt="Jaystarbliss Hub" />
+            <span className="reg-nav-brand-name">
+              Jaystarbliss <span className="hide-xs">Dynamic </span>
+              <span style={{ color: 'var(--madder)' }}>Hub</span>
+            </span>
+          </Link>
+          <div className="reg-nav-actions">
+            <button className="reg-theme-btn" onClick={toggleTheme} aria-label="Toggle theme">
+              {isDarkMode ? <Moon className="w-[15px] h-[15px]" /> : <Sun className="w-[15px] h-[15px]" />}
+            </button>
+            <Link to="/portal" className="reg-nav-login">Sign In &rarr;</Link>
           </div>
         </div>
+      </nav>
 
-        {/* RIGHT SIDE (LIGHT) */}
-        <div className="md:w-[60%] flex flex-col relative bg-white h-full overflow-hidden">
-          
-          {/* Tabs */}
-          <div className="flex border-b border-gray-100 flex-shrink-0">
-            {tabs.map((tab) => {
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  type="button"
-                  className={`flex-1 py-5 flex flex-col items-center gap-2 transition-all text-[9px] font-bold tracking-[0.15em] font-mono uppercase ${
-                    isActive ? 'text-[#f05637] border-b-2 border-[#f05637] bg-red-50/50' : 'text-[#A0A0A0] hover:text-gray-800 hover:bg-gray-50'
-                  }`}
-                >
-                  <div className="opacity-80 mb-1">{tab.icon}</div>
-                  {tab.label}
-                </button>
-              );
-            })}
+      {/* PAGE LAYOUT */}
+      <div className="reg-page-layout">
+
+        {/* LEFT HERO PANEL */}
+        <section className="reg-hero-panel">
+          <div className="reg-hero-content">
+            <h1 className="reg-hero-headline">
+              Ignite Your<br />
+              <em>Potential</em><br />
+              With Expert<br />
+              Mentorship.
+            </h1>
+            <p className="reg-hero-sub">
+              Join a community dedicated to mastery and brilliance. Your journey begins with a single step.
+            </p>
           </div>
+          <div className="reg-hero-features">
+            <div className="reg-hero-feature">
+              <div className="reg-hero-feature-icon red">
+                <CheckCircle2 />
+              </div>
+              <div>
+                <div className="reg-hero-feature-title">Personalized Learning</div>
+                <div className="reg-hero-feature-desc">Tailored curriculums for every unique student.</div>
+              </div>
+            </div>
+            <div className="reg-hero-feature">
+              <div className="reg-hero-feature-icon gold">
+                <Users />
+              </div>
+              <div>
+                <div className="reg-hero-feature-title">Expert Tutors</div>
+                <div className="reg-hero-feature-desc">Learn from the best in the industry.</div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-          {/* Scrollable Form Area */}
-          <div className="flex-1 overflow-y-auto custom-scrollbar p-8 md:p-10">
-            <div className="mb-8">
-              <h2 className="text-2xl font-black text-gray-900 tracking-tight font-mono">
-                Create <span className="text-[#f05637]">{activeTab === 'staff' ? 'Staff/Tutor' : activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}</span> Account
-              </h2>
-              <p className="text-gray-500 text-sm mt-2">Register as a {activeTab} in the Hub</p>
+        {/* RIGHT FORM PANEL */}
+        <section className="reg-form-panel">
+          <div className="reg-form-card">
+            
+            <div className="reg-form-heading">
+              <h2>Create an account</h2>
+              <p>Join Jaystarbliss Dynamic Hub today.</p>
             </div>
 
+            {/* MODE TOGGLE */}
+            <div className="reg-mode-toggle">
+              <button 
+                className={`reg-mode-btn ${mode === 'parent' ? 'active' : ''}`}
+                onClick={() => { setMode('parent'); setError(''); setSuccess(''); }}
+              >
+                <Users />
+                Parent Account
+              </button>
+              <button 
+                className={`reg-mode-btn ${mode === 'student' ? 'active' : ''}`}
+                onClick={() => { setMode('student'); setError(''); setSuccess(''); }}
+              >
+                <GraduationCap />
+                Student Request
+              </button>
+            </div>
+
+            {/* ALERTS */}
             {error && (
-              <div className="mb-6 bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded-xl font-mono">
-                {error}
+              <div className="reg-alert error" role="alert">
+                <AlertCircle />
+                <span>{error}</span>
+              </div>
+            )}
+            {success && (
+              <div className="reg-alert success" role="status">
+                <CheckCircle2 />
+                <span>{success}</span>
               </div>
             )}
 
-            <form onSubmit={handleRegister} className="space-y-5 pb-6">
+            {/* FORM */}
+            <form className="reg-form" onSubmit={handleSubmit} noValidate>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div>
-                  <label className="block text-[9px] font-bold text-[#f05637] mb-2 font-mono tracking-widest uppercase">
-                    Full Name *
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                      <User size={16} />
+              {/* COMMON FIELDS */}
+              <div className="reg-form-row">
+                <div className="reg-form-group">
+                  <label htmlFor="fullName">Full Name *</label>
+                  <div className="reg-input-wrap">
+                    <User />
+                    <input type="text" id="fullName" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="John Doe" required />
+                  </div>
+                </div>
+                <div className="reg-form-group">
+                  <label htmlFor="phone">Phone Number *</label>
+                  <div className="reg-input-wrap">
+                    <Phone />
+                    <input type="tel" id="phone" value={phone} onChange={e => setPhone(e.target.value)} placeholder="+234 xxx xxx xxxx" required />
+                  </div>
+                </div>
+              </div>
+
+              <div className="reg-form-group">
+                <label htmlFor="email">Email Address *</label>
+                <div className="reg-input-wrap">
+                  <Mail />
+                  <input type="email" id="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@email.com" required />
+                </div>
+              </div>
+
+              {/* PARENT FIELDS */}
+              {mode === 'parent' && (
+                <div className="animate-in fade-in duration-300">
+                  <div className="reg-info-box" style={{ marginBottom: '1rem' }}>
+                    <strong>Parent Account:</strong> Register to enroll your children, track their progress, and manage payments from one dashboard.
+                  </div>
+
+                  <div className="reg-form-group" style={{ marginBottom: '1rem' }}>
+                    <label htmlFor="pPassword">Password *</label>
+                    <div className="reg-input-wrap">
+                      <Lock />
+                      <input 
+                        type="password" id="pPassword" 
+                        value={password} onChange={e => setPassword(e.target.value)} 
+                        placeholder="Min. 8 characters" 
+                      />
                     </div>
-                    <input type="text" required value={fullName} onChange={e => setFullName(e.target.value)}
-                      className="w-full bg-[#FAFAFA] border border-[#F0EBE6] rounded-xl pl-10 pr-3 py-3 text-gray-900 focus:outline-none focus:border-[#f05637] focus:ring-1 focus:ring-[#f05637] transition-all placeholder:text-gray-400 font-mono text-xs"
-                      placeholder="John Doe" />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-[9px] font-bold text-[#f05637] mb-2 font-mono tracking-widest uppercase">
-                    Phone Number *
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                      <Phone size={16} />
+                    <div className="reg-pw-strength-bar">
+                      {[0, 1, 2, 3].map(i => (
+                        <div 
+                          key={i} 
+                          className="reg-pw-seg" 
+                          style={{ background: (password.length > 0 && i < pwScore) ? pwColors[pwScore - 1] : '' }}
+                        />
+                      ))}
                     </div>
-                    <input type="tel" required value={phone} onChange={e => setPhone(e.target.value)}
-                      className="w-full bg-[#FAFAFA] border border-[#F0EBE6] rounded-xl pl-10 pr-3 py-3 text-gray-900 focus:outline-none focus:border-[#f05637] focus:ring-1 focus:ring-[#f05637] transition-all placeholder:text-gray-400 font-mono text-xs"
-                      placeholder="+234 xxx xxx xxxx" />
+                  </div>
+
+                  <div className="reg-form-group">
+                    <label htmlFor="pConfirm">Confirm Password *</label>
+                    <div className="reg-input-wrap">
+                      <ShieldCheck />
+                      <input 
+                        type="password" id="pConfirm" 
+                        value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} 
+                        placeholder="Repeat your password" 
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
 
-              <div>
-                <label className="block text-[9px] font-bold text-[#f05637] mb-2 font-mono tracking-widest uppercase">
-                  Terminal ID (Email) *
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                    <Mail size={16} />
+              {/* STUDENT FIELDS */}
+              {mode === 'student' && (
+                <div className="animate-in fade-in duration-300">
+                  <div className="reg-info-box" style={{ marginBottom: '1rem' }}>
+                    <strong>Student Request:</strong> Submit your details. An admin will review and send your access code to your email within 24 hours.
                   </div>
-                  <input type="email" required value={email} onChange={e => setEmail(e.target.value)}
-                    className="w-full bg-[#FAFAFA] border border-[#F0EBE6] rounded-xl pl-10 pr-3 py-3 text-gray-900 focus:outline-none focus:border-[#f05637] focus:ring-1 focus:ring-[#f05637] transition-all placeholder:text-gray-400 font-mono text-xs"
-                    placeholder="you@email.com" />
-                </div>
-              </div>
 
-              <div>
-                <label className="block text-[9px] font-bold text-[#f05637] mb-2 font-mono tracking-widest uppercase">
-                  Access Code (Password) *
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                    <Lock size={16} />
-                  </div>
-                  <input type={showPassword ? 'text' : 'password'} required minLength={8} value={password} onChange={e => setPassword(e.target.value)}
-                    className="w-full bg-[#FAFAFA] border border-[#F0EBE6] rounded-xl pl-10 pr-10 py-3 text-gray-900 focus:outline-none focus:border-[#f05637] focus:ring-1 focus:ring-[#f05637] transition-all placeholder:text-gray-400 font-mono text-xs tracking-widest"
-                    placeholder="••••••••" />
-                  <button type="button" onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-[#f05637] transition-colors">
-                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                  </button>
-                </div>
-              </div>
-
-              {/* Student Fields */}
-              {activeTab === 'student' && (
-                <div className="space-y-5 animate-in fade-in slide-in-from-bottom-2 duration-300 border-t border-gray-100 pt-5 mt-2">
-                  <div className="bg-orange-50/50 border border-orange-100 p-4 rounded-xl">
-                    <p className="text-xs text-orange-800 font-mono"><strong>Student Request:</strong> Submit your details. An admin will review and assign you to your class portal.</p>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div>
-                      <label className="block text-[9px] font-bold text-[#f05637] mb-2 font-mono tracking-widest uppercase">
-                        Class / Grade
-                      </label>
-                      <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                          <BookOpen size={16} />
-                        </div>
-                        <select value={grade} onChange={e => setGrade(e.target.value)}
-                          className="w-full bg-[#FAFAFA] border border-[#F0EBE6] rounded-xl pl-10 pr-3 py-3 text-gray-900 focus:outline-none focus:border-[#f05637] focus:ring-1 focus:ring-[#f05637] transition-all appearance-none font-mono text-xs">
-                          <option value="">Select class...</option>
-                          <option value="Primary 1-3">Primary 1–3</option>
-                          <option value="Primary 4-6">Primary 4–6</option>
-                          <option value="JSS 1">JSS 1</option>
-                          <option value="JSS 2">JSS 2</option>
-                          <option value="JSS 3">JSS 3</option>
-                          <option value="SS 1">SS 1</option>
-                          <option value="SS 2">SS 2</option>
-                          <option value="SS 3">SS 3</option>
-                          <option value="University / Tertiary">University / Tertiary</option>
-                          <option value="Adult Learner">Adult Learner</option>
+                  <div className="reg-form-row" style={{ marginBottom: '1rem' }}>
+                    <div className="reg-form-group">
+                      <label htmlFor="sClass">Class / Grade</label>
+                      <div className="reg-input-wrap">
+                        <BookOpen />
+                        <select id="sClass" value={studentClass} onChange={e => setStudentClass(e.target.value)}>
+                          <option value="">Select class</option>
+                          <option>Primary 1–3</option>
+                          <option>Primary 4–6</option>
+                          <option>JSS 1</option><option>JSS 2</option><option>JSS 3</option>
+                          <option>SS 1</option><option>SS 2</option><option>SS 3</option>
+                          <option>University / Tertiary</option>
+                          <option>Adult Learner</option>
                         </select>
                       </div>
                     </div>
+                    <div className="reg-form-group">
+                      <label htmlFor="sParentPhone">Parent's Phone</label>
+                      <div className="reg-input-wrap">
+                        <Contact />
+                        <input type="tel" id="sParentPhone" value={parentPhone} onChange={e => setParentPhone(e.target.value)} placeholder="Emergency contact" />
+                      </div>
+                    </div>
+                  </div>
 
-                    <div>
-                      <label className="block text-[9px] font-bold text-[#f05637] mb-2 font-mono tracking-widest uppercase">
-                        Parent's Phone
-                      </label>
-                      <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                          <Phone size={16} />
+                  <div className="reg-form-group" style={{ marginBottom: '1rem' }}>
+                    <label>Subjects of Interest *</label>
+                    <div className="reg-subjects-grid">
+                      {SUBJECTS.map((subject, idx) => (
+                        <div className="reg-subject-chip" key={idx}>
+                          <input 
+                            type="checkbox" 
+                            id={`subj_${idx}`} 
+                            checked={selectedSubjects.includes(subject)}
+                            onChange={() => handleSubjectChange(subject)}
+                          />
+                          <label htmlFor={`subj_${idx}`}>{subject}</label>
                         </div>
-                        <input type="tel" value={parentPhone} onChange={e => setParentPhone(e.target.value)}
-                          className="w-full bg-[#FAFAFA] border border-[#F0EBE6] rounded-xl pl-10 pr-3 py-3 text-gray-900 focus:outline-none focus:border-[#f05637] focus:ring-1 focus:ring-[#f05637] transition-all placeholder:text-gray-400 font-mono text-xs"
-                          placeholder="Emergency contact" />
-                      </div>
+                      ))}
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block text-[9px] font-bold text-[#f05637] mb-2 font-mono tracking-widest uppercase">
-                      Learning Goals / Notes
-                    </label>
-                    <textarea value={goals} onChange={e => setGoals(e.target.value)}
-                      className="w-full bg-[#FAFAFA] border border-[#F0EBE6] rounded-xl p-4 text-gray-900 focus:outline-none focus:border-[#f05637] focus:ring-1 focus:ring-[#f05637] transition-all placeholder:text-gray-400 font-mono text-xs min-h-[80px]"
-                      placeholder="Tell us your goals, requirements, or how you heard about us..." />
+                  <div className="reg-form-group">
+                    <label htmlFor="sNotes">Learning Goals / Notes</label>
+                    <textarea 
+                      className="reg-input-bare" id="sNotes" 
+                      value={notes} onChange={e => setNotes(e.target.value)}
+                      placeholder="Tell us your goals, requirements, or how you heard about us…" 
+                      maxLength={2000}
+                    />
                   </div>
                 </div>
               )}
 
-              {/* Parent Fields */}
-              {activeTab === 'parent' && (
-                <div className="space-y-5 animate-in fade-in slide-in-from-bottom-2 duration-300 border-t border-gray-100 pt-5 mt-2">
-                  <div className="bg-orange-50/50 border border-orange-100 p-4 rounded-xl">
-                    <p className="text-xs text-orange-800 font-mono"><strong>Parent Account:</strong> Register to enroll your children, track their progress, and manage payments from one dashboard.</p>
-                  </div>
-                </div>
-              )}
-
-              {/* Staff Fields */}
-              {activeTab === 'staff' && (
-                <div className="space-y-5 animate-in fade-in slide-in-from-bottom-2 duration-300 border-t border-gray-100 pt-5 mt-2">
-                  <div className="bg-orange-50/50 border border-orange-100 p-4 rounded-xl">
-                    <p className="text-xs text-orange-800 font-mono"><strong>Staff Registration:</strong> Apply to join our network of dynamic educators and administrators.</p>
-                  </div>
-
-                  <div>
-                    <label className="block text-[9px] font-bold text-[#f05637] mb-2 font-mono tracking-widest uppercase">
-                      Subject Focus / Role
-                    </label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                        <BookOpen size={16} />
-                      </div>
-                      <input type="text" value={subjectFocus} onChange={e => setSubjectFocus(e.target.value)}
-                        className="w-full bg-[#FAFAFA] border border-[#F0EBE6] rounded-xl pl-10 pr-3 py-3 text-gray-900 focus:outline-none focus:border-[#f05637] focus:ring-1 focus:ring-[#f05637] transition-all placeholder:text-gray-400 font-mono text-xs"
-                        placeholder="e.g. Mathematics, Programming, Admin" />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-[9px] font-bold text-[#f05637] mb-2 font-mono tracking-widest uppercase">
-                      Resume / Portfolio Link
-                    </label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                        <FileText size={16} />
-                      </div>
-                      <input type="url" value={resumeLink} onChange={e => setResumeLink(e.target.value)}
-                        className="w-full bg-[#FAFAFA] border border-[#F0EBE6] rounded-xl pl-10 pr-3 py-3 text-gray-900 focus:outline-none focus:border-[#f05637] focus:ring-1 focus:ring-[#f05637] transition-all placeholder:text-gray-400 font-mono text-xs"
-                        placeholder="https://linkedin.com/in/..." />
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="relative inline-flex w-full mt-6 overflow-hidden rounded-xl p-[2px] focus:outline-none hover:-translate-y-1 transition-transform shadow-[0_10px_20px_rgba(223,70,39,0.3)] group disabled:opacity-50 disabled:hover:translate-y-0"
-              >
-                <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#df4627_0%,#F8FAFC_50%,#df4627_100%)]" />
-                <span className="inline-flex h-full w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-[#df4627] to-[#b3290e] px-8 py-4 text-xs font-bold tracking-widest font-mono uppercase text-white backdrop-blur-3xl transition-colors group-hover:opacity-95 border border-transparent">
-                {loading ? (
-                  <span className="flex items-center gap-2">
-                    <svg className="animate-spin -ml-1 mr-3 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                    Processing...
-                  </span>
-                ) : (
-                  <>Compile Node Profile &rarr;</>
-                )}
-              </span>
+              {/* SUBMIT BUTTON */}
+              <button type="submit" className={`reg-btn-submit ${loading ? 'loading' : ''}`} disabled={loading}>
+                <div className="reg-spinner"></div>
+                <span className="reg-btn-text" style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                  {mode === 'parent' ? <UserPlus size={16} /> : <Send size={16} />}
+                  {mode === 'parent' ? 'Complete Registration' : 'Submit Request'}
+                </span>
               </button>
-              
-              <div className="mt-6 text-center">
-                <Link to="/portal" className="text-[10px] font-bold tracking-widest text-[#f05637] font-mono uppercase hover:text-[#b3290e] transition-colors border-b border-transparent hover:border-[#b3290e]">
-                  Already have an account? Login
-                </Link>
-              </div>
 
             </form>
-          </div>
 
-          {/* Footer inside the right panel */}
-          <div className="border-t border-gray-100 p-6 flex items-center justify-between text-[9px] font-bold font-mono tracking-widest text-[#A0A0A0] bg-[#FAFAFA] flex-shrink-0">
-            <div className="flex items-center gap-6">
-              <Link to="/" className="flex items-center gap-2 hover:text-[#f05637] transition-colors">
-                <ArrowLeft size={14} /> Main Site
-              </Link>
+            <div className="reg-divider">or</div>
+            <div className="reg-form-footer">
+              Already have an account? <Link to="/portal">Login here</Link>
             </div>
-            <div className="flex items-center gap-4">
-              <span>BUILD V4.4.0</span>
-              <button className="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center hover:bg-white transition-colors text-[#f05637] bg-white shadow-sm hover:shadow">
-                <Sun size={14} />
-              </button>
-            </div>
+
           </div>
-        </div>
+        </section>
+
       </div>
     </div>
   );
