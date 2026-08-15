@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { collection, query, where, getDocs, limit } from "firebase/firestore";
-import { db } from "../../lib/firebase";
-import { Link } from "react-router-dom";
-import { Loader2 } from "lucide-react";
+import React, { useState, useEffect } from 'react';
+import { collection, query, where, getDocs, limit } from 'firebase/firestore';
+import { db } from '../../lib/firebase';
+import { Link } from 'react-router-dom';
+import { Loader2 } from 'lucide-react';
 
 const FeaturedPrograms: React.FC = () => {
   const [programs, setPrograms] = useState<any[]>([]);
@@ -12,9 +12,9 @@ const FeaturedPrograms: React.FC = () => {
     const fetchFeaturedPrograms = async () => {
       try {
         const q = query(
-          collection(db, "programs"),
-          where("status", "==", "PUBLISHED"),
-          limit(3),
+          collection(db, 'programs'),
+          where('status', '==', 'PUBLISHED'),
+          limit(3)
         );
         const snapshot = await getDocs(q);
         const programsData = snapshot.docs.map((doc) => ({
@@ -23,7 +23,7 @@ const FeaturedPrograms: React.FC = () => {
         }));
         setPrograms(programsData);
       } catch (error) {
-        console.error("Error fetching featured programs:", error);
+        console.error('Error fetching featured programs:', error);
       } finally {
         setLoading(false);
       }
@@ -67,9 +67,16 @@ const FeaturedPrograms: React.FC = () => {
                 className="flex flex-col bg-gray-50 dark:bg-slate-950 rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow group"
               >
                 <div className="p-8 flex-grow">
-                  <span className="inline-block px-3 py-1 bg-white dark:bg-slate-900 dark:border-slate-800 text-brand-slate dark:text-white text-xs font-bold uppercase tracking-wider rounded-full mb-6 shadow-sm border border-gray-100">
-                    {program.categoryId || "General"}
-                  </span>
+                  <div className="flex gap-2 mb-6 flex-wrap">
+                    <span className="inline-block px-3 py-1 bg-white dark:bg-slate-900 dark:border-slate-800 text-brand-slate dark:text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-sm border border-gray-100">
+                      {program.categoryId || 'General'}
+                    </span>
+                    {program.targetAudience && (
+                      <span className="inline-block px-3 py-1 bg-brand-red text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-sm border border-brand-red">
+                        {program.targetAudience.replace('_', ' ')}
+                      </span>
+                    )}
+                  </div>
                   <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 leading-tight group-hover:text-brand-red transition-colors">
                     {program.title}
                   </h3>
@@ -79,13 +86,13 @@ const FeaturedPrograms: React.FC = () => {
                   <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                     <span className="font-semibold w-20 text-gray-700">
                       Format:
-                    </span>{" "}
-                    {program.deliveryFormat || "ONLINE"}
+                    </span>
+                    {program.deliveryFormat || 'ONLINE'}
                   </div>
                 </div>
                 <div className="p-6 bg-white dark:bg-slate-900 dark:border-slate-800 border-t border-gray-100 flex items-center justify-between mt-auto">
                   <span className="font-bold text-gray-900 dark:text-white text-lg">
-                    {program.pricing || "Contact Us"}
+                    {program.pricing || 'Contact Us'}
                   </span>
                   <Link
                     to={`/programs/${program.slug}`}
@@ -102,4 +109,5 @@ const FeaturedPrograms: React.FC = () => {
     </section>
   );
 };
+
 export default FeaturedPrograms;

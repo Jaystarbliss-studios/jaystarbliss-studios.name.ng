@@ -1,4 +1,0 @@
-const fs = require('fs');
-let content = fs.readFileSync('src/components/Hero.tsx', 'utf8');
-content = content.replace("</div></div>", "</div>");
-fs.writeFileSync('src/components/Hero.tsx', content);

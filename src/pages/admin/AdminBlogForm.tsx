@@ -37,7 +37,7 @@ const AdminBlogForm: React.FC = () => {
         await addDoc(collection(db, 'blog'), payload);
       }
       navigate('/admin/blog');
-    } catch (err) { setError('Failed to save'); }
+    } catch { setError('Failed to save'); }
     finally { setSaving(false); }
   };
 

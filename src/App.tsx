@@ -20,6 +20,8 @@ import StaffDashboard from './pages/portal/StaffDashboard';
 import StudentDashboard from './pages/portal/StudentDashboard';
 
 import Resources from './pages/Resources';
+import Blog from './pages/Blog';
+import BlogPostDetails from './pages/BlogPostDetails';
 
 import AdminLayout from './components/admin/AdminLayout';
 import ProtectedRoute from './components/admin/ProtectedRoute';
@@ -35,6 +37,7 @@ import AdminBlogForm from './pages/admin/AdminBlogForm';
 import AdminPortfolio from './pages/admin/AdminPortfolio';
 import AdminPortfolioForm from './pages/admin/AdminPortfolioForm';
 import AdminInquiries from './pages/admin/AdminInquiries';
+import AdminSettings from './pages/admin/AdminSettings';
 
 import ScrollToTop from './components/ScrollToTop';
 
@@ -57,6 +60,8 @@ function App() {
         <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/resources" element={<Resources />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:slug" element={<BlogPostDetails />} />
         
         <Route path="/project-request" element={<ProjectRequest />} />
         <Route path="/school-partnership" element={<SchoolPartnership />} />
@@ -112,6 +117,7 @@ function App() {
           <Route path="portfolio/:id" element={<AdminPortfolioForm />} />
           
           <Route path="inquiries" element={<AdminInquiries />} />
+          <Route path="settings" element={<AdminSettings />} />
         </Route>
       </Routes>
     </Router>

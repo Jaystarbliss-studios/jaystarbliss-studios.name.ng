@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import MainLayout from '../components/layout/MainLayout';
 import { ChevronDown } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Card } from '../components/ui/Card';
+import Button from '../components/ui/Button';
 
 const faqs = [
   {
@@ -46,42 +47,45 @@ const FAQ: React.FC = () => {
         </div>
       </div>
 
-      <div className="py-24 bg-gray-50 dark:bg-slate-950">
+      <div className="py-24 bg-brand-neutral dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800">
         <div className="container mx-auto px-4 max-w-3xl">
           <div className="space-y-4">
             {faqs.map((faq, index) => (
-              <div 
+              <Card 
                 key={index} 
-                className="bg-white dark:bg-slate-900 dark:border-slate-800 rounded-2xl border border-gray-200 overflow-hidden shadow-sm"
+                className="overflow-hidden border-0 ring-1 ring-slate-200 dark:ring-slate-800"
               >
                 <button
-                  className="w-full px-6 py-5 text-left flex justify-between items-center focus:outline-none"
+                  className="w-full px-8 py-6 text-left flex justify-between items-center focus:outline-none focus:bg-slate-50 dark:focus:bg-slate-900 transition-colors"
                   onClick={() => setOpenIndex(openIndex === index ? null : index)}
                 >
-                  <span className="font-bold text-gray-900 dark:text-white pr-8">{faq.question}</span>
-                  <ChevronDown 
-                    className={`text-brand-red shrink-0 transition-transform ${openIndex === index ? 'rotate-180' : ''}`} 
-                    size={20} 
-                  />
+                  <span className="font-bold text-lg text-brand-slate dark:text-white pr-8">{faq.question}</span>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${openIndex === index ? 'bg-brand-red/10 text-brand-red' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'}`}>
+                    <ChevronDown 
+                      className={`transition-transform duration-300 ${openIndex === index ? 'rotate-180' : ''}`} 
+                      size={20} 
+                    />
+                  </div>
                 </button>
                 {openIndex === index && (
-                  <div className="px-6 pb-6 text-gray-600 dark:text-gray-400 font-medium leading-relaxed">
+                  <div className="px-8 pb-8 pt-2 text-brand-slate/70 dark:text-gray-400 font-medium leading-relaxed bg-white dark:bg-slate-900">
                     {faq.answer}
                   </div>
                 )}
-              </div>
+              </Card>
             ))}
           </div>
           
           <div className="mt-16 text-center">
-            <p className="text-gray-600 dark:text-gray-400 mb-6 font-medium">Still have questions?</p>
-            <Link to="/contact" className="inline-flex items-center justify-center bg-brand-slate text-white px-8 py-3 rounded-xl font-bold hover:bg-gray-800 transition-colors shadow-lg">
+            <p className="text-brand-slate/70 dark:text-gray-400 mb-6 font-bold tracking-wide uppercase text-sm">Still have questions?</p>
+            <Button to="/contact" variant="secondary" size="lg" className="shadow-lg">
               CONTACT US
-            </Link>
+            </Button>
           </div>
         </div>
       </div>
     </MainLayout>
   );
 };
+
 export default FAQ;

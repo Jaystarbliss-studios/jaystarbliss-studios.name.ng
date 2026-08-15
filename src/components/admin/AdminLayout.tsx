@@ -1,6 +1,7 @@
 import jaystarblissLogo from '../../assets/favicon.png';
 import React, { useState } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
+import SearchModal from '../ui/SearchModal';
 import { 
   LayoutDashboard, 
   Users, 
@@ -17,6 +18,7 @@ import {
 
 const AdminLayout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const location = useLocation();
 
   const navigation = [
@@ -112,7 +114,14 @@ const AdminLayout: React.FC = () => {
             <Menu size={24} />
           </button>
           
-          <div className="flex-1 flex justify-end">
+          <div className="flex-1 flex justify-end items-center gap-4">
+            <button 
+              onClick={() => setSearchOpen(true)}
+              className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </button>
+            <div className="h-6 w-px bg-gray-200"></div>
             <div className="flex items-center gap-3">
               <div className="text-sm font-medium text-gray-700 hidden sm:block">Admin User</div>
               <div className="w-8 h-8 rounded-full bg-brand-neutral text-brand-slate flex items-center justify-center font-bold text-sm">
@@ -131,6 +140,7 @@ const AdminLayout: React.FC = () => {
           </div>
         </main>
       </div>
+      <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>
   );
 };

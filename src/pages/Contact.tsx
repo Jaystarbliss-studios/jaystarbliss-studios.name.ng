@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import MainLayout from '../components/layout/MainLayout';
-import { Loader2, CheckCircle2, MapPin, Mail, Phone } from 'lucide-react';
+import { CheckCircle2, MapPin, Mail, Phone } from 'lucide-react';
+import { Card } from '../components/ui/Card';
+import Button from '../components/ui/Button';
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -23,10 +25,12 @@ const Contact: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     setError(false);
-    
+        
     try {
       await addDoc(collection(db, 'inquiries'), {
+        inquirySubject: formData.type,
         ...formData,
+        type: 'CONTACT',
         status: 'NEW',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
@@ -54,75 +58,77 @@ const Contact: React.FC = () => {
         </div>
       </div>
 
-      <div className="py-20 bg-gray-50 dark:bg-slate-950">
+      <div className="py-20 bg-brand-neutral dark:bg-slate-900 dark:border-slate-800">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             
             {/* Contact Info */}
             <div>
-              <h2 className="text-3xl font-bold text-brand-slate dark:text-white mb-8">Contact Information</h2>
+              <h2 className="text-3xl font-bold text-brand-slate dark:text-white mb-8 tracking-tight">Contact Information</h2>
               <div className="space-y-8">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-white dark:bg-slate-900 dark:border-slate-800 rounded-xl shadow-sm border border-gray-100 flex items-center justify-center text-brand-red shrink-0">
+                <Card className="flex items-start gap-4 p-6 shadow-sm">
+                  <div className="w-12 h-12 bg-red-50 dark:bg-brand-red/10 rounded-xl flex items-center justify-center text-brand-red shrink-0">
                     <Mail size={24} />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 dark:text-white mb-1">Email Us</h3>
-                    <p className="text-gray-600 dark:text-gray-400">hello@jaystarbliss.com</p>
+                    <h3 className="font-bold text-brand-slate dark:text-white mb-1">Email Us</h3>
+                    <p className="text-brand-slate/70 dark:text-gray-400 font-medium">hello@jaystarbliss.com</p>
                   </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-white dark:bg-slate-900 dark:border-slate-800 rounded-xl shadow-sm border border-gray-100 flex items-center justify-center text-brand-red shrink-0">
+                </Card>
+
+                <Card className="flex items-start gap-4 p-6 shadow-sm">
+                  <div className="w-12 h-12 bg-red-50 dark:bg-brand-red/10 rounded-xl flex items-center justify-center text-brand-red shrink-0">
                     <Phone size={24} />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 dark:text-white mb-1">Call Us</h3>
-                    <p className="text-gray-600 dark:text-gray-400">+234 (0) 123 456 7890</p>
+                    <h3 className="font-bold text-brand-slate dark:text-white mb-1">Call Us</h3>
+                    <p className="text-brand-slate/70 dark:text-gray-400 font-medium">+234 (0) 123 456 7890</p>
                   </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-white dark:bg-slate-900 dark:border-slate-800 rounded-xl shadow-sm border border-gray-100 flex items-center justify-center text-brand-red shrink-0">
+                </Card>
+
+                <Card className="flex items-start gap-4 p-6 shadow-sm">
+                  <div className="w-12 h-12 bg-red-50 dark:bg-brand-red/10 rounded-xl flex items-center justify-center text-brand-red shrink-0">
                     <MapPin size={24} />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 dark:text-white mb-1">Our Office</h3>
-                    <p className="text-gray-600 dark:text-gray-400">123 Innovation Drive<br/>Tech District, Lagos, Nigeria</p>
+                    <h3 className="font-bold text-brand-slate dark:text-white mb-1">Our Office</h3>
+                    <p className="text-brand-slate/70 dark:text-gray-400 font-medium">123 Innovation Drive<br/>Tech District, Lagos, Nigeria</p>
                   </div>
-                </div>
+                </Card>
               </div>
             </div>
 
             {/* Form */}
-            <div className="bg-white dark:bg-slate-900 dark:border-slate-800 rounded-2xl shadow-xl shadow-gray-200/50 p-8 md:p-12 border border-gray-100">
+            <Card className="p-8 md:p-12 shadow-xl border-0 ring-1 ring-slate-200 dark:ring-slate-800">
               {success ? (
                 <div className="text-center py-12">
-                  <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center text-green-500 mx-auto mb-6">
+                  <div className="w-20 h-20 bg-green-50 dark:bg-green-900/20 rounded-full flex items-center justify-center text-green-500 mx-auto mb-6">
                     <CheckCircle2 size={40} />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Message Sent!</h3>
-                  <p className="text-gray-600 dark:text-gray-400 mb-8">Thank you for reaching out. We will get back to you shortly.</p>
-                  <button onClick={() => setSuccess(false)} className="bg-brand-slate text-white px-8 py-3 rounded-xl font-bold hover:bg-gray-800 transition-colors">
+                  <h3 className="text-2xl font-bold text-brand-slate dark:text-white mb-2">Message Sent!</h3>
+                  <p className="text-brand-slate/70 dark:text-gray-400 mb-8 font-medium">Thank you for reaching out. We will get back to you shortly.</p>
+                  <Button onClick={() => setSuccess(false)} variant="secondary" fullWidth size="lg">
                     Send Another Message
-                  </button>
+                  </Button>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  {error && <div className="p-4 bg-red-50 text-red-600 rounded-lg text-sm">There was an error sending your message. Please try again.</div>}
+                  {error && <div className="p-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl text-sm font-bold">There was an error sending your message. Please try again.</div>}
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label className="block text-sm font-medium text-gray-700">Full Name</label>
-                      <input type="text" name="name" required value={formData.name} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="Jane Doe" />
+                      <label className="block text-sm font-bold text-brand-slate dark:text-white tracking-wide">Full Name</label>
+                      <input type="text" name="name" required value={formData.name} onChange={handleChange} className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-brand-slate dark:text-white font-medium" placeholder="Jane Doe" />
                     </div>
                     <div className="space-y-2">
-                      <label className="block text-sm font-medium text-gray-700">Email Address</label>
-                      <input type="email" name="email" required value={formData.email} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="jane@example.com" />
+                      <label className="block text-sm font-bold text-brand-slate dark:text-white tracking-wide">Email Address</label>
+                      <input type="email" name="email" required value={formData.email} onChange={handleChange} className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-brand-slate dark:text-white font-medium" placeholder="jane@example.com" />
                     </div>
                   </div>
                   
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">Inquiry Type</label>
-                    <select name="type" value={formData.type} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red bg-white dark:bg-slate-900 dark:border-slate-800">
+                    <label className="block text-sm font-bold text-brand-slate dark:text-white tracking-wide">Inquiry Type</label>
+                    <select name="type" value={formData.type} onChange={handleChange} className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-brand-slate dark:text-white font-medium">
                       <option value="General Inquiry">General Inquiry</option>
                       <option value="Project Request">Project Request</option>
                       <option value="Tutoring Program">Tutoring Program</option>
@@ -131,16 +137,16 @@ const Contact: React.FC = () => {
                   </div>
                   
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">Message</label>
-                    <textarea name="message" required rows={5} value={formData.message} onChange={handleChange} className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red" placeholder="How can we help you?"></textarea>
+                    <label className="block text-sm font-bold text-brand-slate dark:text-white tracking-wide">Message</label>
+                    <textarea name="message" required rows={5} value={formData.message} onChange={handleChange} className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red text-brand-slate dark:text-white font-medium resize-none" placeholder="How can we help you?"></textarea>
                   </div>
                   
-                  <button type="submit" disabled={loading} className="w-full bg-brand-red text-white py-4 rounded-xl font-bold hover:bg-red-700 transition-colors disabled:opacity-50 flex justify-center items-center gap-2">
-                    {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Send Message'}
-                  </button>
+                  <Button type="submit" isLoading={loading} fullWidth size="lg" className="shadow-lg shadow-brand-red/20 uppercase tracking-widest">
+                    Send Message
+                  </Button>
                 </form>
               )}
-            </div>
+            </Card>
             
           </div>
         </div>
@@ -148,4 +154,5 @@ const Contact: React.FC = () => {
     </MainLayout>
   );
 };
+
 export default Contact;

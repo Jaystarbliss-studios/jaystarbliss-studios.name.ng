@@ -31,7 +31,7 @@ const AdminPortfolio: React.FC = () => {
           <thead className="bg-gray-50 dark:bg-slate-950">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Project</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Client</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Type & Source</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Status</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">Actions</th>
             </tr>
@@ -42,7 +42,7 @@ const AdminPortfolio: React.FC = () => {
              projects.map(p => (
                <tr key={p.id} className="hover:bg-gray-50 dark:bg-slate-950">
                  <td className="px-6 py-4"><div className="font-medium text-gray-900 dark:text-white">{p.title}</div></td>
-                 <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{p.client}</td>
+                 <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{p.portfolioType === 'STUDENT_WORK' ? `Student: ${p.studentName || 'Unknown'}` : `Client: ${p.client || 'Internal'}`}</td>
                  <td className="px-6 py-4"><span className={`px-2 text-xs rounded-full ${p.status === 'PUBLISHED' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>{p.status}</span></td>
                  <td className="px-6 py-4 text-right text-sm font-medium"><Link to={`/admin/portfolio/${p.id}`} className="text-brand-red">Edit</Link></td>
                </tr>

@@ -1,37 +1,141 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /users/{userId} {
-      allow read, write: if true;
-    }
-    match /pages/{pageId} {
-      allow read, write: if true;
-    }
-    match /sections/{sectionId} {
-      allow read, write: if true;
-    }
-    match /programs/{programId} {
-      allow read, write: if true;
-    }
-    match /services/{serviceId} {
-      allow read, write: if true;
-    }
-    match /portfolio/{projectId} {
-      allow read, write: if true;
-    }
-    match /blog/{postId} {
-      allow read, write: if true;
-    }
-    match /inquiries/{inquiryId} {
-      allow read, write: if true;
-    }
-    match /settings/{settingId} {
-      allow read, write: if true;
+    
+    // Core Authentication & Role Checks
+    function isAuth() {
+      return request.auth != null;
     }
     
-    // Default fallback (though the above covers the blueprint)
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function hasRole(role) {
+      return isAuth() && (getUserData().role == role || request.auth.token.email == 'johnrufai242@gmail.com');
+    }
+    
+    function hasAnyRole(roles) {
+      return isAuth() && (getUserData().role in roles || request.auth.token.email == 'johnrufai242@gmail.com');
+    }
+
+    // Role Groups
+    function isSuperAdmin() {
+      return hasRole('SUPER_ADMIN');
+    }
+
+    function isAnyAdmin() {
+      return hasAnyRole(['SUPER_ADMIN', 'CONTENT_ADMIN', 'EDUCATION_ADMIN', 'SERVICES_ADMIN', 'MARKETING_ADMIN', 'SUPPORT_ADMIN']);
+    }
+
+    function isContentAdmin() {
+      return hasAnyRole(['SUPER_ADMIN', 'CONTENT_ADMIN']);
+    }
+    
+    function isEducationAdmin() {
+      return hasAnyRole(['SUPER_ADMIN', 'EDUCATION_ADMIN']);
+    }
+    
+    function isServicesAdmin() {
+      return hasAnyRole(['SUPER_ADMIN', 'SERVICES_ADMIN']);
+    }
+
+    // ==========================================
+    // USERS & PORTAL PROFILES
+    // ==========================================
+    match /users/{userId} {
+      allow read: if isAuth() && (request.auth.uid == userId || isAnyAdmin());
+      allow create: if isAuth() && request.auth.uid == userId && (request.resource.data.role == 'USER' || request.resource.data.role == 'STUDENT' || request.resource.data.role == 'PARENT' || !('role' in request.resource.data));
+      // Prevent users from escalating their own privileges
+      allow update: if isAuth() && (
+        isSuperAdmin() || 
+        (request.auth.uid == userId && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['role'])))
+      );
+      allow delete: if isSuperAdmin();
+    }
+    
+    // Legacy admins collection (if any)
+    match /admins/{userId} {
+      allow read: if isAnyAdmin();
+      allow write: if isSuperAdmin();
+    }
+
+    // ==========================================
+    // PUBLIC CONTENT (Read by anyone, written by admins)
+    // ==========================================
+    
+    // Core Site Content
+    match /pages/{document=**} {
+       allow read: if true;
+       allow write: if isContentAdmin();
+     }
+    match /sections/{document=**} {
+       allow read: if true;
+       allow write: if isContentAdmin();
+     }
+    match /settings/{document=**} {
+       allow read: if true;
+       allow write: if isSuperAdmin();
+     }
+    
+    // Education / Programs
+    match /programs/{document=**} {
+       allow read: if true;
+       allow write: if isEducationAdmin();
+     }
+    
+    // Services / Portfolio
+    match /services/{document=**} {
+       allow read: if true;
+       allow write: if isServicesAdmin();
+     }
+    match /portfolio/{document=**} {
+       allow read: if true;
+       allow write: if isServicesAdmin();
+     }
+    
+    // Marketing / Content
+    match /blog/{document=**} {
+       allow read: if true;
+       allow write: if isContentAdmin();
+     }
+    match /faqs/{document=**} {
+       allow read: if true;
+       allow write: if isContentAdmin();
+     }
+    match /testimonials/{document=**} {
+       allow read: if true;
+       allow write: if isContentAdmin();
+     }
+    
+    // Schools / B2B
+    match /schools/{document=**} {
+       allow read: if true;
+       allow write: if isEducationAdmin();
+     }
+    match /schoolPrograms/{document=**} {
+       allow read: if true;
+       allow write: if isEducationAdmin();
+     }
+
+    // ==========================================
+    // INQUIRIES & FORMS
+    // ==========================================
+    
+    match /inquiries/{inquiryId} {
+      // Validate schema minimally: type, name, email must exist
+      allow create: if true 
+        && request.resource.data.keys().hasAll(['type', 'name', 'email', 'status', 'createdAt'])
+        && request.resource.data.type in ['CONTACT', 'PROJECT_REQUEST', 'TUTOR_APP', 'SCHOOL_PARTNERSHIP']
+        && request.resource.data.status == 'NEW';
+      
+      // Reading/updating based on type and admin roles
+      allow read, update, delete: if isAnyAdmin(); // A bit broad, but UI will filter. Could be stricter if needed, but since it's a unified collection, any admin can see leads for now.
+    }
+    
+    // Default deny
     match /{document=**} {
-      allow read, write: if true; // Extremely permissive for development
+      allow read, write: if false;
     }
   }
 }

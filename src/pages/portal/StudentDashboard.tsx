@@ -1,16 +1,40 @@
-import React from 'react';
-import { BookOpen, Clock, Award, ArrowRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { BookOpen, Clock, Award, Loader2 } from 'lucide-react';
+import { auth, db } from '../../lib/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { Link } from 'react-router-dom';
 
 const StudentDashboard: React.FC = () => {
-  const upcomingClasses = [
-    { id: 1, name: 'Web Development Basics', time: '10:00 AM Today', instructor: 'Sarah Jenkins', type: 'Live Class' },
-    { id: 2, name: 'UI/UX Design Principles', time: '2:30 PM Tomorrow', instructor: 'Marcus Chen', type: 'Workshop' },
-  ];
+  const [user, setUser] = useState<any>(null);
+  const [enrollments, setEnrollments] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const currentCourses = [
-    { id: 1, name: 'Full-Stack Web Development', progress: 65, totalModules: 12, completedModules: 8, image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=400' },
-    { id: 2, name: 'Digital Marketing Fundamentals', progress: 30, totalModules: 8, completedModules: 2, image: 'https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?auto=format&fit=crop&q=80&w=400' },
-  ];
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setUser(currentUser);
+      if (currentUser) {
+        try {
+          // Fetch student enrollments
+          const q = query(collection(db, 'enrollments'), where('studentId', '==', currentUser.uid));
+          const snapshot = await getDocs(q);
+          const enrollmentsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          
+          // In a real app we'd join this with the 'programs' collection, 
+          // but for this MVP we'll just store the populated data or use what we got
+          setEnrollments(enrollmentsData);
+        } catch (error) {
+          console.error("Error fetching enrollments:", error);
+        }
+      }
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  if (loading) {
+    return <div className="min-h-[50vh] flex justify-center items-center"><Loader2 className="w-10 h-10 animate-spin text-brand-red" /></div>;
+  }
 
   return (
     <div className="space-y-8">
@@ -18,11 +42,11 @@ const StudentDashboard: React.FC = () => {
       <div className="bg-brand-slate rounded-3xl p-8 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-brand-red rounded-full blur-[80px] opacity-20 -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
         <div className="relative z-10 max-w-2xl">
-          <h2 className="text-3xl font-extrabold mb-2">Welcome back, Jane! 👋</h2>
-          <p className="text-white/70 text-lg mb-6">You've completed 8 modules this week. Keep up the great work!</p>
-          <button className="bg-brand-red hover:bg-red-600 text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg shadow-brand-red/20">
-            Resume Course
-          </button>
+          <h2 className="text-3xl font-extrabold mb-2">Welcome back, {user?.displayName?.split(' ')[0] || 'Student'}! 👋</h2>
+          <p className="text-white/70 text-lg mb-6">Ready to continue learning and building your future?</p>
+          <Link to="/programs" className="bg-brand-red hover:bg-red-600 text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg shadow-brand-red/20 inline-block">
+            Browse Programs
+          </Link>
         </div>
       </div>
 
@@ -37,7 +61,7 @@ const StudentDashboard: React.FC = () => {
                 <BookOpen size={24} />
               </div>
               <div>
-                <h3 className="text-3xl font-black text-brand-slate dark:text-white">4</h3>
+                <h3 className="text-3xl font-black text-brand-slate dark:text-white">{enrollments.length}</h3>
                 <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">Active Courses</p>
               </div>
             </div>
@@ -46,7 +70,7 @@ const StudentDashboard: React.FC = () => {
                 <Clock size={24} />
               </div>
               <div>
-                <h3 className="text-3xl font-black text-brand-slate dark:text-white">32h</h3>
+                <h3 className="text-3xl font-black text-brand-slate dark:text-white">0h</h3>
                 <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">Time Learned</p>
               </div>
             </div>
@@ -55,7 +79,7 @@ const StudentDashboard: React.FC = () => {
                 <Award size={24} />
               </div>
               <div>
-                <h3 className="text-3xl font-black text-brand-slate dark:text-white">2</h3>
+                <h3 className="text-3xl font-black text-brand-slate dark:text-white">0</h3>
                 <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">Certificates</p>
               </div>
             </div>
@@ -65,46 +89,39 @@ const StudentDashboard: React.FC = () => {
           <div className="bg-white dark:bg-slate-900 dark:border-slate-800 rounded-2xl border border-gray-100 p-6 shadow-sm">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-bold text-brand-slate dark:text-white">My Learning</h3>
-              <button className="text-sm font-bold text-brand-red hover:text-red-700 transition-colors flex items-center gap-1">
-                View all <ArrowRight size={16} />
-              </button>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {currentCourses.map(course => (
-                <div key={course.id} className="group border border-gray-100 rounded-xl overflow-hidden hover:shadow-lg transition-shadow bg-gray-50 dark:bg-slate-950">
-                  <div className="h-32 overflow-hidden relative">
-                    <img src={course.image} alt={course.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                    <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
-                  </div>
-                  <div className="p-5">
-                    <h4 className="font-bold text-brand-slate dark:text-white mb-1 line-clamp-1">{course.name}</h4>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{course.completedModules} of {course.totalModules} modules</p>
+            
+            {enrollments.length === 0 ? (
+              <div className="text-center py-10 bg-gray-50 dark:bg-slate-950 rounded-xl border border-gray-100 dark:border-slate-800">
+                <BookOpen className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                <h4 className="text-lg font-bold text-brand-slate dark:text-white mb-2">No active enrollments</h4>
+                <p className="text-gray-500 dark:text-gray-400 mb-6">You aren't enrolled in any programs yet.</p>
+                <Link to="/programs" className="text-brand-red font-bold hover:text-red-700 transition-colors">
+                  Explore available programs &rarr;
+                </Link>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {enrollments.map(enrollment => (
+                  <div key={enrollment.id} className="group border border-gray-100 rounded-xl overflow-hidden hover:shadow-lg transition-shadow bg-gray-50 dark:bg-slate-950 p-5">
+                    <h4 className="font-bold text-brand-slate dark:text-white mb-2">{enrollment.programName}</h4>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">Status: {enrollment.status || 'Active'}</p>
                     <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                      <div className="bg-brand-red h-full rounded-full transition-all" style={{ width: `${course.progress}%` }}></div>
+                      <div className="bg-brand-red h-full rounded-full transition-all" style={{ width: `${enrollment.progress || 0}%` }}></div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
         {/* Sidebar */}
         <div className="space-y-8">
-          {/* Upcoming Classes */}
           <div className="bg-white dark:bg-slate-900 dark:border-slate-800 rounded-2xl border border-gray-100 p-6 shadow-sm">
             <h3 className="text-lg font-bold text-brand-slate dark:text-white mb-6">Upcoming Classes</h3>
-            <div className="space-y-4">
-              {upcomingClasses.map(cls => (
-                <div key={cls.id} className="p-4 rounded-xl border border-gray-100 hover:border-brand-red/30 hover:bg-red-50 transition-colors">
-                  <div className="flex justify-between items-start mb-2">
-                    <span className="text-xs font-bold text-brand-red bg-brand-red/10 px-2 py-1 rounded">{cls.type}</span>
-                    <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">{cls.time}</span>
-                  </div>
-                  <h4 className="font-bold text-brand-slate dark:text-white text-sm mb-1">{cls.name}</h4>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">with {cls.instructor}</p>
-                </div>
-              ))}
+            <div className="text-center py-8 text-gray-500 dark:text-gray-400 text-sm font-medium">
+              No upcoming classes scheduled.
             </div>
           </div>
         </div>

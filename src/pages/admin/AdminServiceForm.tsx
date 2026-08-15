@@ -35,7 +35,7 @@ const AdminServiceForm: React.FC = () => {
           } else {
             setError('Service not found');
           }
-        } catch (err) {
+        } catch {
           setError('Failed to fetch service');
         } finally {
           setLoading(false);

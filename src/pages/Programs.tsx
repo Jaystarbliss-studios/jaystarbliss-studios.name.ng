@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import MainLayout from '../components/layout/MainLayout';
-import { Link } from 'react-router-dom';
-import { Loader2 } from 'lucide-react';
+import { Card, CardContent, CardFooter } from '../components/ui/Card';
+import Button from '../components/ui/Button';
+import { CardSkeleton } from '../components/ui/Skeleton';
+import EmptyState from '../components/ui/EmptyState';
 
 const CATEGORY_MAP: Record<string, { label: string, icon: string, description: string }> = {
   ACADEMICS: { label: 'Academics', icon: '🎓', description: 'Core subjects taught with understanding and practical application.' },
@@ -23,6 +25,7 @@ const CATEGORY_ORDER = [
 const Programs: React.FC = () => {
   const [programs, setPrograms] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
 
   useEffect(() => {
     const fetchPrograms = async () => {
@@ -36,11 +39,14 @@ const Programs: React.FC = () => {
         setLoading(false);
       }
     };
-
     fetchPrograms();
   }, []);
 
-  const groupedPrograms = programs.reduce((acc, program) => {
+  const filteredPrograms = selectedCategory === 'ALL' 
+    ? programs 
+    : programs.filter(p => (p.categoryId || 'ACADEMICS') === selectedCategory);
+
+  const groupedPrograms = filteredPrograms.reduce((acc, program) => {
     const cat = program.categoryId || 'ACADEMICS';
     if (!acc[cat]) acc[cat] = [];
     acc[cat].push(program);
@@ -58,17 +64,49 @@ const Programs: React.FC = () => {
           </p>
         </div>
       </div>
+      
+      <div className="bg-gray-50 dark:bg-slate-950 border-b border-gray-200 dark:border-slate-800 sticky top-[72px] z-30">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <div className="flex overflow-x-auto py-4 hide-scrollbar gap-2">
+            <button
+              onClick={() => setSelectedCategory('ALL')}
+              className={`whitespace-nowrap px-4 py-2 rounded-full text-sm font-bold transition-colors ${
+                selectedCategory === 'ALL' 
+                  ? 'bg-brand-red text-white' 
+                  : 'bg-white dark:bg-slate-900 text-brand-slate dark:text-gray-300 border border-gray-200 dark:border-slate-800 hover:border-brand-red dark:hover:border-brand-red hover:text-brand-red'
+              }`}
+            >
+              All Programs
+            </button>
+            {CATEGORY_ORDER.map(cat => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`whitespace-nowrap px-4 py-2 rounded-full text-sm font-bold transition-colors flex items-center gap-2 ${
+                  selectedCategory === cat 
+                    ? 'bg-brand-red text-white' 
+                    : 'bg-white dark:bg-slate-900 text-brand-slate dark:text-gray-300 border border-gray-200 dark:border-slate-800 hover:border-brand-red dark:hover:border-brand-red hover:text-brand-red'
+                }`}
+              >
+                <span>{CATEGORY_MAP[cat]?.icon}</span>
+                {CATEGORY_MAP[cat]?.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
 
-      <div className="py-24 bg-white dark:bg-slate-900 dark:border-slate-800">
+      <div className="py-24 bg-brand-neutral dark:bg-slate-900 dark:border-slate-800 min-h-[50vh]">
         <div className="container mx-auto px-4 max-w-7xl">
           {loading ? (
-            <div className="flex justify-center py-20">
-              <Loader2 className="animate-spin text-brand-red w-12 h-12" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[1, 2, 3, 4, 5, 6].map(i => <CardSkeleton key={i} />)}
             </div>
-          ) : programs.length === 0 ? (
-            <div className="text-center py-20">
-              <p className="text-gray-500 dark:text-gray-400 text-lg">No programs currently available. Please check back later.</p>
-            </div>
+          ) : filteredPrograms.length === 0 ? (
+            <EmptyState 
+              title="No Programs Found" 
+              description={selectedCategory === 'ALL' ? "We are currently updating our program catalog. Please check back soon." : `We don't have any published programs in the ${CATEGORY_MAP[selectedCategory]?.label} category yet.`}
+            />
           ) : (
             <div className="space-y-24">
               {CATEGORY_ORDER.map(categoryId => {
@@ -78,12 +116,12 @@ const Programs: React.FC = () => {
                 
                 return (
                   <div key={categoryId} id={categoryId.toLowerCase()}>
-                    <div className="mb-12 border-b border-gray-100 dark:border-slate-800 pb-6">
+                    <div className="mb-12 border-b border-slate-200 dark:border-slate-800 pb-6">
                       <h2 className="text-3xl md:text-4xl font-extrabold text-brand-slate dark:text-white flex items-center gap-4">
                         <span>{catInfo.icon}</span> {catInfo.label}
                       </h2>
                       {catInfo.description && (
-                        <p className="text-lg text-gray-600 dark:text-gray-400 mt-4 max-w-3xl">
+                        <p className="text-lg text-brand-slate/70 dark:text-gray-400 mt-4 max-w-3xl">
                           {catInfo.description}
                         </p>
                       )}
@@ -91,38 +129,38 @@ const Programs: React.FC = () => {
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                       {catPrograms.map((program: any) => (
-                        <div key={program.id} className="flex flex-col bg-gray-50 dark:bg-slate-950 rounded-2xl border border-gray-100 dark:border-slate-800 overflow-hidden hover:shadow-xl transition-shadow group">
-                          <div className="p-8 flex-grow">
-                            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 leading-tight group-hover:text-brand-red transition-colors">
+                        <Card key={program.id} hoverEffect className="flex flex-col group">
+                          <CardContent className="p-8 flex-grow">
+                            <h3 className="text-2xl font-bold text-brand-slate dark:text-white mb-4 leading-tight group-hover:text-brand-red transition-colors">
                               {program.title}
                             </h3>
-                            <p className="text-gray-600 dark:text-gray-400 mb-6 line-clamp-3">
+                            <p className="text-brand-slate/70 dark:text-gray-400 mb-6 line-clamp-3">
                               {program.shortDescription || (program.longDescription ? program.longDescription.substring(0, 100) + '...' : '')}
                             </p>
                             
-                            <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                            <div className="space-y-2 text-sm text-brand-slate/70 dark:text-gray-400">
                               {program.targetAudience && (
                                 <div className="flex items-center">
-                                  <span className="font-semibold w-20 text-gray-900 dark:text-white">For:</span> 
-                                  {program.targetAudience}
+                                  <span className="font-semibold w-20 text-brand-slate dark:text-white">For:</span> 
+                                  {program.targetAudience.replace('_', ' ')}
                                 </div>
                               )}
                               <div className="flex items-center">
-                                <span className="font-semibold w-20 text-gray-900 dark:text-white">Format:</span> 
+                                <span className="font-semibold w-20 text-brand-slate dark:text-white">Format:</span> 
                                 {program.deliveryFormat === 'ONLINE' ? 'Online' : program.deliveryFormat === 'PHYSICAL' ? 'In-Person' : 'Hybrid'}
                               </div>
                             </div>
-                          </div>
+                          </CardContent>
                           
-                          <div className="p-6 bg-white dark:bg-slate-900 dark:border-slate-800 border-t border-gray-100 dark:border-slate-800 flex items-center justify-between mt-auto">
-                            <span className="font-bold text-gray-900 dark:text-white text-lg">
+                          <CardFooter className="p-6 flex items-center justify-between mt-auto">
+                            <span className="font-bold text-brand-slate dark:text-white text-lg">
                               {program.pricing && program.pricing.trim() !== '' ? program.pricing : 'Contact Us'}
                             </span>
-                            <Link to={`/programs/${program.slug}`} className="bg-brand-slate text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-gray-800 transition-colors">
+                            <Button to={`/programs/${program.slug}`} variant="secondary" size="sm" className="uppercase font-bold tracking-wider">
                               VIEW DETAILS
-                            </Link>
-                          </div>
-                        </div>
+                            </Button>
+                          </CardFooter>
+                        </Card>
                       ))}
                     </div>
                   </div>

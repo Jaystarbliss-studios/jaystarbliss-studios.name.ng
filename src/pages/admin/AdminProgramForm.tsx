@@ -38,7 +38,7 @@ const AdminProgramForm: React.FC = () => {
           } else {
             setError('Program not found');
           }
-        } catch (err) {
+        } catch {
           setError('Failed to fetch program');
         } finally {
           setLoading(false);
@@ -172,15 +172,17 @@ const AdminProgramForm: React.FC = () => {
               </select>
             </div>
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">Age Range / Audience</label>
-              <input 
-                type="text" 
+              <label className="block text-sm font-medium text-gray-700">Target Audience</label>
+              <select 
                 name="targetAudience" 
-                value={formData.targetAudience || ''}
+                value={formData.targetAudience || 'B2C'}
                 onChange={handleChange}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red dark:bg-slate-900 dark:border-slate-800 dark:text-white"
-                placeholder="e.g. Ages 5-11 or Senior Secondary"
-              />
+              >
+                <option value="B2C">Direct to Consumer (B2C)</option>
+                <option value="B2B_SCHOOLS">Schools (B2B)</option>
+                <option value="CORPORATE">Corporate Training</option>
+              </select>
             </div>
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-700">Pricing</label>
@@ -215,6 +217,22 @@ const AdminProgramForm: React.FC = () => {
               value={formData.longDescription}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red"
+            ></textarea>
+          </div>
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-700">Curriculum (One item per line)</label>
+            <textarea 
+              name="curriculum" 
+              rows={4}
+              value={Array.isArray((formData as any).curriculum) ? (formData as any).curriculum.join('\n') : (formData as any).curriculum || ''}
+              onChange={(e) => {
+                setFormData(prev => ({
+                  ...prev,
+                  curriculum: e.target.value.split('\n').filter(line => line.trim() !== '')
+                }));
+              }}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red dark:bg-slate-900 dark:border-slate-800 dark:text-white"
+              placeholder="Module 1: Introduction&#10;Module 2: Advanced Topics"
             ></textarea>
           </div>
 
