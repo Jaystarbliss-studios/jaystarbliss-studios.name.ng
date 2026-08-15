@@ -3,6 +3,7 @@ import { Search, X, Loader2, ArrowRight } from 'lucide-react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { useNavigate } from 'react-router-dom';
+import { useKeyboardShortcut } from '../../hooks/useKeyboardShortcut';
 
 interface SearchResult {
   id: string;
@@ -27,6 +28,7 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
   // All published documents cached for client-side search
   const [allDocs, setAllDocs] = useState<SearchResult[]>([]);
   const [docsLoaded, setDocsLoaded] = useState(false);
+  useKeyboardShortcut("Escape", () => { if (isOpen) onClose(); });
 
   useEffect(() => {
     if (isOpen) {

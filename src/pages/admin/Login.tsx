@@ -3,6 +3,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../lib/firebase';
 import { useNavigate } from 'react-router-dom';
 import { Loader2, Lock } from 'lucide-react';
+import { useToast } from '../../contexts/ToastContext';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -10,6 +11,7 @@ const Login: React.FC = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { success, error: showError } = useToast();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,9 +19,11 @@ const Login: React.FC = () => {
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      success('Successfully logged in!');
       navigate('/admin');
     } catch (err: any) {
       setError(err.message || 'Invalid credentials');
+      showError(err.message || 'Invalid credentials');
     } finally {
       setLoading(false);
     }

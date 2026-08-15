@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import MainLayout from '../components/layout/MainLayout';
+import SEO from '../components/ui/SEO';
 import { Monitor, Paintbrush, Database, Globe, Briefcase, Cpu } from 'lucide-react';
 import { Card, CardContent } from '../components/ui/Card';
 import Button from '../components/ui/Button';
@@ -42,6 +43,7 @@ const Services: React.FC = () => {
 
   return (
     <MainLayout>
+      <SEO title="Services" description="Professional technology and creative services designed to elevate your brand." />
       <div className="bg-brand-slate text-white py-20 lg:py-32">
         <div className="container mx-auto px-4 max-w-7xl text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">Our Services</h1>

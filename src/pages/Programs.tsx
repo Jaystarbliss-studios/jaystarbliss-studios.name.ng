@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import MainLayout from '../components/layout/MainLayout';
+import SEO from '../components/ui/SEO';
 import { Card, CardContent, CardFooter } from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import { CardSkeleton } from '../components/ui/Skeleton';
@@ -55,6 +56,7 @@ const Programs: React.FC = () => {
 
   return (
     <MainLayout>
+      <SEO title="Programs" description="Explore our ecosystem of educational and tech programs." />
       <div className="bg-brand-slate text-white py-20 lg:py-32">
         <div className="container mx-auto px-4 max-w-7xl text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">Our Ecosystem of Programs</h1>

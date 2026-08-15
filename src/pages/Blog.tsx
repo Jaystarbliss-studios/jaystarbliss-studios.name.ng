@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MainLayout from '../components/layout/MainLayout';
+import SEO from '../components/ui/SEO';
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { Link } from 'react-router-dom';
@@ -37,6 +38,7 @@ const Blog: React.FC = () => {
 
   return (
     <MainLayout>
+      <SEO title="Blog" description="Insights, tutorials and tech news." />
       <div className="bg-brand-slate text-white py-24 lg:py-32 relative overflow-hidden">
         <div className="container mx-auto px-4 max-w-7xl relative z-10 text-center">
           <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold mb-6 tracking-tight">

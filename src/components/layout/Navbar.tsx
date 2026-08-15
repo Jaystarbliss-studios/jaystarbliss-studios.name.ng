@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronRight, Sun, Moon, Search } from 'lucide-react';
 import { useTheme } from '../../hooks/useTheme';
+import { useKeyboardShortcut } from '../../hooks/useKeyboardShortcut';
 import SearchModal from '../ui/SearchModal';
 
 const Navbar: React.FC = () => {
@@ -10,6 +11,7 @@ const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const location = useLocation();
+  useKeyboardShortcut("/", () => setSearchOpen(true));
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {

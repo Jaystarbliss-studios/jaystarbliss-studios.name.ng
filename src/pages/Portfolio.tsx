@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import MainLayout from '../components/layout/MainLayout';
+import SEO from '../components/ui/SEO';
 import { ExternalLink } from 'lucide-react';
 import { Card, CardContent } from '../components/ui/Card';
 import Badge from '../components/ui/Badge';
@@ -29,6 +30,7 @@ const Portfolio: React.FC = () => {
 
   return (
     <MainLayout>
+      <SEO title="Portfolio" description="Explore our recent projects and case studies." />
       <div className="bg-brand-slate text-white py-20 lg:py-32">
         <div className="container mx-auto px-4 max-w-7xl text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">Our Work</h1>

@@ -1,4 +1,7 @@
 import { ThemeProvider } from './contexts/ThemeContext';
+import { ToastProvider } from './contexts/ToastContext';
+import ErrorBoundary from './components/ui/ErrorBoundary';
+import PageLoader from './components/ui/PageLoader';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import About from './pages/About';
@@ -43,8 +46,11 @@ import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
+    <ErrorBoundary>
     <ThemeProvider>
+      <ToastProvider>
     <Router>
+      <PageLoader />
       <ScrollToTop />
       <Routes>
         {/* Public Routes */}
@@ -121,7 +127,9 @@ function App() {
         </Route>
       </Routes>
     </Router>
+          </ToastProvider>
     </ThemeProvider>
+    </ErrorBoundary>
   );
 }
 
