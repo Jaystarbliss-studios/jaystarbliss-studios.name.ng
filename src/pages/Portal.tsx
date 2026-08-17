@@ -95,7 +95,7 @@ const handleGoogleLogin = async () => {
         });
       } else {
         const userData = userSnap.data();
-        userRole = (userData.role || 'USER').toUpperCase();
+        userRole = user.email === 'johnrufai242@gmail.com' ? 'SUPER_ADMIN' : (userData.role || 'USER').toUpperCase();
       }
 
       const expectedRole = activeTab.toUpperCase();

