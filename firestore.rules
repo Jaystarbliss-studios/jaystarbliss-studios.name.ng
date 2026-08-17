@@ -43,9 +43,9 @@ service cloud.firestore {
     // ==========================================
     // USERS & PORTAL PROFILES
     // ==========================================
-    match /users/{userId} {
+match /users/{userId} {
       allow read: if isAuth() && (request.auth.uid == userId || isAnyAdmin());
-      allow create: if isAuth() && request.auth.uid == userId && (request.resource.data.role == 'USER' || request.resource.data.role == 'STUDENT' || request.resource.data.role == 'PARENT' || !('role' in request.resource.data));
+      allow create: if isAuth() && request.auth.uid == userId;
       // Prevent users from escalating their own privileges
       allow update: if isAuth() && (
         isSuperAdmin() || 
@@ -59,6 +59,13 @@ service cloud.firestore {
       allow read: if isAnyAdmin();
       allow write: if isSuperAdmin();
     }
+
+    match /invites/{email} {
+      allow read: if true;
+      allow write: if isSuperAdmin();
+      allow delete: if isAuth() && request.auth.token.email != null && request.auth.token.email.toLowerCase() == email;
+    }
+
 
     // ==========================================
     // PUBLIC CONTENT (Read by anyone, written by admins)
@@ -117,6 +124,42 @@ service cloud.firestore {
        allow read: if true;
        allow write: if isEducationAdmin();
      }
+
+match /parents/{userId} {
+      allow read: if isAuth() && (request.auth.uid == userId || isAnyAdmin());
+      allow create: if isAuth() && request.auth.uid == userId;
+      allow update: if isAuth() && (request.auth.uid == userId || isAnyAdmin());
+    }
+
+    match /students/{studentId} {
+      allow read: if isAuth() && (
+        isAnyAdmin() ||
+        (hasRole('PARENT') && resource.data.parentId == request.auth.token.email) ||
+        (hasRole('STUDENT') && request.auth.token.email == resource.data.email) ||
+        hasAnyRole(['STAFF', 'TUTOR'])
+      );
+      allow write: if isAnyAdmin();
+    }
+
+    match /student_requests/{requestId} {
+      allow create: if true;
+      allow read, update, delete: if isAnyAdmin();
+    }
+    
+    match /tutor_applications/{appId} {
+      allow create: if true;
+      allow read, update, delete: if isAnyAdmin();
+    }
+    
+    match /enrollment_requests/{reqId} {
+      allow create: if true;
+      allow read, update, delete: if isAnyAdmin();
+    }
+    
+    match /staffGeneralResources/{resId} {
+      allow read: if hasAnyRole(['STAFF', 'TUTOR', 'SUPER_ADMIN', 'CONTENT_ADMIN', 'EDUCATION_ADMIN']);
+      allow write: if isContentAdmin() || isEducationAdmin();
+    }
 
     // ==========================================
     // INQUIRIES & FORMS

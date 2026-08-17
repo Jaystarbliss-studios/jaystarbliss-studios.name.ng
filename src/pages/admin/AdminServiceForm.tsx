@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { doc, getDoc, addDoc, updateDoc, collection } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { Link } from 'react-router-dom';
 
 const AdminServiceForm: React.FC = () => {
@@ -161,13 +163,14 @@ const AdminServiceForm: React.FC = () => {
 
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">Long Content</label>
-            <textarea 
+            <ReactQuill theme="snow" value={formData.content} onChange={(value) => setFormData({ ...formData, content: value })} className="bg-white" />
+            {/* <textarea 
               name="content" 
               rows={4}
               value={formData.content}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red"
-            ></textarea>
+            ></textarea> */}
           </div>
 
           <div className="flex items-center gap-8 py-4 border-t border-gray-100">

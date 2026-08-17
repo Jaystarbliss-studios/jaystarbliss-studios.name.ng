@@ -4,7 +4,7 @@ import SEO from '../components/ui/SEO';
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { Link } from 'react-router-dom';
-import { Calendar } from 'lucide-react';
+import { Calendar, User } from 'lucide-react';
 import { Card, CardContent } from '../components/ui/Card';
 import { CardSkeleton } from '../components/ui/Skeleton';
 import EmptyState from '../components/ui/EmptyState';
@@ -33,6 +33,7 @@ const Blog: React.FC = () => {
         setLoading(false);
       }
     };
+
     fetchPosts();
   }, []);
 
@@ -80,11 +81,17 @@ const Blog: React.FC = () => {
                       </div>
                     )}
                     <CardContent className="p-8 flex flex-col flex-grow">
-                      <div className="flex items-center gap-4 text-xs font-bold text-gray-500 dark:text-gray-400 mb-4 tracking-wider uppercase">
+                      <div className="flex items-center gap-4 text-xs font-bold text-gray-500 dark:text-gray-400 mb-4 tracking-wider uppercase flex-wrap">
                         {post.createdAt && (
                           <div className="flex items-center gap-1.5">
                             <Calendar size={14} />
                             {new Date(post.createdAt).toLocaleDateString()}
+                          </div>
+                        )}
+                        {post.author && (
+                          <div className="flex items-center gap-1.5">
+                            <User size={14} />
+                            {post.author}
                           </div>
                         )}
                       </div>

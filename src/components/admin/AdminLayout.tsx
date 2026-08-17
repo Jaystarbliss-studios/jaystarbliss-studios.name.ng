@@ -1,6 +1,7 @@
 import jaystarblissLogo from '../../assets/favicon.png';
 import React, { useState } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import SearchModal from '../ui/SearchModal';
 import { 
   LayoutDashboard, 
@@ -22,21 +23,15 @@ const AdminLayout: React.FC = () => {
   const location = useLocation();
 
   const navigation = [
-    { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-    { name: 'Resources', href: '/admin/resources', icon: FileText },
-    { name: 'Exams', href: '/admin/exams', icon: BookOpen },
-    { name: 'Links', href: '/admin/links', icon: FolderOpen },
-    { name: 'Schools', href: '/admin/schools', icon: Users },
-    { name: 'Students', href: '/admin/students', icon: Users },
-    { name: 'Staff & Tutors', href: '/admin/staff', icon: Users },
-    { name: 'Approvals', href: '/admin/approvals', icon: MessageSquare },
-    { name: 'Payments', href: '/admin/payments', icon: Briefcase },
-    { name: 'Programs', href: '/admin/programs', icon: BookOpen },
-    { name: 'Services', href: '/admin/services', icon: Briefcase },
-    { name: 'Portfolio', href: '/admin/portfolio', icon: FolderOpen },
-    { name: 'Blog', href: '/admin/blog', icon: FileText },
-    { name: 'Inquiries', href: '/admin/inquiries', icon: MessageSquare },
-    { name: 'Settings', href: '/admin/settings', icon: Settings },
+    { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
+    { name: "Pages (CMS)", href: "/admin/pages", icon: FileText },
+    { name: "Programs", href: "/admin/programs", icon: BookOpen },
+    { name: "Services", href: "/admin/services", icon: Briefcase },
+    { name: "Portfolio", href: "/admin/portfolio", icon: FolderOpen },
+    { name: "Blog", href: "/admin/blog", icon: FileText },
+    { name: "Inquiries", href: "/admin/inquiries", icon: MessageSquare },
+    { name: "Users", href: "/admin/users", icon: Users },
+    { name: "Settings", href: "/admin/settings", icon: Settings },
   ];
 
   const closeSidebar = () => setSidebarOpen(false);
@@ -66,7 +61,6 @@ const AdminLayout: React.FC = () => {
             <X size={20} />
           </button>
         </div>
-
         <div className="flex-1 overflow-y-auto py-4 px-3">
           <nav className="space-y-1">
             {navigation.map((item) => {
@@ -94,7 +88,6 @@ const AdminLayout: React.FC = () => {
             })}
           </nav>
         </div>
-
         <div className="p-4 border-t border-white/10">
           <button className="flex items-center w-full px-3 py-2.5 text-sm font-medium text-gray-300 rounded-md hover:bg-white/5 hover:text-white transition-colors">
             <LogOut className="mr-3 h-5 w-5 text-gray-400" />
@@ -135,11 +128,22 @@ const AdminLayout: React.FC = () => {
         <main className="flex-1 relative overflow-y-auto focus:outline-none">
           <div className="py-6">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-              <Outlet />
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={location.pathname}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Outlet />
+                </motion.div>
+              </AnimatePresence>
             </div>
           </div>
         </main>
       </div>
+
       <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>
   );

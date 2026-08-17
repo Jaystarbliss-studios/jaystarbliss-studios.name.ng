@@ -4,6 +4,7 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import MainLayout from '../components/layout/MainLayout';
 import { Loader2, ArrowLeft } from 'lucide-react';
+import DOMPurify from 'dompurify';
 import Button from '../components/ui/Button';
 import Badge from '../components/ui/Badge';
 
@@ -98,7 +99,7 @@ const ProgramDetails: React.FC = () => {
           <h2 className="text-3xl font-bold text-brand-slate dark:text-white mb-8">About This Program</h2>
           <div className="prose prose-lg max-w-none prose-slate text-brand-slate/80 dark:text-gray-400">
             {program.longDescription ? (
-              <div className="whitespace-pre-line leading-relaxed">{program.longDescription}</div>
+              <div className="whitespace-pre-line leading-relaxed quill-content" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(program.longDescription) }} />
             ) : (
               <p>Detailed curriculum and description coming soon. Please contact us for more information.</p>
             )}

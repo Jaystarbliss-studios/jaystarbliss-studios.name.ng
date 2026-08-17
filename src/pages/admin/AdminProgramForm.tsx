@@ -1,3 +1,5 @@
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { doc, getDoc, addDoc, updateDoc, collection } from 'firebase/firestore';
@@ -211,17 +213,18 @@ const AdminProgramForm: React.FC = () => {
 
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">Long Description</label>
-            <textarea 
+            <ReactQuill theme="snow" value={formData.longDescription} onChange={(value) => setFormData({ ...formData, longDescription: value })} className="bg-white text-black" />
+            {/* <textarea 
               name="longDescription" 
               rows={4}
               value={formData.longDescription}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red"
-            ></textarea>
+            ></textarea> */}
           </div>
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">Curriculum (One item per line)</label>
-            <textarea 
+            {/* <textarea 
               name="curriculum" 
               rows={4}
               value={Array.isArray((formData as any).curriculum) ? (formData as any).curriculum.join('\n') : (formData as any).curriculum || ''}
@@ -233,7 +236,7 @@ const AdminProgramForm: React.FC = () => {
               }}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red dark:bg-slate-900 dark:border-slate-800 dark:text-white"
               placeholder="Module 1: Introduction&#10;Module 2: Advanced Topics"
-            ></textarea>
+            ></textarea> */}
           </div>
 
           <div className="flex items-center gap-8 py-4 border-t border-gray-100">

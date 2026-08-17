@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import { auth, db } from '../lib/firebase';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
-import { collection, addDoc, doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, doc, setDoc, serverTimestamp, getDoc, deleteDoc } from 'firebase/firestore';
 import { useTheme } from '../hooks/useTheme';
 import './Register.css';
 
@@ -92,14 +92,26 @@ const Register = () => {
       }
 
       try {
-        const cred = await createUserWithEmailAndPassword(auth, email, password);
+const cred = await createUserWithEmailAndPassword(auth, email, password);
         await sendEmailVerification(cred.user);
+        
+        let finalRole = mode;
+        try {
+          const inviteDocRef = doc(db, 'invites', email.toLowerCase());
+          const inviteSnap = await getDoc(inviteDocRef);
+          if (inviteSnap.exists()) {
+             finalRole = inviteSnap.data().role.toLowerCase();
+             await deleteDoc(inviteDocRef);
+          }
+        } catch(e) {
+          console.error(e);
+        }
         
         const data = {
           name: fullName,
           email: email.toLowerCase(),
           phone,
-          role: 'parent',
+          role: finalRole,
           children: [],
           emailVerified: false,
           createdAt: serverTimestamp()

@@ -5,7 +5,7 @@ import {
   Eye, EyeOff, ArrowLeft, Sun, Moon 
 } from 'lucide-react';
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp, deleteDoc } from 'firebase/firestore';
 import { auth, db } from '../lib/firebase';
 import { useTheme } from '../hooks/useTheme';
 import jaystarblissLogo from '../assets/favicon.png';
@@ -31,15 +31,25 @@ const Portal: React.FC = () => {
     e.preventDefault();
     setError('');
     setLoading(true);
-
     try {
       const cred = await signInWithEmailAndPassword(auth, email, password);
       const userSnap = await getDoc(doc(db, 'users', cred.user.uid));
       
       if (userSnap.exists()) {
         const userData = userSnap.data();
-        if (userData.role !== activeTab && userData.role !== 'admin') {
-           throw new Error(`Wrong tab for this account. Please use the ${userData.role} tab.`);
+        const userRole = cred.user.email === 'johnrufai242@gmail.com' ? 'SUPER_ADMIN' : (userData.role || 'USER').toUpperCase();
+        const expectedRole = activeTab.toUpperCase();
+
+        if (userRole.includes('ADMIN')) {
+           navigate('/admin');
+           return;
+        }
+
+        const isStaffTab = expectedRole === 'STAFF';
+        const isStaffUser = userRole === 'STAFF' || userRole === 'TUTOR';
+
+        if (userRole !== expectedRole && !(isStaffTab && isStaffUser)) {
+           throw new Error(`Wrong tab for this account. Please use the ${userData.role || 'USER'} tab.`);
         }
       }
       
@@ -56,7 +66,7 @@ const Portal: React.FC = () => {
     }
   };
 
-  const handleGoogleLogin = async () => {
+const handleGoogleLogin = async () => {
     setError('');
     setLoading(true);
     try {
@@ -64,20 +74,44 @@ const Portal: React.FC = () => {
       const user = result.user;
       const userSnap = await getDoc(doc(db, 'users', user.uid));
 
+      let userRole = user.email === 'johnrufai242@gmail.com' ? 'SUPER_ADMIN' : activeTab.toUpperCase();
+
       if (!userSnap.exists()) {
+        // Check for pending invite
+        const inviteDocRef = doc(db, 'invites', (user.email || '').toLowerCase());
+        const inviteSnap = await getDoc(inviteDocRef);
+        
+        if (inviteSnap.exists()) {
+           userRole = inviteSnap.data().role;
+           await deleteDoc(inviteDocRef);
+        }
+
         // Auto-create for first-time Google sign-in
         await setDoc(doc(db, 'users', user.uid), {
           email: user.email,
           name: user.displayName || '',
-          role: activeTab,
+          role: userRole,
           createdAt: serverTimestamp()
         });
       } else {
         const userData = userSnap.data();
-        if (userData.role !== activeTab && userData.role !== 'admin') {
-           throw new Error(`This account belongs to a ${userData.role}. Please switch tabs.`);
-        }
+        userRole = (userData.role || 'USER').toUpperCase();
       }
+
+      const expectedRole = activeTab.toUpperCase();
+
+      if (userRole.includes('ADMIN')) {
+         navigate('/admin');
+         return;
+      }
+
+      const isStaffTab = expectedRole === 'STAFF';
+      const isStaffUser = userRole === 'STAFF' || userRole === 'TUTOR';
+
+      if (userRole !== expectedRole && !(isStaffTab && isStaffUser)) {
+         throw new Error(`This account belongs to a ${userRole || 'USER'}. Please switch tabs.`);
+      }
+      
       navigate(`/portal/${activeTab}`);
     } catch (err: any) {
       console.error(err);

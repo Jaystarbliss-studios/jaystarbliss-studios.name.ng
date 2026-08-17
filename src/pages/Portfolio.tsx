@@ -4,6 +4,7 @@ import { db } from '../lib/firebase';
 import MainLayout from '../components/layout/MainLayout';
 import SEO from '../components/ui/SEO';
 import { ExternalLink } from 'lucide-react';
+import DOMPurify from 'dompurify';
 import { Card, CardContent } from '../components/ui/Card';
 import Badge from '../components/ui/Badge';
 import { CardSkeleton } from '../components/ui/Skeleton';
@@ -56,10 +57,14 @@ const Portfolio: React.FC = () => {
               {projects.map((project) => (
                 <Card key={project.id} hoverEffect className="flex flex-col group overflow-hidden border-0 ring-1 ring-slate-200 dark:ring-slate-800">
                   {/* Visual placeholder for a project thumbnail */}
-                  <div className="h-64 bg-slate-100 dark:bg-slate-800 flex items-center justify-center border-b border-slate-200 dark:border-slate-700 relative">
+                  {project.featuredImage ? (
+                    <div className="h-64 w-full relative border-b border-slate-200 dark:border-slate-700 overflow-hidden">
+                      <img src={project.featuredImage} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    </div>
+                  ) : (
+                    <div className="h-64 bg-slate-100 dark:bg-slate-800 flex items-center justify-center border-b border-slate-200 dark:border-slate-700 relative">
                     <div className="absolute inset-0 bg-gradient-to-br from-brand-slate/5 to-transparent"></div>
-                    <span className="font-bold text-brand-slate/20 dark:text-white/20 text-4xl tracking-widest uppercase">{project.title.substring(0, 2)}</span>
-                  </div>
+                    <span className="font-bold text-brand-slate/20 dark:text-white/20 text-4xl tracking-widest uppercase">{project.title.substring(0, 2)}</span></div>)}
                   
                   <CardContent className="p-10 flex-grow flex flex-col bg-white dark:bg-slate-950">
                     <div className="flex justify-between items-start mb-6">
@@ -86,9 +91,10 @@ const Portfolio: React.FC = () => {
                       </div>
                     ) : null}
                     
-                    <p className="text-brand-slate/70 dark:text-gray-400 leading-relaxed font-medium">
+                    <div className="text-brand-slate/70 dark:text-gray-400 leading-relaxed font-medium quill-content" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(project.description) }} />
+{/*
                       {project.description}
-                    </p>
+                    */}
                   </CardContent>
                 </Card>
               ))}

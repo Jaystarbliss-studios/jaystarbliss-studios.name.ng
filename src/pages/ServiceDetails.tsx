@@ -1,3 +1,4 @@
+import DOMPurify from 'dompurify';
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { collection, query, where, getDocs } from 'firebase/firestore';
@@ -96,7 +97,7 @@ const ServiceDetails: React.FC = () => {
               <h2 className="text-3xl font-bold text-brand-slate dark:text-white mb-8">Service Overview</h2>
               <div className="prose prose-lg max-w-none text-brand-slate/70 dark:text-gray-400 prose-headings:text-brand-slate dark:text-white prose-a:text-brand-red">
                 {service.content ? (
-                  <div className="whitespace-pre-line leading-relaxed">{service.content}</div>
+                  <div className="whitespace-pre-line leading-relaxed quill-content" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(service.content) }} />
                 ) : (
                   <p>Details about this service are being updated. Our team works closely with you to understand your specific needs, plan the execution, and deliver high-quality results. Contact us to learn more about how we can help with {service.title}.</p>
                 )}

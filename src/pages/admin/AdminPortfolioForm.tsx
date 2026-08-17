@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { doc, getDoc, addDoc, updateDoc, collection } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { ArrowLeft, Loader2 } from 'lucide-react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { Link } from 'react-router-dom';
 
 const AdminPortfolioForm: React.FC = () => {
@@ -90,7 +92,7 @@ const AdminPortfolioForm: React.FC = () => {
           <div className={formData.portfolioType === 'CLIENT_WORK' ? '' : 'col-span-2'}><label className="block text-sm font-medium mb-1">Category</label><input type="text" name="category" value={formData.category} onChange={handleChange} className="w-full px-4 py-2 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white" /></div>
         </div>
         <div><label className="block text-sm font-medium mb-1">Live URL</label><input type="text" name="liveUrl" value={formData.liveUrl} onChange={handleChange} className="w-full px-4 py-2 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white" /></div>
-        <div><label className="block text-sm font-medium mb-1">Description</label><textarea name="description" rows={4} value={formData.description} onChange={handleChange} className="w-full px-4 py-2 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white"></textarea></div>
+        <div><label className="block text-sm font-medium mb-1">Description</label><ReactQuill theme="snow" value={formData.description} onChange={(value) => setFormData({ ...formData, description: value })} className="bg-white text-black" /></div>
         <div className="flex gap-8">
           <div><label className="block text-sm font-medium mb-1">Status</label><select name="status" value={formData.status} onChange={handleChange} className="px-4 py-2 border rounded-lg dark:bg-slate-900 dark:border-slate-700 dark:text-white"><option value="DRAFT">Draft</option><option value="PUBLISHED">Published</option></select></div>
           <div className="flex items-center pt-6"><label className="flex items-center gap-2"><input type="checkbox" name="isFeatured" checked={formData.isFeatured} onChange={handleChange} className="w-5 h-5 rounded text-brand-red dark:bg-slate-900 dark:border-slate-700" /><span>Featured Project</span></label></div>

@@ -9,6 +9,7 @@ import { CardSkeleton } from '../components/ui/Skeleton';
 import EmptyState from '../components/ui/EmptyState';
 
 const CATEGORY_MAP: Record<string, { label: string, icon: string, description: string }> = {
+  ALL_PROGRAMS: { label: 'All Programs', icon: '📚', description: 'From foundational academics to advanced digital skills and creative arts.' },
   ACADEMICS: { label: 'Academics', icon: '🎓', description: 'Core subjects taught with understanding and practical application.' },
   DIGITAL_AND_TECHNOLOGY: { label: 'Digital & Technology', icon: '💻', description: 'Programming, web development, AI, and digital literacy.' },
   CREATIVE: { label: 'Creative', icon: '🎨', description: 'Graphic design, digital art, branding, and visual communication.' },
@@ -19,6 +20,7 @@ const CATEGORY_MAP: Record<string, { label: string, icon: string, description: s
 };
 
 const CATEGORY_ORDER = [
+  'ALL_PROGRAMS',
   'ACADEMICS', 'DIGITAL_AND_TECHNOLOGY', 'CREATIVE', 'MUSIC', 
   'EXAM_PREPARATION', 'PERSONALIZED_LEARNING', 'SCHOOL_PROGRAMS'
 ];

@@ -4,6 +4,8 @@ import SEO from '../components/ui/SEO';
 import Hero from '../components/Hero.tsx';
 import CorePillars from '../components/home/CorePillars';
 import FeaturedPrograms from '../components/home/FeaturedPrograms';
+import FeaturedServices from '../components/home/FeaturedServices';
+import FeaturedPortfolio from '../components/home/FeaturedPortfolio';
 
 import LearningMethod from '../components/home/LearningMethod';
 import AudiencePathways from '../components/home/AudiencePathways';
@@ -16,6 +18,8 @@ const Home: React.FC = () => {
       <Hero />
       <CorePillars />
       <FeaturedPrograms />
+      <FeaturedServices />
+      <FeaturedPortfolio />
       
       <LearningMethod />
       <AudiencePathways />

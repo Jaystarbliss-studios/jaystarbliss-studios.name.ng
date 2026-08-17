@@ -1,32 +1,36 @@
-# React + TypeScript + Vite
+# Jaystarbliss Studios | Dynamic Hub
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A premium, full-stack educational and portfolio platform designed for Jaystarbliss Studios. This platform serves as a modern digital headquarters, featuring dynamic content management, real-time administrative dashboards, role-based portals (Student, Parent, Tutor, School), and a robust React SPA front-end.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Public Hub:** Home, Programs, Services, Portfolio, Resources, FAQ, Blog.
+- **Portals (RBAC Enforced):** Dedicated environments for Students, Parents, Tutors/Staff, and Schools.
+- **Administrative CMS (Admin):** 
+  - Manage users, roles, programs, services, and blog content.
+  - Interactive charts via Recharts for quick data insights.
+  - CSV Data exports for Inquiries and User Registrations.
+- **Content Management:** Fully integrated Firebase Firestore backend for rapid UI hydration.
+- **Interactive Visuals:** Framer Motion-powered route transitions, page animations, and an aesthetic red-black-white color palette.
 
-## React Compiler
+## Technical Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Frontend:** React 19, TypeScript, Vite, Tailwind CSS.
+- **Animations:** Framer Motion.
+- **Routing:** React Router v7.
+- **Backend/DB:** Firebase Firestore & Firebase Auth.
+- **Data Visualization:** Recharts (Analytics Dashboard).
+- **Icons:** Lucide React.
 
-## Expanding the Oxlint configuration
+## Getting Started
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+1. Set up a Firebase project and enable Firestore & Authentication.
+2. Ensure Firebase environment settings are loaded (via config files).
+3. Install dependencies: `npm install`
+4. Run locally: `npm run dev`
+5. Build for production: `npm run build`
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
+## Permissions
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+The app defines specific roles: `USER` (default), `STUDENT`, `PARENT`, `TUTOR`, `SCHOOL`, `CONTENT_ADMIN`, `SERVICES_ADMIN`, and `SUPER_ADMIN`.
+Use the Admin Dashboard to modify user roles and gain complete access to portal routes and administrative capabilities.
