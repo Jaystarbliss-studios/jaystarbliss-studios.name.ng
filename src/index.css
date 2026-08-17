@@ -6,6 +6,12 @@ body {
   font-family: 'Poppins', sans-serif;
   background-color: #F8FAFC;
   color: #1E293B;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+html.dark body {
+  background-color: #0B1120;
+  color: #F8FAFC;
 }
 
 @layer utilities {
@@ -14,6 +20,10 @@ body {
   .bg-brand-slate { background-color: #1E293B; }
   .bg-brand-red { background-color: #B91C1C; }
   .bg-brand-neutral { background-color: #F8FAFC; }
+}
+
+html.dark .bg-brand-neutral {
+  background-color: #0B1120;
 }
 
 @keyframes pulse-glow {

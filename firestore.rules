@@ -98,13 +98,24 @@ match /users/{userId} {
      }
     match /portfolio/{document=**} {
        allow read: if true;
-       allow write: if isServicesAdmin();
+       allow write: if isServicesAdmin() || isEducationAdmin() || isContentAdmin();
      }
     
-    // Marketing / Content
+    // Kids & Student Projects Showcase
+    match /kidsProjects/{document=**} {
+       allow read: if isAuth() || true;
+       allow create, update, delete: if isAnyAdmin() || hasRole('ADMIN');
+     }
+    
+    // Marketing / Content & News Corner
     match /blog/{document=**} {
        allow read: if true;
        allow write: if isContentAdmin();
+     }
+    match /newsCorner/{document=**} {
+       allow read: if true;
+       allow update: if isContentAdmin() || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views']));
+       allow create, delete: if isContentAdmin();
      }
     match /faqs/{document=**} {
        allow read: if true;

@@ -2,7 +2,10 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import { ToastProvider } from "./contexts/ToastContext";
 import ErrorBoundary from "./components/ui/ErrorBoundary";
 import PageLoader from "./components/ui/PageLoader";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
+import PageTransition from "./components/ui/PageTransition";
+
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Programs from "./pages/Programs";
@@ -10,6 +13,7 @@ import ProgramDetails from "./pages/ProgramDetails";
 import Services from "./pages/Services";
 import ServiceDetails from "./pages/ServiceDetails";
 import Portfolio from "./pages/Portfolio";
+import MagicParticles from "./pages/MagicParticles";
 import Contact from "./pages/Contact";
 import ProjectRequest from "./pages/ProjectRequest";
 import SchoolPartnership from "./pages/SchoolPartnership";
@@ -41,56 +45,40 @@ import AdminBlog from "./pages/admin/AdminBlog";
 import AdminBlogForm from "./pages/admin/AdminBlogForm";
 import AdminPortfolio from "./pages/admin/AdminPortfolio";
 import AdminPortfolioForm from "./pages/admin/AdminPortfolioForm";
+import AdminKidsProjects from "./pages/admin/AdminKidsProjects";
 import AdminInquiries from "./pages/admin/AdminInquiries";
 import AdminSettings from "./pages/admin/AdminSettings";
 
 import ScrollToTop from "./components/ScrollToTop";
 
-function App() {
-  return (
-    <ErrorBoundary>
-      <ThemeProvider>
-        <ToastProvider>
-          <Router>
-            <PageLoader />
-            <ScrollToTop />
-            <AnimatedRoutes />
-          </Router>
-        </ToastProvider>
-      </ThemeProvider>
-    </ErrorBoundary>
-  );
-}
-
-
-import { useLocation } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
-
 function AnimatedRoutes() {
   const location = useLocation();
+  
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname.split('/')[1]}>
+    <AnimatePresence mode="wait" initial={false}>
+      <Routes location={location} key={location.pathname}>
         {/* Public Routes */}
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/programs" element={<Programs />} />
-        <Route path="/programs/:slug" element={<ProgramDetails />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/services/:slug" element={<ServiceDetails />} />
-        <Route path="/portfolio" element={<Portfolio />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/resources" element={<Resources />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/blog/:slug" element={<BlogPostDetails />} />
-        <Route path="/project-request" element={<ProjectRequest />} />
-        <Route path="/school-partnership" element={<SchoolPartnership />} />
-        <Route path="/tutor-application" element={<TutorApplication />} />
-        <Route path="/faq" element={<FAQ />} />
+        <Route path="/" element={<PageTransition><Home /></PageTransition>} />
+        <Route path="/about" element={<PageTransition><About /></PageTransition>} />
+        <Route path="/programs" element={<PageTransition><Programs /></PageTransition>} />
+        <Route path="/programs/:slug" element={<PageTransition><ProgramDetails /></PageTransition>} />
+        <Route path="/services" element={<PageTransition><Services /></PageTransition>} />
+        <Route path="/services/:slug" element={<PageTransition><ServiceDetails /></PageTransition>} />
+        <Route path="/portfolio" element={<PageTransition><Portfolio /></PageTransition>} />
+        <Route path="/magic-particles" element={<MagicParticles />} />
+        <Route path="/kids-zone/magic" element={<MagicParticles />} />
+        <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
+        <Route path="/resources" element={<PageTransition><Resources /></PageTransition>} />
+        <Route path="/blog" element={<PageTransition><Blog /></PageTransition>} />
+        <Route path="/blog/:slug" element={<PageTransition><BlogPostDetails /></PageTransition>} />
+        <Route path="/project-request" element={<PageTransition><ProjectRequest /></PageTransition>} />
+        <Route path="/school-partnership" element={<PageTransition><SchoolPartnership /></PageTransition>} />
+        <Route path="/tutor-application" element={<PageTransition><TutorApplication /></PageTransition>} />
+        <Route path="/faq" element={<PageTransition><FAQ /></PageTransition>} />
 
         {/* Portal Routes */}
-        <Route path="/portal" element={<Portal />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/portal" element={<PageTransition><Portal /></PageTransition>} />
+        <Route path="/register" element={<PageTransition><Register /></PageTransition>} />
         <Route path="/portal/student" element={<ProtectedRoute allowedRoles={['STUDENT']} redirectPath="/portal"><PortalLayout /></ProtectedRoute>}>
           <Route index element={<StudentDashboard />} />
           <Route path="calendar" element={<div className="p-8 text-center text-gray-500">Calendar coming soon</div>} />
@@ -111,7 +99,7 @@ function AnimatedRoutes() {
         </Route>
 
         {/* Admin Login */}
-        <Route path="/admin/login" element={<Login />} />
+        <Route path="/admin/login" element={<PageTransition><Login /></PageTransition>} />
 
         {/* Protected Admin Routes */}
         <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
@@ -128,6 +116,7 @@ function AnimatedRoutes() {
           <Route path="portfolio" element={<AdminPortfolio />} />
           <Route path="portfolio/new" element={<AdminPortfolioForm />} />
           <Route path="portfolio/:id" element={<AdminPortfolioForm />} />
+          <Route path="kids-projects" element={<AdminKidsProjects />} />
           <Route path="inquiries" element={<AdminInquiries />} />
           <Route path="users" element={<AdminUsers />} />
           <Route path="pages" element={<AdminPages />} />
@@ -139,4 +128,22 @@ function AnimatedRoutes() {
     </AnimatePresence>
   );
 }
+
+function App() {
+  return (
+    <ErrorBoundary>
+      <ThemeProvider>
+        <ToastProvider>
+          <Router>
+            <PageLoader />
+            <ScrollToTop />
+            <AnimatedRoutes />
+          </Router>
+        </ToastProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
+  );
+}
+
 export default App;
+

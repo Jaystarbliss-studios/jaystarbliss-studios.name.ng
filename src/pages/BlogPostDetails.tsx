@@ -80,7 +80,16 @@ const BlogPostDetails: React.FC = () => {
                   <ArrowLeft size={16} />
                   Back to Blog
                 </Link>
-                <div className="flex items-center gap-6 text-sm font-bold text-white/80 mb-6 uppercase tracking-wider">
+                <div className="flex items-center gap-4 text-sm font-bold text-white/80 mb-6 uppercase tracking-wider flex-wrap">
+                  {post.category && (
+                    <span className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider ${
+                      post.category.toLowerCase().includes('news')
+                        ? 'bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30'
+                        : 'bg-brand-red text-white'
+                    }`}>
+                      {post.category}
+                    </span>
+                  )}
                   {post.createdAt && (
                     <div className="flex items-center gap-2">
                       <Calendar size={16} />
@@ -107,7 +116,16 @@ const BlogPostDetails: React.FC = () => {
                 <ArrowLeft size={16} />
                 Back to Blog
               </Link>
-              <div className="flex items-center gap-6 text-sm font-bold text-white/60 mb-6 uppercase tracking-wider">
+              <div className="flex items-center gap-4 text-sm font-bold text-white/60 mb-6 uppercase tracking-wider flex-wrap">
+                {post.category && (
+                  <span className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider ${
+                    post.category.toLowerCase().includes('news')
+                      ? 'bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30'
+                      : 'bg-brand-red text-white'
+                  }`}>
+                    {post.category}
+                  </span>
+                )}
                 {post.createdAt && (
                   <div className="flex items-center gap-2">
                     <Calendar size={16} />

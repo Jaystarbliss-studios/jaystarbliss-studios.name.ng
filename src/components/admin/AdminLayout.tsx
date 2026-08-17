@@ -14,7 +14,8 @@ import {
   Settings,
   LogOut,
   Menu,
-  X
+  X,
+  Gamepad2
 } from 'lucide-react';
 
 const AdminLayout: React.FC = () => {
@@ -28,6 +29,7 @@ const AdminLayout: React.FC = () => {
     { name: "Programs", href: "/admin/programs", icon: BookOpen },
     { name: "Services", href: "/admin/services", icon: Briefcase },
     { name: "Portfolio", href: "/admin/portfolio", icon: FolderOpen },
+    { name: "Kids Projects", href: "/admin/kids-projects", icon: Gamepad2 },
     { name: "Blog", href: "/admin/blog", icon: FileText },
     { name: "Inquiries", href: "/admin/inquiries", icon: MessageSquare },
     { name: "Users", href: "/admin/users", icon: Users },

@@ -116,12 +116,31 @@
         "excerpt": { "type": "string" },
         "content": { "type": "string" },
         "authorId": { "type": "string" },
+        "category": { "type": "string" },
         "status": { "type": "string", "enum": ["DRAFT", "PUBLISHED", "ARCHIVED"] },
         "featuredImage": { "type": "string" },
         "createdAt": { "type": "string" },
         "updatedAt": { "type": "string" }
       },
       "required": ["title", "slug", "authorId", "status", "content"]
+    },
+    "KidsProject": {
+      "title": "Kids Project",
+      "description": "Showcase of projects and games created by kids and students.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "creator": { "type": "string" },
+        "embedUrl": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "category": { "type": "string" },
+        "status": { "type": "string", "enum": ["DRAFT", "PUBLISHED"] },
+        "isFeatured": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["title", "creator", "status"]
     },
     "Inquiry": {
       "title": "Inquiry",
@@ -178,6 +197,10 @@
     "portfolio/{projectId}": {
       "schema": { "$ref": "#/entities/PortfolioProject" },
       "description": "Past work and portfolio projects."
+    },
+    "kidsProjects/{projectId}": {
+      "schema": { "$ref": "#/entities/KidsProject" },
+      "description": "Kids and student games, apps, and interactive projects."
     },
     "blog/{postId}": {
       "schema": { "$ref": "#/entities/BlogPost" },
