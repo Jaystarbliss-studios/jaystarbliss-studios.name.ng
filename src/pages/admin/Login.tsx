@@ -6,6 +6,7 @@ import { db } from '../../lib/firebase';
 import { useNavigate } from 'react-router-dom';
 import { Loader2, Lock } from 'lucide-react';
 import { useToast } from '../../contexts/ToastContext';
+import SEO from '../../components/ui/SEO';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -91,6 +92,11 @@ const handleGoogleLogin = async () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <SEO 
+        title="Admin Console Login" 
+        description="Administrative access to Jaystarbliss Studios content management portal." 
+        noindex={true}
+      />
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
           <div className="w-12 h-12 bg-brand-slate rounded-xl flex items-center justify-center">

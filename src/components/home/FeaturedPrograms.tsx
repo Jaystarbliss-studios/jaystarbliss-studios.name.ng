@@ -4,7 +4,8 @@ import { db } from '../../lib/firebase';
 import { Link } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { getProgramImage } from '../../lib/stockImages';
-import { StaggerGroup, staggerItem, Reveal } from '../ui/Reveal';
+import { StaggerGroup, Reveal } from '../ui/Reveal';
+import { staggerItem } from '../ui/animationVariants';
 import { motion } from 'framer-motion';
 
 const FeaturedPrograms: React.FC = () => {

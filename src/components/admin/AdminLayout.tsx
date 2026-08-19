@@ -1,9 +1,10 @@
-import jaystarblissLogo from '../../assets/favicon.png';
 import React, { useState } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import SearchModal from '../ui/SearchModal';
 import { Tooltip } from '../ui/Tooltip';
+import { JaystarblissIcon } from '../common/JaystarblissLogo';
+import SEO from '../ui/SEO';
 import { 
   LayoutDashboard, 
   Users, 
@@ -40,9 +41,16 @@ const AdminLayout: React.FC = () => {
   ];
 
   const closeSidebar = () => setSidebarOpen(false);
+  const currentNav = navigation.find(n => n.href === location.pathname);
+  const currentTitle = currentNav ? `Admin ${currentNav.name}` : 'Admin Management Panel';
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
+      <SEO 
+        title={currentTitle} 
+        description="Jaystarbliss Studios Administration and Content Management System." 
+        noindex={true}
+      />
       {/* Mobile sidebar overlay */}
       <div 
         className={`fixed inset-0 z-40 bg-gray-900/80 transition-opacity lg:hidden ${
@@ -58,9 +66,7 @@ const AdminLayout: React.FC = () => {
         <div className="flex items-center justify-between h-16 px-6 bg-brand-slate border-b border-white/10">
           <Tooltip content="Return to Public Website" placement="bottom">
             <Link to="/" className="flex items-center gap-2 group">
-              <div className="w-8 h-8 bg-white/10 rounded flex items-center justify-center group-hover:bg-brand-red transition-colors">
-                <img src={jaystarblissLogo} alt="Logo" className="w-6 h-6 object-cover" />
-              </div>
+              <JaystarblissIcon className="w-8 h-8 group-hover:scale-105 transition-transform" />
               <span className="font-bold text-sm tracking-tight text-white flex items-center gap-1">
                 ADMIN PORTAL
                 <ExternalLink size={12} className="opacity-0 group-hover:opacity-70 transition-opacity" />

@@ -23,7 +23,6 @@ import {
   CalendarDays,
   FileText
 } from 'lucide-react';
-import { Card, CardContent } from '../components/ui/Card';
 import { CardSkeleton } from '../components/ui/Skeleton';
 import EmptyState from '../components/ui/EmptyState';
 import DOMPurify from 'dompurify';
@@ -127,19 +126,22 @@ const Blog: React.FC = () => {
     <MainLayout>
       <SEO 
         title="News Corner & Blog Insights" 
-        description="Latest tech news, academy announcements, coding tutorials, and insights from Jaystarbliss Dynamic Hub." 
+        description="Latest tech news, academy announcements, coding tutorials, and insights from Jaystarbliss Studios." 
       />
 
-      {/* Cyber/Modern Header */}
+      {/* Header */}
       <div className="bg-brand-slate text-white py-16 lg:py-24 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
         
-        <div className="container mx-auto px-4 max-w-7xl relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
           <div className="max-w-3xl mb-10">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 tracking-tight">
+            <span className="inline-block text-xs font-black uppercase tracking-widest text-brand-red mb-3">
+              Broadcasts & Articles
+            </span>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-4 tracking-tight">
               News Corner & Blog
             </h1>
-            <p className="text-lg md:text-xl text-white/80 leading-relaxed font-medium">
+            <p className="text-base sm:text-lg text-white/80 leading-relaxed font-normal">
               Real-time academy bulletins, competition highlights, student achievements, and technical deep dives.
             </p>
           </div>
@@ -147,10 +149,11 @@ const Blog: React.FC = () => {
           {/* Tab Switcher */}
           <div className="flex flex-wrap items-center gap-3">
             <button
+              type="button"
               onClick={() => setActiveTab('NEWS')}
-              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-md ${
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all ${
                 activeTab === 'NEWS'
-                  ? 'bg-cyan-500 text-slate-950 shadow-cyan-500/25 scale-102'
+                  ? 'bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/20'
                   : 'bg-white/10 text-white/80 hover:bg-white/20 hover:text-white'
               }`}
             >
@@ -159,10 +162,11 @@ const Blog: React.FC = () => {
             </button>
 
             <button
+              type="button"
               onClick={() => setActiveTab('BLOG')}
-              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-md ${
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all ${
                 activeTab === 'BLOG'
-                  ? 'bg-brand-red text-white shadow-brand-red/30 scale-102'
+                  ? 'bg-brand-red text-white shadow-md shadow-brand-red/20'
                   : 'bg-white/10 text-white/80 hover:bg-white/20 hover:text-white'
               }`}
             >
@@ -174,11 +178,11 @@ const Blog: React.FC = () => {
       </div>
 
       {/* Main Body */}
-      <div className="py-14 md:py-20 bg-brand-neutral dark:bg-slate-950 min-h-[60vh]">
-        <div className="container mx-auto px-4 max-w-7xl">
+      <div className="py-16 md:py-24 bg-brand-neutral dark:bg-slate-900 min-h-[60vh]">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
 
           {/* Search & Category Filter */}
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-10 bg-white dark:bg-slate-900 p-4 md:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-10 bg-white dark:bg-slate-950 p-4 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-800">
             <div className="relative w-full md:w-80">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
               <input
@@ -186,7 +190,7 @@ const Blog: React.FC = () => {
                 placeholder={activeTab === 'NEWS' ? "Search news, bulletins..." : "Search articles, topics..."}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-8 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white text-xs font-medium focus:outline-none focus:ring-2 focus:ring-brand-red"
+                className="w-full pl-9 pr-8 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-medium focus:outline-none focus:ring-2 focus:ring-brand-red"
               />
               {searchQuery && (
                 <button onClick={() => setSearchQuery('')} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
@@ -201,10 +205,10 @@ const Blog: React.FC = () => {
                   <button
                     key={cat}
                     onClick={() => setSelectedNewsCategory(cat)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap uppercase tracking-wider transition-colors ${
+                    className={`px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap uppercase tracking-wider transition-colors ${
                       selectedNewsCategory === cat
-                        ? 'bg-cyan-500 text-slate-950 shadow-sm font-black'
-                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
+                        ? 'bg-cyan-500 text-slate-950 font-black'
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
                     }`}
                   >
                     {cat === 'ALL' ? 'All Bulletins' : cat}
@@ -219,10 +223,10 @@ const Blog: React.FC = () => {
                   <button
                     key={cat}
                     onClick={() => setSelectedBlogCategory(cat)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap uppercase tracking-wider transition-colors ${
+                    className={`px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap uppercase tracking-wider transition-colors ${
                       selectedBlogCategory === cat
-                        ? 'bg-brand-red text-white shadow-sm font-black'
-                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
+                        ? 'bg-brand-red text-white font-black'
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
                     }`}
                   >
                     {cat === 'ALL' ? 'All Topics' : cat}
@@ -232,14 +236,12 @@ const Blog: React.FC = () => {
             )}
           </div>
 
-          {/* ======================================================== */}
           {/* TAB 1: NEWS CORNER */}
-          {/* ======================================================== */}
           {activeTab === 'NEWS' && (
             <div className="space-y-10">
               
-              {/* Broadcast Header */}
-              <div className="bg-slate-900 rounded-3xl border border-slate-800 p-6 md:p-8 shadow-xl relative overflow-hidden text-white">
+              {/* Broadcast Hub Header */}
+              <div className="bg-brand-slate rounded-2xl border border-slate-800 p-6 sm:p-8 relative overflow-hidden text-white">
                 <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
                   <div className="flex items-center gap-2.5 text-xs font-mono text-cyan-400 font-bold">
                     <Terminal size={15} />
@@ -251,12 +253,12 @@ const Blog: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                   <div>
-                    <h3 className="text-2xl md:text-3xl font-extrabold text-white mb-2">
+                    <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-2 tracking-tight">
                       Jaystarbliss News Corner
                     </h3>
-                    <p className="text-slate-400 text-xs md:text-sm max-w-2xl leading-relaxed">
+                    <p className="text-slate-400 text-xs sm:text-sm max-w-2xl leading-relaxed">
                       Stay updated with the latest happenings at our Lagos hub, student hackathons, bootcamp milestones, and STEM workshops.
                     </p>
                   </div>
@@ -292,31 +294,30 @@ const Blog: React.FC = () => {
                     const IconComponent = catStyle.Icon;
 
                     return (
-                      <Card
+                      <div
                         key={item.id}
-                        hoverEffect
-                        className="h-full border border-slate-200 dark:border-slate-800 flex flex-col overflow-hidden bg-white dark:bg-slate-900 group cursor-pointer"
                         onClick={() => handleOpenNewsModal(item)}
+                        className="group flex flex-col rounded-2xl overflow-hidden bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-cyan-500/50 cursor-pointer transition-all duration-300"
                       >
                         {item.featuredImage ? (
-                          <div className="aspect-[16/9] w-full overflow-hidden relative">
+                          <div className="aspect-[16/9] w-full overflow-hidden relative bg-slate-100 dark:bg-slate-900">
                             <img
                               src={item.featuredImage}
                               alt={item.title}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             />
                             <div className="absolute top-3 left-3">
-                              <span className={`px-2.5 py-1 rounded-full text-xs font-bold backdrop-blur-md border ${catStyle.bg} ${catStyle.text} bg-slate-900/80 flex items-center gap-1.5`}>
+                              <span className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border ${catStyle.bg} ${catStyle.text} bg-slate-900/90 flex items-center gap-1.5`}>
                                 <IconComponent size={12} />
                                 {catStyle.label}
                               </span>
                             </div>
                           </div>
                         ) : (
-                          <div className="aspect-[16/9] w-full bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center p-6 relative">
-                            <Newspaper size={36} className="text-white/30" />
+                          <div className="aspect-[16/9] w-full bg-brand-slate flex items-center justify-center p-6 relative">
+                            <Newspaper size={36} className="text-white/20" />
                             <div className="absolute top-3 left-3">
-                              <span className={`px-2.5 py-1 rounded-full text-xs font-bold border ${catStyle.bg} ${catStyle.text} bg-slate-900/80 flex items-center gap-1.5`}>
+                              <span className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border ${catStyle.bg} ${catStyle.text} bg-slate-900/90 flex items-center gap-1.5`}>
                                 <IconComponent size={12} />
                                 {catStyle.label}
                               </span>
@@ -324,7 +325,7 @@ const Blog: React.FC = () => {
                           </div>
                         )}
 
-                        <CardContent className="p-6 flex flex-col flex-grow justify-between">
+                        <div className="p-6 flex flex-col flex-grow justify-between">
                           <div>
                             <div className="flex items-center justify-between text-xs font-medium text-slate-500 dark:text-slate-400 mb-3">
                               <div className="flex items-center gap-1.5">
@@ -341,21 +342,21 @@ const Blog: React.FC = () => {
                               {item.title}
                             </h3>
 
-                            <p className="text-slate-600 dark:text-slate-400 text-xs md:text-sm font-normal line-clamp-3 mb-4 leading-relaxed">
+                            <p className="text-slate-600 dark:text-slate-400 text-xs sm:text-sm font-normal line-clamp-3 mb-4 leading-relaxed">
                               {item.excerpt}
                             </p>
                           </div>
 
                           <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                              <User size={13} /> {item.author || 'Jaystarbliss'}
+                            <span className="text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                              <User size={13} /> {item.author || 'Jaystarbliss Studios'}
                             </span>
                             <span className="text-xs font-bold text-cyan-600 dark:text-cyan-400 group-hover:underline flex items-center gap-1">
                               Read Bulletin <ArrowRight size={13} />
                             </span>
                           </div>
-                        </CardContent>
-                      </Card>
+                        </div>
+                      </div>
                     );
                   })}
                 </div>
@@ -363,9 +364,7 @@ const Blog: React.FC = () => {
             </div>
           )}
 
-          {/* ======================================================== */}
           {/* TAB 2: BLOG & ARTICLES */}
-          {/* ======================================================== */}
           {activeTab === 'BLOG' && (
             <div className="space-y-10">
               {loading ? (
@@ -383,16 +382,15 @@ const Blog: React.FC = () => {
                     const isNews = post.category?.toLowerCase().includes('news');
                     return (
                       <Link to={`/blog/${post.slug}`} key={post.id} className="group">
-                        <Card 
-                          hoverEffect 
-                          className={`h-full border-0 flex flex-col overflow-hidden bg-white dark:bg-slate-900 transition-all ${
+                        <div 
+                          className={`h-full flex flex-col rounded-2xl overflow-hidden bg-white dark:bg-slate-950 transition-all duration-300 border ${
                             isNews 
-                              ? 'ring-2 ring-cyan-500/80 shadow-lg shadow-cyan-500/10' 
-                              : 'ring-1 ring-slate-200 dark:ring-slate-800'
+                              ? 'border-cyan-500/60 ring-1 ring-cyan-500/30' 
+                              : 'border-slate-200 dark:border-slate-800 hover:border-brand-red/40'
                           }`}
                         >
                           {post.featuredImage ? (
-                            <div className="aspect-[16/9] w-full overflow-hidden relative">
+                            <div className="aspect-[16/9] w-full overflow-hidden relative bg-slate-100 dark:bg-slate-900">
                               <img
                                 src={post.featuredImage}
                                 alt={post.title}
@@ -400,9 +398,9 @@ const Blog: React.FC = () => {
                               />
                               {post.category && (
                                 <div className="absolute top-3 left-3">
-                                  <span className={`px-2.5 py-1 rounded-full text-[11px] font-black uppercase tracking-wider backdrop-blur-md shadow-md flex items-center gap-1 ${
+                                  <span className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider backdrop-blur-md flex items-center gap-1 ${
                                     isNews
-                                      ? 'bg-cyan-500 text-slate-950 border border-cyan-400/50'
+                                      ? 'bg-cyan-500 text-slate-950'
                                       : 'bg-slate-950/80 text-white border border-white/20'
                                   }`}>
                                     {isNews && <Radio size={11} />}
@@ -412,7 +410,7 @@ const Blog: React.FC = () => {
                               )}
                             </div>
                           ) : (
-                            <div className="aspect-[16/9] w-full bg-slate-100 dark:bg-slate-800 flex flex-col items-center justify-center relative p-6">
+                            <div className="aspect-[16/9] w-full bg-slate-100 dark:bg-slate-900 flex flex-col items-center justify-center relative p-6">
                               {post.category && (
                                 <span className={`mb-2 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
                                   isNews
@@ -422,11 +420,11 @@ const Blog: React.FC = () => {
                                   {post.category}
                                 </span>
                               )}
-                              <span className="text-slate-400 font-bold uppercase tracking-widest text-xs">Jaystarbliss</span>
+                              <span className="text-slate-400 font-bold uppercase tracking-widest text-xs">Jaystarbliss Studios</span>
                             </div>
                           )}
-                          <CardContent className="p-6 md:p-7 flex flex-col flex-grow">
-                            <div className="flex items-center gap-3 text-xs font-bold text-gray-500 dark:text-gray-400 mb-3 tracking-wider uppercase flex-wrap">
+                          <div className="p-6 sm:p-7 flex flex-col flex-grow">
+                            <div className="flex items-center gap-3 text-xs font-bold text-slate-500 dark:text-slate-400 mb-3 tracking-wider uppercase flex-wrap">
                               {post.createdAt && (
                                 <div className="flex items-center gap-1.5">
                                   <Calendar size={13} />
@@ -440,17 +438,17 @@ const Blog: React.FC = () => {
                                 </div>
                               )}
                             </div>
-                            <h3 className="text-lg md:text-xl font-bold text-brand-slate dark:text-white mb-3 group-hover:text-brand-red transition-colors line-clamp-2 leading-snug">
+                            <h3 className="text-lg font-bold text-brand-slate dark:text-white mb-3 group-hover:text-brand-red transition-colors line-clamp-2 leading-snug">
                               {post.title}
                             </h3>
-                            <p className="text-gray-600 dark:text-gray-400 text-xs md:text-sm font-medium line-clamp-3 mb-6 flex-grow leading-relaxed">
+                            <p className="text-slate-600 dark:text-slate-400 text-xs sm:text-sm font-normal line-clamp-3 mb-6 flex-grow leading-relaxed">
                               {post.excerpt}
                             </p>
                             <span className="text-brand-red font-bold text-xs uppercase tracking-wider group-hover:text-red-700 dark:group-hover:text-red-400 transition-colors mt-auto flex items-center gap-1">
                               Read Article <ArrowRight size={13} />
                             </span>
-                          </CardContent>
-                        </Card>
+                          </div>
+                        </div>
                       </Link>
                     );
                   })}
@@ -496,7 +494,7 @@ const Blog: React.FC = () => {
             </h2>
 
             <div className="text-xs text-slate-500 dark:text-slate-400 mb-6 flex items-center gap-2">
-              <User size={14} /> Reported by <strong className="text-slate-700 dark:text-slate-300">{selectedNewsModal.author || 'Jaystarbliss Hub'}</strong>
+              <User size={14} /> Reported by <strong className="text-slate-700 dark:text-slate-300">{selectedNewsModal.author || 'Jaystarbliss Studios'}</strong>
             </div>
 
             <div 

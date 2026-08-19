@@ -1,9 +1,10 @@
-import jaystarblissLogo from '../../assets/favicon.png';
 import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Book, Settings, LogOut, LayoutDashboard, User, Calendar, ExternalLink } from 'lucide-react';
 import { Tooltip } from '../ui/Tooltip';
+import { JaystarblissIcon } from '../common/JaystarblissLogo';
+import SEO from '../ui/SEO';
 
 const PortalLayout: React.FC = () => {
   const location = useLocation();
@@ -25,19 +26,23 @@ const PortalLayout: React.FC = () => {
   };
 
   const navLinks = getNavLinks();
+  const roleTitle = role.charAt(0).toUpperCase() + role.slice(1);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row">
+      <SEO 
+        title={`${roleTitle} Portal`} 
+        description={`Jaystarbliss Studios ${roleTitle} portal access and learning dashboard.`} 
+        noindex={true}
+      />
       {/* Sidebar */}
       <aside className="w-full md:w-64 bg-brand-slate text-white flex flex-col h-auto md:min-h-screen border-b md:border-b-0 md:border-r border-white/10 sticky top-0 md:relative z-20">
         <div className="p-6">
           <Tooltip content="Return to Main Website" placement="bottom">
-            <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-8 h-8 bg-brand-red rounded-lg flex items-center justify-center overflow-hidden group-hover:scale-105 transition-transform">
-                <img src={jaystarblissLogo} alt="Logo" className="w-full h-full object-cover" />
-              </div>
+            <Link to="/" className="flex items-center gap-2.5 group">
+              <JaystarblissIcon className="w-8 h-8 group-hover:scale-105 transition-transform" />
               <span className="font-bold text-lg tracking-tight flex items-center gap-1.5">
-                DYNAMIC HUB
+                STUDIOS
                 <ExternalLink size={14} className="opacity-0 group-hover:opacity-60 transition-opacity" />
               </span>
             </Link>

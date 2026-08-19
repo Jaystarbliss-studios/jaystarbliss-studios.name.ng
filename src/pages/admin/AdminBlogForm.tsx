@@ -23,7 +23,7 @@ const AdminBlogForm: React.FC = () => {
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
-    author: 'Jaystarbliss Hub',
+    author: 'Jaystarbliss Studios',
     category: 'announcement',
     featuredImage: '',
     excerpt: '',
@@ -43,7 +43,7 @@ const AdminBlogForm: React.FC = () => {
           setFormData({
             title: data.title || '',
             slug: data.slug || '',
-            author: data.author || 'Jaystarbliss Hub',
+            author: data.author || 'Jaystarbliss Studios',
             category: data.category || 'announcement',
             featuredImage: data.featuredImage || '',
             excerpt: data.excerpt || '',
@@ -217,7 +217,7 @@ const AdminBlogForm: React.FC = () => {
               value={formData.author}
               onChange={handleChange}
               className="w-full px-4 py-2.5 border border-gray-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-sm"
-              placeholder="e.g. John Rufai / Jaystarbliss"
+              placeholder="e.g. John Rufai / Jaystarbliss Studios"
             />
           </div>
 

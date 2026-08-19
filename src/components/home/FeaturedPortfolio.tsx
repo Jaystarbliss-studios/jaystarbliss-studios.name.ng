@@ -5,7 +5,8 @@ import { Loader2, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Badge from '../ui/Badge';
 import DOMPurify from 'dompurify';
-import { StaggerGroup, staggerItem, Reveal } from '../ui/Reveal';
+import { StaggerGroup, Reveal } from '../ui/Reveal';
+import { staggerItem } from '../ui/animationVariants';
 import { motion } from 'framer-motion';
 
 const FeaturedPortfolio: React.FC = () => {

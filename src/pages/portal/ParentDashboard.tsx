@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db, auth } from '../../lib/firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { GraduationCap, FileText, Calendar } from 'lucide-react';
+import SEO from '../../components/ui/SEO';
 
 const ParentDashboard: React.FC = () => {
   const [children, setChildren] = useState<any[]>([]);
@@ -28,6 +29,11 @@ const ParentDashboard: React.FC = () => {
 
   return (
     <div className="space-y-8">
+      <SEO 
+        title="Parent Portal Dashboard" 
+        description="Monitor your child's academic progress, attendance, and mentor feedback." 
+        noindex={true}
+      />
       {/* Welcome Banner */}
       <div className="bg-brand-slate rounded-3xl p-8 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-brand-red rounded-full blur-[80px] opacity-20 -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>

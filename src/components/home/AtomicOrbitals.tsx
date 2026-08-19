@@ -1,6 +1,6 @@
 import React from 'react';
 import { Paintbrush, Cpu, Hash, Type } from 'lucide-react';
-import jaystarblissLogo from '../../assets/favicon.png';
+import { JaystarblissIcon } from '../common/JaystarblissLogo';
 
 interface OrbitProps {
   rotationZ: number;
@@ -124,7 +124,7 @@ const AtomicOrbitals: React.FC = () => {
         onClick={() => window.location.href = '/portal'}
       >
         <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-brand-red/20 to-transparent opacity-50"></div>
-        <img src={jaystarblissLogo} alt="Jaystarbliss Logo" className="w-20 h-20 sm:w-24 sm:h-24 object-contain opacity-90 relative z-10" />
+        <JaystarblissIcon className="w-20 h-20 sm:w-24 sm:h-24 relative z-10 shadow-2xl" />
       </div>
     </div>
   );

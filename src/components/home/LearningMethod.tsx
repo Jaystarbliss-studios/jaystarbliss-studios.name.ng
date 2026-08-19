@@ -1,5 +1,6 @@
 import React from 'react';
-import { StaggerGroup, staggerItem, Reveal } from '../ui/Reveal';
+import { StaggerGroup, Reveal } from '../ui/Reveal';
+import { staggerItem } from '../ui/animationVariants';
 import { motion } from 'framer-motion';
 
 const steps = [

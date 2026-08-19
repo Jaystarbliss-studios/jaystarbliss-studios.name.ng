@@ -122,7 +122,7 @@ export const defaultBlogPosts = [
     author: 'John Rufai',
     category: 'coding',
     excerpt: 'Exploring how computational thinking, Scratch, and early algorithmic problem solving prepare young learners for the next century of innovation.',
-    content: '<p>In a world increasingly driven by digital infrastructure, programming has evolved from a niche specialty into an essential foundational literacy. Teaching children how to code at a young age instills logical reasoning, systemic problem-solving, and creative confidence.</p><h2>Building Builders, Not Just Consumers</h2><p>At Jaystarbliss Dynamic Hub, our mission is to transform students from passive digital consumers into passionate creators and engineers who construct their own games, websites, and intelligent systems.</p>',
+    content: '<p>In a world increasingly driven by digital infrastructure, programming has evolved from a niche specialty into an essential foundational literacy. Teaching children how to code at a young age instills logical reasoning, systemic problem-solving, and creative confidence.</p><h2>Building Builders, Not Just Consumers</h2><p>At Jaystarbliss Studios, our mission is to transform students from passive digital consumers into passionate creators and engineers who construct their own games, websites, and intelligent systems.</p>',
     status: 'PUBLISHED',
     createdAt: new Date('2026-01-20').toISOString(),
     updatedAt: new Date().toISOString()

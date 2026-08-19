@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import MainLayout from '../components/layout/MainLayout';
+import SEO from '../components/ui/SEO';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { Loader2, Calendar, ArrowLeft, User } from 'lucide-react';
@@ -38,8 +39,8 @@ const BlogPostDetails: React.FC = () => {
   if (loading) {
     return (
       <MainLayout>
-        <div className="min-h-[60vh] flex items-center justify-center bg-brand-neutral dark:bg-slate-950">
-          <Loader2 className="w-12 h-12 animate-spin text-brand-red" />
+        <div className="min-h-[60vh] flex items-center justify-center bg-brand-neutral dark:bg-slate-900">
+          <Loader2 className="w-10 h-10 animate-spin text-brand-red" />
         </div>
       </MainLayout>
     );
@@ -48,13 +49,13 @@ const BlogPostDetails: React.FC = () => {
   if (error || !post) {
     return (
       <MainLayout>
-        <div className="min-h-[60vh] flex flex-col items-center justify-center bg-brand-neutral dark:bg-slate-950 px-4 text-center">
-          <h1 className="text-4xl font-bold text-brand-slate dark:text-white mb-6">Post Not Found</h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-lg">
+        <div className="min-h-[60vh] flex flex-col items-center justify-center bg-brand-neutral dark:bg-slate-900 px-4 text-center">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-brand-slate dark:text-white mb-4">Post Not Found</h1>
+          <p className="text-base text-slate-600 dark:text-slate-400 mb-8 max-w-md">
             We couldn't find the article you were looking for. It might have been moved or removed.
           </p>
-          <Link to="/blog" className="inline-flex items-center gap-2 bg-brand-slate text-white px-8 py-4 rounded-xl font-bold hover:bg-gray-800 transition-colors">
-            <ArrowLeft size={20} />
+          <Link to="/blog" className="inline-flex items-center gap-2 bg-brand-slate text-white px-6 py-3 rounded-xl font-bold hover:bg-slate-800 transition-colors uppercase tracking-wider text-xs">
+            <ArrowLeft size={16} />
             BACK TO BLOG
           </Link>
         </div>
@@ -64,82 +65,89 @@ const BlogPostDetails: React.FC = () => {
 
   return (
     <MainLayout>
-      <article className="bg-brand-neutral dark:bg-slate-950 pb-24">
+      <SEO 
+        title={post.title} 
+        description={post.excerpt || `Read ${post.title} on Jaystarbliss Studios blog.`} 
+      />
+
+      <article className="bg-brand-neutral dark:bg-slate-900 pb-24">
         {/* Hero Section */}
         {post.featuredImage ? (
-          <div className="w-full h-[40vh] md:h-[60vh] relative">
+          <div className="w-full h-[40vh] md:h-[55vh] relative overflow-hidden bg-brand-slate">
             <img 
               src={post.featuredImage} 
               alt={post.title} 
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/50 to-transparent" />
             <div className="absolute inset-0 flex items-end">
-              <div className="container mx-auto px-4 max-w-4xl pb-12 md:pb-20">
-                <Link to="/blog" className="inline-flex items-center gap-2 text-white/60 hover:text-white mb-6 transition-colors font-bold uppercase tracking-wider text-sm">
-                  <ArrowLeft size={16} />
+              <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl pb-10 sm:pb-16">
+                <Link to="/blog" className="inline-flex items-center gap-2 text-white/70 hover:text-white mb-6 transition-colors font-bold uppercase tracking-widest text-xs">
+                  <ArrowLeft size={14} />
                   Back to Blog
                 </Link>
-                <div className="flex items-center gap-4 text-sm font-bold text-white/80 mb-6 uppercase tracking-wider flex-wrap">
+                
+                <div className="flex items-center gap-4 text-xs font-bold text-white/80 mb-4 uppercase tracking-wider flex-wrap">
                   {post.category && (
-                    <span className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider ${
+                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
                       post.category.toLowerCase().includes('news')
-                        ? 'bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30'
+                        ? 'bg-cyan-500 text-slate-950'
                         : 'bg-brand-red text-white'
                     }`}>
                       {post.category}
                     </span>
                   )}
                   {post.createdAt && (
-                    <div className="flex items-center gap-2">
-                      <Calendar size={16} />
+                    <div className="flex items-center gap-1.5 text-white/70">
+                      <Calendar size={14} />
                       {new Date(post.createdAt).toLocaleDateString()}
                     </div>
                   )}
                   {post.author && (
-                    <div className="flex items-center gap-2">
-                      <User size={16} />
+                    <div className="flex items-center gap-1.5 text-white/70">
+                      <User size={14} />
                       {post.author}
                     </div>
                   )}
                 </div>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 leading-tight">
+
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight tracking-tight">
                   {post.title}
                 </h1>
               </div>
             </div>
           </div>
         ) : (
-          <div className="bg-brand-slate text-white pt-32 pb-24 px-4">
+          <div className="bg-brand-slate text-white pt-24 pb-16 px-4">
             <div className="container mx-auto max-w-4xl">
-              <Link to="/blog" className="inline-flex items-center gap-2 text-white/60 hover:text-white mb-10 transition-colors font-bold uppercase tracking-wider text-sm">
-                <ArrowLeft size={16} />
+              <Link to="/blog" className="inline-flex items-center gap-2 text-white/70 hover:text-white mb-8 transition-colors font-bold uppercase tracking-widest text-xs">
+                <ArrowLeft size={14} />
                 Back to Blog
               </Link>
-              <div className="flex items-center gap-4 text-sm font-bold text-white/60 mb-6 uppercase tracking-wider flex-wrap">
+              <div className="flex items-center gap-4 text-xs font-bold text-white/70 mb-4 uppercase tracking-wider flex-wrap">
                 {post.category && (
-                  <span className={`px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider ${
+                  <span className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
                     post.category.toLowerCase().includes('news')
-                      ? 'bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30'
+                      ? 'bg-cyan-500 text-slate-950'
                       : 'bg-brand-red text-white'
                   }`}>
                     {post.category}
                   </span>
                 )}
                 {post.createdAt && (
-                  <div className="flex items-center gap-2">
-                    <Calendar size={16} />
+                  <div className="flex items-center gap-1.5">
+                    <Calendar size={14} />
                     {new Date(post.createdAt).toLocaleDateString()}
                   </div>
                 )}
                 {post.author && (
-                  <div className="flex items-center gap-2">
-                    <User size={16} />
+                  <div className="flex items-center gap-1.5">
+                    <User size={14} />
                     {post.author}
                   </div>
                 )}
               </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight tracking-tight">
                 {post.title}
               </h1>
             </div>
@@ -147,9 +155,11 @@ const BlogPostDetails: React.FC = () => {
         )}
 
         {/* Content Section */}
-        <div className="container mx-auto px-4 max-w-3xl py-16 md:py-24">
-          <div className="prose prose-lg dark:prose-invert prose-headings:font-bold prose-a:text-brand-red max-w-none">
-            <div className="quill-content" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content || '') }} />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl py-12 sm:py-16">
+          <div className="bg-white dark:bg-slate-950 p-8 sm:p-12 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div className="prose prose-lg dark:prose-invert prose-headings:font-bold prose-a:text-brand-red max-w-none text-slate-700 dark:text-slate-300 leading-relaxed">
+              <div className="quill-content" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content || '') }} />
+            </div>
           </div>
         </div>
       </article>

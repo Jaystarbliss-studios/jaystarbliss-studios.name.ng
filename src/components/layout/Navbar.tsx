@@ -1,6 +1,6 @@
-import jaystarblissLogo from '../../assets/favicon.png';
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { JaystarblissIcon } from '../common/JaystarblissLogo';
 import { 
   Menu, 
   X, 
@@ -98,15 +98,13 @@ const Navbar: React.FC = () => {
             <Link 
               to="/" 
               className="flex items-center gap-2.5 shrink-0 z-50 group select-none"
-              aria-label="Jaystarbliss Dynamic Hub Homepage"
+              aria-label="Jaystarbliss Studios Homepage"
             >
-              <div className="w-8 h-8 sm:w-9 sm:h-9 bg-brand-slate rounded-lg flex items-center justify-center overflow-hidden shadow-sm group-hover:scale-105 transition-transform shrink-0 border border-white/10">
-                <img src={jaystarblissLogo} alt="Jaystarbliss Logo" className="w-full h-full object-cover" />
-              </div>
+              <JaystarblissIcon className="w-8 h-8 sm:w-9 sm:h-9 group-hover:scale-105 transition-transform" />
               <span className={`font-black text-xs sm:text-sm xl:text-base tracking-tight whitespace-nowrap transition-colors ${
                 isScrolled || mobileMenuOpen ? 'text-brand-slate dark:text-white' : 'text-white'
               }`}>
-                JAYSTARBLISS DYNAMIC HUB
+                JAYSTARBLISS STUDIOS
               </span>
             </Link>
 

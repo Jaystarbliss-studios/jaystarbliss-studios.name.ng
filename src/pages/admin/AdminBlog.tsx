@@ -147,7 +147,7 @@ const AdminBlog: React.FC = () => {
                       </div>
                     ) : (
                       <div className="text-gray-900 dark:text-white font-medium">
-                        {item.author || 'Jaystarbliss Hub'}
+                        {item.author || 'Jaystarbliss Studios'}
                       </div>
                     )}
                   </td>

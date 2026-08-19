@@ -1,0 +1,36 @@
+# Robots.txt for Jaystarbliss Studios (https://jaystarbliss-studios.name.ng)
+# Allow all search engines and web crawlers to index public pages
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /portal
+Disallow: /register
+
+# Disallow crawler access to private scripts
+Disallow: /*.json$
+
+# Googlebot specific
+User-agent: Googlebot
+Allow: /
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.svg$
+Allow: /*.webp$
+Allow: /*.css$
+Allow: /*.js$
+
+# Bingbot specific
+User-agent: Bingbot
+Allow: /
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.svg$
+Allow: /*.webp$
+Allow: /*.css$
+Allow: /*.js$
+
+# Sitemap declaration
+Sitemap: https://jaystarbliss-studios.name.ng/sitemap.xml

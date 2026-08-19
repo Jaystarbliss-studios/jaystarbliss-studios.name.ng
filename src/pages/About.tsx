@@ -1,103 +1,113 @@
 import React from 'react';
 import MainLayout from '../components/layout/MainLayout';
-import { Target, CheckCircle2, Users, Lightbulb, Eye } from 'lucide-react';
 import Button from '../components/ui/Button';
-import { stockImages } from '../lib/stockImages';
-import { StaggerGroup, staggerItem, Reveal } from '../components/ui/Reveal';
-import { motion } from 'framer-motion';
-
-const beliefs = [
-  {
-    title: 'PRACTICAL SKILLS MATTER',
-    description: 'Learning should prepare people to do something, not simply remember something.',
-    icon: <Lightbulb size={26} />,
-    image: stockImages.build,
-  },
-  {
-    title: 'CREATIVITY MATTERS',
-    description: 'Technology is powerful, but creativity is what helps people use it in meaningful ways.',
-    icon: <Target size={26} />,
-    image: stockImages.create,
-  },
-  {
-    title: 'GOOD WORK TAKES CARE',
-    description: "Whether we're teaching a student or building a website for a client, we believe the details matter.",
-    icon: <CheckCircle2 size={26} />,
-    image: stockImages.care,
-  },
-  {
-    title: 'PEOPLE COME FIRST',
-    description: 'Every student, parent, school and client has different needs. We listen before we recommend.',
-    icon: <Users size={26} />,
-    image: stockImages.businesses,
-  },
-];
+import SEO from '../components/ui/SEO';
 
 const About: React.FC = () => {
+  const beliefs = [
+    {
+      num: "01",
+      title: "PRACTICAL SKILLS MATTER",
+      desc: "Learning should prepare people to do something, not simply remember something."
+    },
+    {
+      num: "02",
+      title: "CREATIVITY MATTERS",
+      desc: "Technology is powerful, but creativity is what helps people use it in meaningful ways."
+    },
+    {
+      num: "03",
+      title: "GOOD WORK TAKES CARE",
+      desc: "Whether we're teaching a student or building a website for a client, we believe the details matter."
+    },
+    {
+      num: "04",
+      title: "PEOPLE COME FIRST",
+      desc: "Every student, parent, school and client has different needs. We listen before we recommend."
+    }
+  ];
+
   return (
     <MainLayout>
-      <div className="bg-brand-slate text-white py-24 lg:py-32 relative overflow-hidden">
-        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-[600px] h-[600px] bg-brand-red/10 rounded-full blur-[100px] pointer-events-none"></div>
-        <div className="container mx-auto px-4 max-w-7xl relative z-10 text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold mb-8 tracking-tight">
-            WE TEACH. WE BUILD.<br className="hidden md:block" /> WE CREATE.
-          </h1>
-          <div className="max-w-3xl mx-auto space-y-6 text-xl text-white/80 leading-relaxed font-medium">
-            <p>
-              Jaystarbliss Studios is a learning, technology and creative company built around a simple idea: people learn better when they get the opportunity to actually use what they're learning.
-            </p>
-            <p>
-              What started from a focus on teaching has grown into a broader ecosystem where education, technology and creativity meet.
-            </p>
-            <p>
-              Today, Jaystarbliss supports students, families, schools and businesses through practical learning programs, digital services and creative work.
-            </p>
+      <SEO 
+        title="About Us" 
+        description="Jaystarbliss Studios is a learning, technology and creative company built around practical education, digital services, and creative solutions."
+      />
+
+      {/* Hero Header */}
+      <div className="bg-brand-slate text-white py-20 lg:py-32 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
+          <div className="max-w-4xl">
+            <span className="inline-block text-xs font-black uppercase tracking-widest text-brand-red mb-4">
+              About Jaystarbliss Studios
+            </span>
+            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold mb-8 tracking-tight leading-[1.08]">
+              WE TEACH. WE BUILD.<br />WE CREATE.
+            </h1>
+            <div className="space-y-6 text-lg sm:text-xl text-white/80 leading-relaxed font-normal max-w-3xl border-l-2 border-brand-red pl-6">
+              <p>
+                Jaystarbliss Studios is a learning, technology and creative company built around a simple idea: people learn better when they get the opportunity to actually use what they're learning.
+              </p>
+              <p>
+                What started from a focus on teaching has grown into a broader ecosystem where education, technology and creativity meet.
+              </p>
+              <p>
+                Today, Jaystarbliss Studios supports students, families, schools and businesses through practical learning programs, digital services and creative work.
+              </p>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* What We Believe */}
-      <div className="py-24 bg-brand-neutral dark:bg-slate-900 dark:border-slate-800 border-b border-slate-200 dark:border-slate-800">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <Reveal className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-5xl font-extrabold text-brand-slate dark:text-white tracking-tight">WHAT WE BELIEVE</h2>
-          </Reveal>
-          
-          <StaggerGroup className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {beliefs.map((belief, index) => (
-              <motion.div
-                key={index}
-                variants={staggerItem}
-                className="group relative rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row min-h-[220px]"
-              >
-                <div className="relative sm:w-2/5 h-48 sm:h-auto overflow-hidden">
-                  <img
-                    src={belief.image}
-                    alt=""
-                    loading="lazy"
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r from-brand-slate/60 to-transparent" />
-                  <div className="absolute bottom-4 left-4 sm:top-4 sm:bottom-auto w-12 h-12 bg-white rounded-xl flex items-center justify-center text-brand-red shadow-lg">
-                    {belief.icon}
+      {/* What We Believe - Clean Editorial Rows */}
+      <div className="py-20 lg:py-28 bg-brand-neutral dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            
+            <div className="lg:col-span-4 lg:sticky lg:top-28">
+              <span className="text-xs font-black uppercase tracking-widest text-brand-red block mb-2">Core Philosophy</span>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-brand-slate dark:text-white tracking-tight">
+                WHAT WE BELIEVE
+              </h2>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-4 leading-relaxed">
+                The foundational principles that guide how we teach, engineer solutions, and collaborate with our community.
+              </p>
+            </div>
+
+            <div className="lg:col-span-8 divide-y divide-slate-200 dark:divide-slate-800 border-t border-b border-slate-200 dark:border-slate-800">
+              {beliefs.map((b) => (
+                <div key={b.num} className="py-8 sm:py-10 grid grid-cols-1 sm:grid-cols-12 gap-4 sm:gap-6 items-baseline group">
+                  <div className="sm:col-span-2 font-mono text-2xl font-extrabold text-slate-400 dark:text-slate-600 group-hover:text-brand-red transition-colors">
+                    {b.num}
+                  </div>
+                  <div className="sm:col-span-10 space-y-2">
+                    <h3 className="text-xl sm:text-2xl font-extrabold text-brand-slate dark:text-white group-hover:text-brand-red transition-colors">
+                      {b.title}
+                    </h3>
+                    <p className="text-base text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
+                      {b.desc}
+                    </p>
                   </div>
                 </div>
-                <div className="p-8 sm:p-10 bg-white dark:bg-slate-900 flex-1 flex flex-col justify-center">
-                  <h3 className="text-2xl font-bold text-brand-slate dark:text-white mb-3">{belief.title}</h3>
-                  <p className="text-brand-slate/70 dark:text-gray-400 leading-relaxed font-medium">{belief.description}</p>
-                </div>
-              </motion.div>
-            ))}
-          </StaggerGroup>
+              ))}
+            </div>
+
+          </div>
         </div>
       </div>
 
-      {/* Our Approach */}
-      <div className="py-24 bg-white dark:bg-slate-950">
-        <Reveal className="container mx-auto px-4 max-w-4xl text-center">
-          <h2 className="text-3xl md:text-5xl font-extrabold text-brand-slate dark:text-white mb-8 tracking-tight">OUR APPROACH</h2>
-          <div className="space-y-6 text-xl text-brand-slate/80 dark:text-gray-400 leading-relaxed font-medium">
-            <p>
+      {/* Our Approach - Full-width Editorial Section */}
+      <div className="py-20 lg:py-28 bg-white dark:bg-slate-950">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
+          <div className="text-center mb-12">
+            <span className="text-xs font-black uppercase tracking-widest text-brand-red block mb-2">Tailored Execution</span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-brand-slate dark:text-white tracking-tight">
+              OUR APPROACH
+            </h2>
+          </div>
+          <div className="space-y-6 text-lg sm:text-xl text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
+            <p className="text-2xl sm:text-3xl font-extrabold text-brand-slate dark:text-white leading-snug">
               We don't believe in forcing everyone into the same solution.
             </p>
             <p>
@@ -107,40 +117,44 @@ const About: React.FC = () => {
               That's why our approach starts with understanding the person, the goal and the situation — then building the right path from there.
             </p>
           </div>
-        </Reveal>
+        </div>
       </div>
 
-      {/* Vision & Mission */}
-      <div className="py-24 bg-brand-slate text-white border-t border-brand-slate">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <StaggerGroup className="grid grid-cols-1 md:grid-cols-2 gap-16">
-            <motion.div variants={staggerItem} className="bg-white/5 p-12 rounded-[2rem] border border-white/10 relative overflow-hidden group hover:bg-white/10 transition-colors">
-              <div className="absolute top-0 right-0 p-8 text-white/10 group-hover:text-brand-red/20 transition-colors">
-                <Eye size={120} strokeWidth={1} />
-              </div>
-              <h2 className="text-3xl font-extrabold mb-6 relative z-10 text-brand-red tracking-tight">OUR VISION</h2>
-              <p className="text-xl text-white/80 leading-relaxed font-medium relative z-10">
+      {/* Vision & Mission - Split Editorial Panel */}
+      <div className="py-20 lg:py-28 bg-brand-slate text-white border-t border-white/10">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+            
+            <div className="p-8 sm:p-12 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-brand-red/50 transition-all duration-300 relative overflow-hidden">
+              <span className="text-xs font-black uppercase tracking-widest text-brand-red block mb-4">Direction</span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold mb-4 text-white tracking-tight">
+                OUR VISION
+              </h2>
+              <p className="text-base sm:text-lg text-white/80 leading-relaxed font-normal">
                 To build a company where education, technology and creativity work together to give people practical skills, useful digital tools and better opportunities to create.
               </p>
-            </motion.div>
+            </div>
             
-            <motion.div variants={staggerItem} className="bg-white/5 p-12 rounded-[2rem] border border-white/10 relative overflow-hidden group hover:bg-white/10 transition-colors">
-              <div className="absolute top-0 right-0 p-8 text-white/10 group-hover:text-brand-red/20 transition-colors">
-                <Target size={120} strokeWidth={1} />
-              </div>
-              <h2 className="text-3xl font-extrabold mb-6 relative z-10 text-brand-red tracking-tight">OUR MISSION</h2>
-              <p className="text-xl text-white/80 leading-relaxed font-medium relative z-10">
+            <div className="p-8 sm:p-12 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-brand-red/50 transition-all duration-300 relative overflow-hidden">
+              <span className="text-xs font-black uppercase tracking-widest text-brand-red block mb-4">Commitment</span>
+              <h2 className="text-2xl sm:text-3xl font-extrabold mb-4 text-white tracking-tight">
+                OUR MISSION
+              </h2>
+              <p className="text-base sm:text-lg text-white/80 leading-relaxed font-normal">
                 To provide practical education, reliable digital solutions and thoughtful creative services that help individuals and organizations learn, build and grow.
               </p>
-            </motion.div>
-          </StaggerGroup>
+            </div>
+
+          </div>
         </div>
       </div>
 
       {/* CTA */}
-      <div className="py-24 bg-brand-neutral dark:bg-slate-900 text-center border-t border-slate-200 dark:border-slate-800">
-        <Reveal className="container mx-auto px-4 max-w-3xl">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-brand-slate dark:text-white mb-8 tracking-tight">READY TO WORK WITH US?</h2>
+      <div className="py-20 lg:py-24 bg-brand-neutral dark:bg-slate-900 text-center border-t border-slate-200 dark:border-slate-800">
+        <div className="container mx-auto px-4 max-w-3xl">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-brand-slate dark:text-white mb-8 tracking-tight">
+            READY TO WORK WITH US?
+          </h2>
           <div className="flex flex-wrap justify-center gap-4">
             <Button to="/programs" size="lg" className="shadow-lg shadow-brand-red/20">
               START LEARNING
@@ -149,7 +163,7 @@ const About: React.FC = () => {
               GET IN TOUCH
             </Button>
           </div>
-        </Reveal>
+        </div>
       </div>
     </MainLayout>
   );

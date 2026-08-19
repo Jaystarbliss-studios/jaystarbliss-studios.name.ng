@@ -2,7 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { GraduationCap, Users, School, Building2, UserCircle } from 'lucide-react';
 import { stockImages } from '../../lib/stockImages';
-import { StaggerGroup, staggerItem, Reveal } from '../ui/Reveal';
+import { StaggerGroup, Reveal } from '../ui/Reveal';
+import { staggerItem } from '../ui/animationVariants';
 import { motion } from 'framer-motion';
 
 const pathways = [
@@ -57,7 +58,7 @@ const AudiencePathways: React.FC = () => {
             BUILT AROUND PEOPLE, NOT JUST PRODUCTS.
           </h2>
           <p className="text-xl text-gray-600 dark:text-gray-400 font-medium">
-            Different people come to Jaystarbliss for different reasons. Our services and programs are designed to meet them where they are.
+            Different people come to Jaystarbliss Studios for different reasons. Our services and programs are designed to meet them where they are.
           </p>
         </Reveal>
 

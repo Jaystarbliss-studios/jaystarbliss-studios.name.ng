@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Mail, Phone, MapPin } from 'lucide-react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
+import { JaystarblissIcon } from '../common/JaystarblissLogo';
 
 const Footer: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -45,11 +46,9 @@ const Footer: React.FC = () => {
           {/* Column 1: Brand & Socials (Span 4) */}
           <div className="lg:col-span-4 pr-0 lg:pr-8">
             <Link to="/" className="inline-block mb-6">
-              <span className="text-2xl font-black text-white tracking-tight flex items-center gap-2">
-                <div className="w-8 h-8 bg-brand-red rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">J</span>
-                </div>
-                JAYSTARBLISS
+              <span className="text-2xl font-black text-white tracking-tight flex items-center gap-2.5">
+                <JaystarblissIcon className="w-8 h-8" />
+                JAYSTARBLISS STUDIOS
               </span>
             </Link>
             <p className="text-gray-400 mb-8 font-medium leading-relaxed">

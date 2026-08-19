@@ -2,7 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { BookOpen, Monitor, Palette, Users } from 'lucide-react';
 import { stockImages } from '../../lib/stockImages';
-import { StaggerGroup, staggerItem, Reveal } from '../ui/Reveal';
+import { StaggerGroup, Reveal } from '../ui/Reveal';
+import { staggerItem } from '../ui/animationVariants';
 import { motion } from 'framer-motion';
 
 const pillars = [

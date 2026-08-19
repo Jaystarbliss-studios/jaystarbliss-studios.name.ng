@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import * as THREE from 'three';
+import SEO from '../components/ui/SEO';
 import { 
   Sparkles, 
   Camera, 
@@ -415,6 +416,10 @@ const MagicParticles: React.FC = () => {
 
   return (
     <div className="relative min-h-screen bg-slate-950 text-white overflow-hidden select-none font-sans">
+      <SEO 
+        title="Interactive 3D Particles - Kids Zone" 
+        description="Interact with thousands of glowing cosmic 3D particles in real-time using mouse, touch, or webcam motion tracking at Jaystarbliss Studios." 
+      />
       {/* Intro Modal Screen */}
       {showIntro && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gradient-to-br from-purple-950 via-slate-950 to-indigo-950 backdrop-blur-xl overflow-y-auto">
