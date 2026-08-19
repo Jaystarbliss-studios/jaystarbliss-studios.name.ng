@@ -3,6 +3,9 @@ import { collection, query, where, getDocs, limit } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { Link } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
+import { getProgramImage } from '../../lib/stockImages';
+import { StaggerGroup, staggerItem, Reveal } from '../ui/Reveal';
+import { motion } from 'framer-motion';
 
 const FeaturedPrograms: React.FC = () => {
   const [programs, setPrograms] = useState<any[]>([]);
@@ -34,7 +37,7 @@ const FeaturedPrograms: React.FC = () => {
   return (
     <section className="py-24 bg-white dark:bg-slate-900 dark:border-slate-800 border-t border-gray-100">
       <div className="container mx-auto px-4 md:px-8 max-w-7xl">
-        <div className="text-center max-w-3xl mx-auto mb-20">
+        <Reveal className="text-center max-w-3xl mx-auto mb-20">
           <h2 className="text-3xl md:text-5xl font-extrabold text-brand-slate dark:text-white mb-6 tracking-tight">
             LEARN SOMETHING YOU CAN USE.
           </h2>
@@ -49,7 +52,7 @@ const FeaturedPrograms: React.FC = () => {
           >
             VIEW ALL PROGRAMS
           </Link>
-        </div>
+        </Reveal>
 
         {loading ? (
           <div className="flex justify-center py-12">
@@ -60,23 +63,33 @@ const FeaturedPrograms: React.FC = () => {
             <p>No featured programs currently available.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <StaggerGroup className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {programs.map((program) => (
-              <div
+              <motion.div
                 key={program.id}
+                variants={staggerItem}
                 className="flex flex-col bg-gray-50 dark:bg-slate-950 rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow group"
               >
-                <div className="p-8 flex-grow">
-                  <div className="flex gap-2 mb-6 flex-wrap">
-                    <span className="inline-block px-3 py-1 bg-white dark:bg-slate-900 dark:border-slate-800 text-brand-slate dark:text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-sm border border-gray-100">
+                <div className="relative h-44 overflow-hidden">
+                  <img
+                    src={getProgramImage(program.categoryId)}
+                    alt=""
+                    loading="lazy"
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                  <div className="absolute bottom-4 left-4 flex gap-2 flex-wrap">
+                    <span className="inline-block px-3 py-1 bg-white/90 backdrop-blur-sm text-brand-slate text-xs font-bold uppercase tracking-wider rounded-full shadow-sm">
                       {program.categoryId || 'General'}
                     </span>
                     {program.targetAudience && (
-                      <span className="inline-block px-3 py-1 bg-brand-red text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-sm border border-brand-red">
+                      <span className="inline-block px-3 py-1 bg-brand-red text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-sm">
                         {program.targetAudience.replace('_', ' ')}
                       </span>
                     )}
                   </div>
+                </div>
+                <div className="p-8 flex-grow">
                   <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 leading-tight group-hover:text-brand-red transition-colors">
                     {program.title}
                   </h3>
@@ -101,9 +114,9 @@ const FeaturedPrograms: React.FC = () => {
                     VIEW PROGRAM
                   </Link>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </StaggerGroup>
         )}
       </div>
     </section>

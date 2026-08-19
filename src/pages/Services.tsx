@@ -4,22 +4,37 @@ import { db } from '../lib/firebase';
 import MainLayout from '../components/layout/MainLayout';
 import SEO from '../components/ui/SEO';
 import { Monitor, Paintbrush, Database, Globe, Briefcase, Cpu } from 'lucide-react';
-import { Card, CardContent } from '../components/ui/Card';
-import Button from '../components/ui/Button';
+import { Link } from 'react-router-dom';
 import { CardSkeleton } from '../components/ui/Skeleton';
 import EmptyState from '../components/ui/EmptyState';
+import { stockImages } from '../lib/stockImages';
+import { StaggerGroup, staggerItem } from '../components/ui/Reveal';
+import { motion } from 'framer-motion';
 
 const getIconComponent = (iconName: string) => {
   const normalizedName = (iconName || "Monitor").toLowerCase();
   const lowerIcons: Record<string, React.ReactNode> = { 
-    monitor: <Monitor size={24} />, 
-    database: <Database size={24} />, 
-    paintbrush: <Paintbrush size={24} />, 
-    briefcase: <Briefcase size={24} />, 
-    globe: <Globe size={24} />, 
-    cpu: <Cpu size={24} /> 
+    monitor: <Monitor size={22} />, 
+    database: <Database size={22} />, 
+    paintbrush: <Paintbrush size={22} />, 
+    briefcase: <Briefcase size={22} />, 
+    globe: <Globe size={22} />, 
+    cpu: <Cpu size={22} /> 
   };
-  return lowerIcons[normalizedName] || <Monitor size={24} />;
+  return lowerIcons[normalizedName] || <Monitor size={22} />;
+};
+
+const getServiceImage = (iconName: string) => {
+  const normalizedName = (iconName || "Monitor").toLowerCase();
+  const map: Record<string, string> = {
+    monitor: stockImages.webDev,
+    database: stockImages.database,
+    paintbrush: stockImages.design,
+    briefcase: stockImages.consulting,
+    globe: stockImages.global,
+    cpu: stockImages.tech,
+  };
+  return map[normalizedName] || stockImages.webDev;
 };
 
 const Services: React.FC = () => {
@@ -65,24 +80,37 @@ const Services: React.FC = () => {
               description="We are currently updating our professional services catalog. Please check back soon."
             />
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <StaggerGroup className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {services.map((service) => (
-                <Card key={service.id} hoverEffect className="flex flex-col group">
-                  <CardContent className="p-10 flex flex-col flex-grow">
-                    <div className="w-14 h-14 bg-red-50 dark:bg-brand-red/10 rounded-xl flex items-center justify-center mb-6 text-brand-red group-hover:scale-110 transition-transform">
-                      {getIconComponent(service.iconName)}
+                <motion.div key={service.id} variants={staggerItem}>
+                  <Link
+                    to={`/services/${service.slug}`}
+                    className="group relative flex flex-col justify-end h-[320px] rounded-2xl overflow-hidden"
+                  >
+                    <img
+                      src={getServiceImage(service.iconName)}
+                      alt=""
+                      loading="lazy"
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-brand-slate via-brand-slate/70 to-brand-slate/10" />
+                    <div className="relative z-10 p-8">
+                      <div className="w-14 h-14 bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl flex items-center justify-center mb-6 text-white group-hover:bg-brand-red group-hover:border-brand-red transition-colors">
+                        {getIconComponent(service.iconName)}
+                      </div>
+                      <h3 className="text-2xl font-bold text-white mb-3">{service.title}</h3>
+                      <p className="text-white/70 leading-relaxed mb-4 text-sm line-clamp-2">
+                        {service.shortDescription}
+                      </p>
+                      <span className="font-bold text-sm uppercase tracking-wider text-white inline-flex items-center gap-2">
+                        Learn More
+                        <span className="transition-transform group-hover:translate-x-1">&rarr;</span>
+                      </span>
                     </div>
-                    <h3 className="text-2xl font-bold text-brand-slate dark:text-white mb-3">{service.title}</h3>
-                    <p className="text-brand-slate/70 dark:text-gray-400 leading-relaxed mb-8 flex-grow">
-                      {service.shortDescription}
-                    </p>
-                    <Button to={`/services/${service.slug}`} variant="ghost" className="mt-auto self-start text-brand-red hover:bg-brand-red/10 px-0">
-                      <span className="font-bold text-sm uppercase tracking-wider">Learn More &rarr;</span>
-                    </Button>
-                  </CardContent>
-                </Card>
+                  </Link>
+                </motion.div>
               ))}
-            </div>
+            </StaggerGroup>
           )}
         </div>
       </div>

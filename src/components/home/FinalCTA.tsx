@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
+import { Reveal } from '../ui/Reveal';
 
 const FinalCTA: React.FC = () => {
   return (
@@ -8,7 +9,7 @@ const FinalCTA: React.FC = () => {
       <div className="absolute top-0 right-0 w-96 h-96 bg-brand-red/10 rounded-full blur-3xl -mr-48 -mt-48"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-900/20 rounded-full blur-3xl -ml-48 -mb-48"></div>
       
-      <div className="container mx-auto px-4 md:px-8 max-w-4xl relative z-10 text-center">
+      <Reveal className="container mx-auto px-4 md:px-8 max-w-4xl relative z-10 text-center">
         <h2 className="text-4xl md:text-5xl lg:text-6xl font-black mb-6 tracking-tight">
           READY TO LEARN, <br />
           BUILD OR CREATE?
@@ -29,7 +30,7 @@ const FinalCTA: React.FC = () => {
             START A PROJECT
           </Link>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 };

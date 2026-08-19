@@ -1,0 +1,49 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+
+interface RevealProps {
+  children: React.ReactNode;
+  delay?: number;
+  className?: string;
+  y?: number;
+}
+
+/** Fades + slides an element up into place once when it enters the viewport. */
+export const Reveal: React.FC<RevealProps> = ({ children, delay = 0, className = '', y = 24 }) => (
+  <motion.div
+    className={className}
+    initial={{ opacity: 0, y }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, margin: '-80px' }}
+    transition={{ duration: 0.6, delay, ease: [0.21, 0.47, 0.32, 0.98] as const }}
+  >
+    {children}
+  </motion.div>
+);
+
+interface StaggerProps {
+  children: React.ReactNode;
+  className?: string;
+  staggerDelay?: number;
+}
+
+/** Wrap a grid/list of cards; each direct motion child reveals in sequence. */
+export const StaggerGroup: React.FC<StaggerProps> = ({ children, className = '', staggerDelay = 0.09 }) => (
+  <motion.div
+    className={className}
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true, margin: '-80px' }}
+    variants={{
+      hidden: {},
+      visible: { transition: { staggerChildren: staggerDelay } },
+    }}
+  >
+    {children}
+  </motion.div>
+);
+
+export const staggerItem = {
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.21, 0.47, 0.32, 0.98] as const } },
+};

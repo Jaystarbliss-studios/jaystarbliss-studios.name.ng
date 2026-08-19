@@ -1,8 +1,37 @@
 import React from 'react';
 import MainLayout from '../components/layout/MainLayout';
 import { Target, CheckCircle2, Users, Lightbulb, Eye } from 'lucide-react';
-import { Card } from '../components/ui/Card';
 import Button from '../components/ui/Button';
+import { stockImages } from '../lib/stockImages';
+import { StaggerGroup, staggerItem, Reveal } from '../components/ui/Reveal';
+import { motion } from 'framer-motion';
+
+const beliefs = [
+  {
+    title: 'PRACTICAL SKILLS MATTER',
+    description: 'Learning should prepare people to do something, not simply remember something.',
+    icon: <Lightbulb size={26} />,
+    image: stockImages.build,
+  },
+  {
+    title: 'CREATIVITY MATTERS',
+    description: 'Technology is powerful, but creativity is what helps people use it in meaningful ways.',
+    icon: <Target size={26} />,
+    image: stockImages.create,
+  },
+  {
+    title: 'GOOD WORK TAKES CARE',
+    description: "Whether we're teaching a student or building a website for a client, we believe the details matter.",
+    icon: <CheckCircle2 size={26} />,
+    image: stockImages.care,
+  },
+  {
+    title: 'PEOPLE COME FIRST',
+    description: 'Every student, parent, school and client has different needs. We listen before we recommend.',
+    icon: <Users size={26} />,
+    image: stockImages.businesses,
+  },
+];
 
 const About: React.FC = () => {
   return (
@@ -30,57 +59,42 @@ const About: React.FC = () => {
       {/* What We Believe */}
       <div className="py-24 bg-brand-neutral dark:bg-slate-900 dark:border-slate-800 border-b border-slate-200 dark:border-slate-800">
         <div className="container mx-auto px-4 max-w-7xl">
-          <div className="text-center max-w-3xl mx-auto mb-16">
+          <Reveal className="text-center max-w-3xl mx-auto mb-16">
             <h2 className="text-3xl md:text-5xl font-extrabold text-brand-slate dark:text-white tracking-tight">WHAT WE BELIEVE</h2>
-          </div>
+          </Reveal>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <Card hoverEffect className="flex gap-6 p-10">
-              <div className="w-14 h-14 bg-red-50 dark:bg-brand-red/10 text-brand-red rounded-xl flex items-center justify-center shrink-0">
-                <Lightbulb size={28} />
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold text-brand-slate dark:text-white mb-3">PRACTICAL SKILLS MATTER</h3>
-                <p className="text-brand-slate/70 dark:text-gray-400 leading-relaxed font-medium">Learning should prepare people to do something, not simply remember something.</p>
-              </div>
-            </Card>
-            
-            <Card hoverEffect className="flex gap-6 p-10">
-              <div className="w-14 h-14 bg-red-50 dark:bg-brand-red/10 text-brand-red rounded-xl flex items-center justify-center shrink-0">
-                <Target size={28} />
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold text-brand-slate dark:text-white mb-3">CREATIVITY MATTERS</h3>
-                <p className="text-brand-slate/70 dark:text-gray-400 leading-relaxed font-medium">Technology is powerful, but creativity is what helps people use it in meaningful ways.</p>
-              </div>
-            </Card>
-            
-            <Card hoverEffect className="flex gap-6 p-10">
-              <div className="w-14 h-14 bg-red-50 dark:bg-brand-red/10 text-brand-red rounded-xl flex items-center justify-center shrink-0">
-                <CheckCircle2 size={28} />
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold text-brand-slate dark:text-white mb-3">GOOD WORK TAKES CARE</h3>
-                <p className="text-brand-slate/70 dark:text-gray-400 leading-relaxed font-medium">Whether we're teaching a student or building a website for a client, we believe the details matter.</p>
-              </div>
-            </Card>
-            
-            <Card hoverEffect className="flex gap-6 p-10">
-              <div className="w-14 h-14 bg-red-50 dark:bg-brand-red/10 text-brand-red rounded-xl flex items-center justify-center shrink-0">
-                <Users size={28} />
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold text-brand-slate dark:text-white mb-3">PEOPLE COME FIRST</h3>
-                <p className="text-brand-slate/70 dark:text-gray-400 leading-relaxed font-medium">Every student, parent, school and client has different needs. We listen before we recommend.</p>
-              </div>
-            </Card>
-          </div>
+          <StaggerGroup className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {beliefs.map((belief, index) => (
+              <motion.div
+                key={index}
+                variants={staggerItem}
+                className="group relative rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row min-h-[220px]"
+              >
+                <div className="relative sm:w-2/5 h-48 sm:h-auto overflow-hidden">
+                  <img
+                    src={belief.image}
+                    alt=""
+                    loading="lazy"
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r from-brand-slate/60 to-transparent" />
+                  <div className="absolute bottom-4 left-4 sm:top-4 sm:bottom-auto w-12 h-12 bg-white rounded-xl flex items-center justify-center text-brand-red shadow-lg">
+                    {belief.icon}
+                  </div>
+                </div>
+                <div className="p-8 sm:p-10 bg-white dark:bg-slate-900 flex-1 flex flex-col justify-center">
+                  <h3 className="text-2xl font-bold text-brand-slate dark:text-white mb-3">{belief.title}</h3>
+                  <p className="text-brand-slate/70 dark:text-gray-400 leading-relaxed font-medium">{belief.description}</p>
+                </div>
+              </motion.div>
+            ))}
+          </StaggerGroup>
         </div>
       </div>
 
       {/* Our Approach */}
       <div className="py-24 bg-white dark:bg-slate-950">
-        <div className="container mx-auto px-4 max-w-4xl text-center">
+        <Reveal className="container mx-auto px-4 max-w-4xl text-center">
           <h2 className="text-3xl md:text-5xl font-extrabold text-brand-slate dark:text-white mb-8 tracking-tight">OUR APPROACH</h2>
           <div className="space-y-6 text-xl text-brand-slate/80 dark:text-gray-400 leading-relaxed font-medium">
             <p>
@@ -93,14 +107,14 @@ const About: React.FC = () => {
               That's why our approach starts with understanding the person, the goal and the situation — then building the right path from there.
             </p>
           </div>
-        </div>
+        </Reveal>
       </div>
 
       {/* Vision & Mission */}
       <div className="py-24 bg-brand-slate text-white border-t border-brand-slate">
         <div className="container mx-auto px-4 max-w-7xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-            <div className="bg-white/5 p-12 rounded-[2rem] border border-white/10 relative overflow-hidden group hover:bg-white/10 transition-colors">
+          <StaggerGroup className="grid grid-cols-1 md:grid-cols-2 gap-16">
+            <motion.div variants={staggerItem} className="bg-white/5 p-12 rounded-[2rem] border border-white/10 relative overflow-hidden group hover:bg-white/10 transition-colors">
               <div className="absolute top-0 right-0 p-8 text-white/10 group-hover:text-brand-red/20 transition-colors">
                 <Eye size={120} strokeWidth={1} />
               </div>
@@ -108,9 +122,9 @@ const About: React.FC = () => {
               <p className="text-xl text-white/80 leading-relaxed font-medium relative z-10">
                 To build a company where education, technology and creativity work together to give people practical skills, useful digital tools and better opportunities to create.
               </p>
-            </div>
+            </motion.div>
             
-            <div className="bg-white/5 p-12 rounded-[2rem] border border-white/10 relative overflow-hidden group hover:bg-white/10 transition-colors">
+            <motion.div variants={staggerItem} className="bg-white/5 p-12 rounded-[2rem] border border-white/10 relative overflow-hidden group hover:bg-white/10 transition-colors">
               <div className="absolute top-0 right-0 p-8 text-white/10 group-hover:text-brand-red/20 transition-colors">
                 <Target size={120} strokeWidth={1} />
               </div>
@@ -118,14 +132,14 @@ const About: React.FC = () => {
               <p className="text-xl text-white/80 leading-relaxed font-medium relative z-10">
                 To provide practical education, reliable digital solutions and thoughtful creative services that help individuals and organizations learn, build and grow.
               </p>
-            </div>
-          </div>
+            </motion.div>
+          </StaggerGroup>
         </div>
       </div>
 
       {/* CTA */}
       <div className="py-24 bg-brand-neutral dark:bg-slate-900 text-center border-t border-slate-200 dark:border-slate-800">
-        <div className="container mx-auto px-4 max-w-3xl">
+        <Reveal className="container mx-auto px-4 max-w-3xl">
           <h2 className="text-3xl md:text-4xl font-extrabold text-brand-slate dark:text-white mb-8 tracking-tight">READY TO WORK WITH US?</h2>
           <div className="flex flex-wrap justify-center gap-4">
             <Button to="/programs" size="lg" className="shadow-lg shadow-brand-red/20">
@@ -135,7 +149,7 @@ const About: React.FC = () => {
               GET IN TOUCH
             </Button>
           </div>
-        </div>
+        </Reveal>
       </div>
     </MainLayout>
   );

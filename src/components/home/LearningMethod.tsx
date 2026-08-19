@@ -1,4 +1,6 @@
 import React from 'react';
+import { StaggerGroup, staggerItem, Reveal } from '../ui/Reveal';
+import { motion } from 'framer-motion';
 
 const steps = [
   {
@@ -34,19 +36,19 @@ const LearningMethod: React.FC = () => {
       <div className="container mx-auto px-4 md:px-8 max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           
-          <div className="lg:col-span-5">
+          <Reveal className="lg:col-span-5">
             <h2 className="text-3xl md:text-5xl font-extrabold text-brand-slate dark:text-white mb-6 tracking-tight leading-[1.1]">
               LEARN. PRACTICE.<br />BUILD. SHOWCASE.
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-400 font-medium leading-relaxed">
               We believe learning becomes much more meaningful when students get the chance to use what they've learned.
             </p>
-          </div>
+          </Reveal>
           
           <div className="lg:col-span-7">
-            <div className="space-y-8">
+            <StaggerGroup className="space-y-8" staggerDelay={0.12}>
               {steps.map((step, index) => (
-                <div key={index} className="flex gap-6 group">
+                <motion.div key={index} variants={staggerItem} className="flex gap-6 group">
                   <div className="w-16 h-16 rounded-2xl bg-gray-50 dark:bg-slate-950 border border-gray-100 flex items-center justify-center text-xl font-black text-brand-red shrink-0 group-hover:bg-brand-red group-hover:text-white transition-colors">
                     {step.num}
                   </div>
@@ -56,9 +58,9 @@ const LearningMethod: React.FC = () => {
                       {step.description}
                     </p>
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </StaggerGroup>
           </div>
           
         </div>

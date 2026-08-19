@@ -3,18 +3,34 @@ import { Monitor, Paintbrush, Database, Globe, Briefcase, Cpu, Loader2 } from 'l
 import { Link } from 'react-router-dom';
 import { collection, query, where, getDocs, limit } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
+import { stockImages } from '../../lib/stockImages';
+import { StaggerGroup, staggerItem, Reveal } from '../ui/Reveal';
+import { motion } from 'framer-motion';
 
 const getIconComponent = (iconName: string) => {
   const normalizedName = (iconName || "Monitor").toLowerCase();
-  const lowerIcons: Record<string, React.ReactNode> = { 
-    monitor: <Monitor size={24} />, 
-    database: <Database size={24} />, 
-    paintbrush: <Paintbrush size={24} />, 
-    briefcase: <Briefcase size={24} />, 
-    globe: <Globe size={24} />, 
-    cpu: <Cpu size={24} /> 
+  const lowerIcons: Record<string, React.ReactNode> = {
+    monitor: <Monitor size={22} />,
+    database: <Database size={22} />,
+    paintbrush: <Paintbrush size={22} />,
+    briefcase: <Briefcase size={22} />,
+    globe: <Globe size={22} />,
+    cpu: <Cpu size={22} />
   };
-  return lowerIcons[normalizedName] || <Monitor size={24} />;
+  return lowerIcons[normalizedName] || <Monitor size={22} />;
+};
+
+const getServiceImage = (iconName: string) => {
+  const normalizedName = (iconName || "Monitor").toLowerCase();
+  const map: Record<string, string> = {
+    monitor: stockImages.webDev,
+    database: stockImages.database,
+    paintbrush: stockImages.design,
+    briefcase: stockImages.consulting,
+    globe: stockImages.global,
+    cpu: stockImages.tech,
+  };
+  return map[normalizedName] || stockImages.webDev;
 };
 
 const FeaturedServices: React.FC = () => {
@@ -43,9 +59,10 @@ const FeaturedServices: React.FC = () => {
   }, []);
 
   return (
-    <section className="py-24 bg-brand-slate text-white border-t border-brand-slate">
-      <div className="container mx-auto px-4 md:px-8 max-w-7xl">
-        <div className="text-center max-w-3xl mx-auto mb-20">
+    <section className="py-24 bg-brand-slate text-white border-t border-brand-slate relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-96 h-96 bg-brand-red/10 rounded-full blur-3xl -mr-48 -mt-48"></div>
+      <div className="container mx-auto px-4 md:px-8 max-w-7xl relative">
+        <Reveal className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-3xl md:text-5xl font-extrabold mb-6 tracking-tight">NEED SOMETHING BUILT OR DESIGNED?</h2>
           <p className="text-xl text-brand-neutral/70 font-medium mb-10">
             If you already have an idea, a business, a school project or simply a problem that needs solving, let's talk about it.
@@ -53,33 +70,49 @@ const FeaturedServices: React.FC = () => {
           <Link to="/services" className="inline-flex items-center gap-2 bg-brand-red text-white px-8 py-4 rounded-xl font-bold hover:-translate-y-1 transition-transform shadow-lg shadow-brand-red/20 uppercase">
             EXPLORE SERVICES
           </Link>
-        </div>
-        
+        </Reveal>
+
         {loading ? (
           <div className="flex justify-center py-20">
             <Loader2 className="animate-spin text-brand-red w-10 h-10" />
           </div>
         ) : services.length === 0 ? (
-          <div className="text-center py-20 bg-white dark:bg-slate-900 dark:border-slate-800/5 rounded-2xl border border-white/10 text-white/50">
+          <div className="text-center py-20 bg-white/5 rounded-2xl border border-white/10 text-white/50">
             <p>No featured services currently available. Please check back later.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <StaggerGroup className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {services.map((service) => (
-              <div key={service.id} className="bg-white dark:bg-slate-900 dark:border-slate-800/5 border border-white/10 p-10 rounded-2xl hover:bg-white dark:bg-slate-900 dark:border-slate-800/10 transition-colors group flex flex-col">
-                <div className="w-16 h-16 bg-white dark:bg-slate-900 dark:border-slate-800/10 rounded-xl flex items-center justify-center mb-8 text-brand-red group-hover:scale-110 transition-transform">
-                  {getIconComponent(service.iconName || 'Monitor')}
-                </div>
-                <h3 className="text-2xl font-bold mb-4">{service.title}</h3>
-                <p className="text-brand-neutral/70 font-medium leading-relaxed mb-10 flex-grow">
-                  {service.shortDescription}
-                </p>
-                <Link to={`/services/${service.slug}`} className="text-brand-red font-bold text-sm uppercase tracking-wider hover:text-white transition-colors mt-auto inline-block">
-                  VIEW {service.title.toUpperCase()} &rarr;
+              <motion.div key={service.id} variants={staggerItem}>
+                <Link
+                  to={`/services/${service.slug}`}
+                  className="group relative flex flex-col justify-end h-[340px] rounded-2xl overflow-hidden border border-white/10"
+                >
+                  <img
+                    src={getServiceImage(service.iconName)}
+                    alt=""
+                    loading="lazy"
+                    className="absolute inset-0 w-full h-full object-cover scale-100 group-hover:scale-110 transition-transform duration-700 ease-out"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-slate via-brand-slate/75 to-brand-slate/20" />
+
+                  <div className="relative z-10 p-8">
+                    <div className="w-12 h-12 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl flex items-center justify-center mb-6 text-white">
+                      {getIconComponent(service.iconName || 'Monitor')}
+                    </div>
+                    <h3 className="text-xl font-bold mb-3">{service.title}</h3>
+                    <p className="text-brand-neutral/70 font-medium leading-relaxed text-sm mb-4 line-clamp-2">
+                      {service.shortDescription}
+                    </p>
+                    <span className="text-brand-red font-bold text-xs uppercase tracking-wider inline-flex items-center gap-2">
+                      VIEW {service.title.toUpperCase()}
+                      <span className="transition-transform group-hover:translate-x-1">&rarr;</span>
+                    </span>
+                  </div>
                 </Link>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </StaggerGroup>
         )}
       </div>
     </section>
