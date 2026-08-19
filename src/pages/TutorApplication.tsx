@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import MainLayout from '../components/layout/MainLayout';
+import SEO from '../components/ui/SEO';
 import { CheckCircle2, ArrowRight, ArrowLeft, Send, User, Briefcase, FileText } from 'lucide-react';
-import { Card } from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import ProgressStepper from '../components/ui/ProgressStepper';
 
@@ -117,37 +117,49 @@ const TutorApplication: React.FC = () => {
 
   return (
     <MainLayout>
-      <div className="bg-brand-slate text-white py-20 lg:py-28">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">Become a Tutor</h1>
-            <p className="text-xl text-white/80 leading-relaxed font-medium">
-              Join our network of skilled professionals who are passionate about teaching, mentoring, and helping others grow.
-            </p>
-          </div>
+      <SEO 
+        title="Become a Tutor" 
+        description="Join our network of skilled instructors and mentors teaching coding, robotics, digital skills, and creative media at Jaystarbliss Studios." 
+      />
+
+      {/* Header Banner */}
+      <div className="bg-brand-slate text-white py-16 lg:py-24 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10 text-center">
+          <span className="inline-block text-xs font-black uppercase tracking-widest text-brand-red mb-3">
+            Mentorship Network
+          </span>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight">
+            Become a Tutor
+          </h1>
+          <p className="text-base sm:text-lg text-white/80 leading-relaxed font-normal max-w-2xl mx-auto">
+            Join our network of skilled professionals who are passionate about teaching, mentoring, and helping others grow.
+          </p>
         </div>
       </div>
 
-      <div className="py-16 bg-brand-neutral dark:bg-slate-950">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <Card className="p-8 md:p-12 shadow-xl border-0 ring-1 ring-slate-200 dark:ring-slate-800">
+      {/* Form Area */}
+      <div className="py-16 md:py-24 bg-brand-neutral dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
+          
+          <div className="bg-white dark:bg-slate-950 p-8 sm:p-12 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
             {success ? (
-              <div className="text-center py-16">
-                <div className="w-24 h-24 bg-green-50 dark:bg-green-900/20 rounded-full flex items-center justify-center text-green-500 mx-auto mb-8 shadow-sm">
-                  <CheckCircle2 size={48} />
+              <div className="text-center py-12">
+                <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center text-emerald-500 mx-auto mb-6">
+                  <CheckCircle2 size={42} />
                 </div>
-                <h3 className="text-3xl font-bold text-brand-slate dark:text-white mb-4">Application Submitted!</h3>
-                <p className="text-brand-slate/70 dark:text-gray-400 mb-10 text-lg max-w-md mx-auto font-medium">
+                <h3 className="text-2xl sm:text-3xl font-extrabold text-brand-slate dark:text-white mb-3">Application Submitted!</h3>
+                <p className="text-slate-600 dark:text-slate-400 mb-8 text-base max-w-md mx-auto leading-relaxed">
                   Thanks for applying. We've received your information and will review it shortly.
                 </p>
-                <Button to="/" variant="secondary" size="lg" rightIcon={<ArrowRight size={20} />}>
+                <Button to="/" variant="secondary" size="lg" rightIcon={<ArrowRight size={18} />}>
                   RETURN TO HOME
                 </Button>
               </div>
             ) : (
               <div>
                 {/* Visual Stepper */}
-                <div className="mb-10">
+                <div className="mb-10 pb-8 border-b border-slate-100 dark:border-slate-800">
                   <ProgressStepper
                     steps={steps}
                     currentStep={currentStep}
@@ -158,33 +170,65 @@ const TutorApplication: React.FC = () => {
                   />
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-8">
-                  {error && (
-                    <div className="p-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl text-sm font-bold border border-red-100 dark:border-red-900/30">
-                      {error}
-                    </div>
-                  )}
-                  
+                {error && (
+                  <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 rounded-xl text-xs sm:text-sm font-semibold">
+                    {error}
+                  </div>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-6">
                   {/* Step 1: Personal Information */}
                   {currentStep === 0 && (
-                    <div className="space-y-6 animate-in fade-in duration-300">
-                      <div className="border-b border-slate-200 dark:border-slate-800 pb-3">
-                        <h3 className="text-xl font-bold text-brand-slate dark:text-white">1. Personal Information</h3>
+                    <div className="space-y-6 animate-in fade-in duration-200">
+                      <div>
+                        <h4 className="text-lg font-bold text-brand-slate dark:text-white mb-1">Personal Information</h4>
                         <p className="text-xs text-slate-500 dark:text-slate-400">Tell us how to contact you.</p>
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                          <label className="block text-sm font-bold text-brand-slate dark:text-white tracking-wide">Full Name *</label>
-                          <input type="text" name="name" required value={formData.name} onChange={handleChange} placeholder="e.g. Alex Morgan" className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium text-brand-slate dark:text-white" />
+                          <label className="block text-xs font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">
+                            Full Name <span className="text-brand-red">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            name="name"
+                            required
+                            placeholder="Alex Morgan"
+                            value={formData.name}
+                            onChange={handleChange}
+                            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-brand-red text-slate-900 dark:text-white text-sm"
+                          />
                         </div>
+
                         <div className="space-y-2">
-                          <label className="block text-sm font-bold text-brand-slate dark:text-white tracking-wide">Email Address *</label>
-                          <input type="email" name="email" required value={formData.email} onChange={handleChange} placeholder="alex@example.com" className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium text-brand-slate dark:text-white" />
+                          <label className="block text-xs font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">
+                            Email Address <span className="text-brand-red">*</span>
+                          </label>
+                          <input
+                            type="email"
+                            name="email"
+                            required
+                            placeholder="alex@example.com"
+                            value={formData.email}
+                            onChange={handleChange}
+                            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-brand-red text-slate-900 dark:text-white text-sm"
+                          />
                         </div>
+
                         <div className="space-y-2 md:col-span-2">
-                          <label className="block text-sm font-bold text-brand-slate dark:text-white tracking-wide">Phone Number *</label>
-                          <input type="tel" name="phone" required value={formData.phone} onChange={handleChange} placeholder="+234 ..." className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium text-brand-slate dark:text-white" />
+                          <label className="block text-xs font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">
+                            Phone Number <span className="text-brand-red">*</span>
+                          </label>
+                          <input
+                            type="tel"
+                            name="phone"
+                            required
+                            placeholder="+234..."
+                            value={formData.phone}
+                            onChange={handleChange}
+                            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-brand-red text-slate-900 dark:text-white text-sm"
+                          />
                         </div>
                       </div>
                     </div>
@@ -192,32 +236,58 @@ const TutorApplication: React.FC = () => {
 
                   {/* Step 2: Professional Details */}
                   {currentStep === 1 && (
-                    <div className="space-y-6 animate-in fade-in duration-300">
-                      <div className="border-b border-slate-200 dark:border-slate-800 pb-3">
-                        <h3 className="text-xl font-bold text-brand-slate dark:text-white">2. Professional Details</h3>
+                    <div className="space-y-6 animate-in fade-in duration-200">
+                      <div>
+                        <h4 className="text-lg font-bold text-brand-slate dark:text-white mb-1">Professional Details</h4>
                         <p className="text-xs text-slate-500 dark:text-slate-400">Share your teaching skills and subject mastery.</p>
                       </div>
 
-                      <div className="space-y-6">
+                      <div className="space-y-4">
                         <div className="space-y-2">
-                          <label className="block text-sm font-bold text-brand-slate dark:text-white tracking-wide">Primary Area of Expertise *</label>
-                          <input type="text" name="expertise" required placeholder="e.g. Web Development, Mathematics, Graphic Design" value={formData.expertise} onChange={handleChange} className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium text-brand-slate dark:text-white" />
+                          <label className="block text-xs font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">
+                            Primary Area of Expertise <span className="text-brand-red">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            name="expertise"
+                            required
+                            placeholder="e.g. Web Development, Robotics, Graphic Design"
+                            value={formData.expertise}
+                            onChange={handleChange}
+                            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-brand-red text-slate-900 dark:text-white text-sm"
+                          />
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div className="space-y-2">
-                            <label className="block text-sm font-bold text-brand-slate dark:text-white tracking-wide">Years of Experience</label>
-                            <select name="experience" value={formData.experience} onChange={handleChange} className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium text-brand-slate dark:text-white">
-                              <option value="">Select...</option>
+                            <label className="block text-xs font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">
+                              Years of Experience
+                            </label>
+                            <select
+                              name="experience"
+                              value={formData.experience}
+                              onChange={handleChange}
+                              className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-brand-red text-slate-900 dark:text-white text-sm"
+                            >
+                              <option value="">Select experience...</option>
                               <option value="Less than 1 year">Less than 1 year</option>
                               <option value="1 - 3 years">1 - 3 years</option>
                               <option value="3 - 5 years">3 - 5 years</option>
                               <option value="5+ years">5+ years</option>
                             </select>
                           </div>
+
                           <div className="space-y-2">
-                            <label className="block text-sm font-bold text-brand-slate dark:text-white tracking-wide">Preferred Age Group</label>
-                            <select name="ageGroup" value={formData.ageGroup} onChange={handleChange} className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium text-brand-slate dark:text-white">
-                              <option value="">Select...</option>
+                            <label className="block text-xs font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">
+                              Preferred Age Group
+                            </label>
+                            <select
+                              name="ageGroup"
+                              value={formData.ageGroup}
+                              onChange={handleChange}
+                              className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-brand-red text-slate-900 dark:text-white text-sm"
+                            >
+                              <option value="">Select age group...</option>
                               <option value="Children (7-12)">Children (7-12)</option>
                               <option value="Teens (13-17)">Teens (13-17)</option>
                               <option value="Adults (18+)">Adults (18+)</option>
@@ -225,14 +295,33 @@ const TutorApplication: React.FC = () => {
                             </select>
                           </div>
                         </div>
+
                         <div className="space-y-2">
-                          <label className="block text-sm font-bold text-brand-slate dark:text-white tracking-wide">Specific Subjects/Skills you can teach *</label>
-                          <textarea name="subjects" required rows={2} placeholder="e.g. Python, Scratch, React, Biology, Physics..." value={formData.subjects} onChange={handleChange} className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium text-brand-slate dark:text-white resize-none"></textarea>
+                          <label className="block text-xs font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">
+                            Specific Subjects/Skills You Teach <span className="text-brand-red">*</span>
+                          </label>
+                          <textarea
+                            name="subjects"
+                            required
+                            rows={2}
+                            placeholder="e.g. Python, Scratch, React, UI/UX, Blender..."
+                            value={formData.subjects}
+                            onChange={handleChange}
+                            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-brand-red text-slate-900 dark:text-white text-sm resize-none"
+                          />
                         </div>
+
                         <div className="space-y-2">
-                          <label className="block text-sm font-bold text-brand-slate dark:text-white tracking-wide">Teaching Availability</label>
-                          <select name="availability" value={formData.availability} onChange={handleChange} className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium text-brand-slate dark:text-white">
-                            <option value="">Select...</option>
+                          <label className="block text-xs font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">
+                            Teaching Availability
+                          </label>
+                          <select
+                            name="availability"
+                            value={formData.availability}
+                            onChange={handleChange}
+                            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-brand-red text-slate-900 dark:text-white text-sm"
+                          >
+                            <option value="">Select availability...</option>
                             <option value="Online Only">Online Only</option>
                             <option value="Physical Only">Physical Only</option>
                             <option value="Both Online and Physical">Both Online and Physical</option>
@@ -244,40 +333,55 @@ const TutorApplication: React.FC = () => {
 
                   {/* Step 3: Bio & Review */}
                   {currentStep === 2 && (
-                    <div className="space-y-6 animate-in fade-in duration-300">
-                      <div className="border-b border-slate-200 dark:border-slate-800 pb-3">
-                        <h3 className="text-xl font-bold text-brand-slate dark:text-white">3. Introduction & Review</h3>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">Tell students and our team about your mentorship background.</p>
+                    <div className="space-y-6 animate-in fade-in duration-200">
+                      <div>
+                        <h4 className="text-lg font-bold text-brand-slate dark:text-white mb-1">Introduction & Review</h4>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">Tell us about your teaching philosophy and experience.</p>
                       </div>
 
-                      <div className="space-y-6">
+                      <div className="space-y-4">
                         <div className="space-y-2">
-                          <label className="block text-sm font-bold text-brand-slate dark:text-white tracking-wide">Short Introduction *</label>
-                          <p className="text-xs text-brand-slate/60 dark:text-gray-400 font-medium">Tell us why you enjoy teaching and what makes your approach effective.</p>
-                          <textarea name="introduction" required rows={4} placeholder="Write a brief overview of your teaching philosophy..." value={formData.introduction} onChange={handleChange} className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium text-brand-slate dark:text-white resize-none"></textarea>
-                        </div>
-                        <div className="space-y-2">
-                          <label className="block text-sm font-bold text-brand-slate dark:text-white tracking-wide">Link to CV / Portfolio (Optional)</label>
-                          <p className="text-xs text-brand-slate/60 dark:text-gray-400 font-medium">Google Drive link, LinkedIn profile, GitHub, or personal website.</p>
-                          <input type="url" name="portfolioLink" placeholder="https://" value={formData.portfolioLink} onChange={handleChange} className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium text-brand-slate dark:text-white" />
+                          <label className="block text-xs font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">
+                            Short Introduction <span className="text-brand-red">*</span>
+                          </label>
+                          <textarea
+                            name="introduction"
+                            required
+                            rows={4}
+                            placeholder="Write a brief overview of your teaching approach and experience..."
+                            value={formData.introduction}
+                            onChange={handleChange}
+                            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-brand-red text-slate-900 dark:text-white text-sm resize-none"
+                          />
                         </div>
 
-                        {/* Summary Box */}
-                        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2 text-sm">
-                          <div className="font-bold text-brand-slate dark:text-white mb-2 text-xs uppercase tracking-wider">Application Summary</div>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
-                            <div><span className="text-slate-500">Applicant:</span> <strong className="text-slate-900 dark:text-white">{formData.name}</strong></div>
-                            <div><span className="text-slate-500">Email:</span> <strong className="text-slate-900 dark:text-white">{formData.email}</strong></div>
-                            <div><span className="text-slate-500">Expertise:</span> <strong className="text-slate-900 dark:text-white">{formData.expertise}</strong></div>
-                            <div><span className="text-slate-500">Mode:</span> <strong className="text-slate-900 dark:text-white">{formData.availability || 'Flexible'}</strong></div>
-                          </div>
+                        <div className="space-y-2">
+                          <label className="block text-xs font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">
+                            Portfolio / LinkedIn / CV Link (Optional)
+                          </label>
+                          <input
+                            type="url"
+                            name="portfolioLink"
+                            placeholder="https://linkedin.com/in/... or https://github.com/..."
+                            value={formData.portfolioLink}
+                            onChange={handleChange}
+                            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-brand-red text-slate-900 dark:text-white text-sm"
+                          />
+                        </div>
+
+                        {/* Summary */}
+                        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2 text-xs">
+                          <div className="font-bold text-brand-slate dark:text-white mb-1 uppercase tracking-wider">Application Summary</div>
+                          <div><span className="text-slate-500">Applicant:</span> <strong className="text-slate-900 dark:text-white">{formData.name}</strong></div>
+                          <div><span className="text-slate-500">Expertise:</span> <strong className="text-slate-900 dark:text-white">{formData.expertise}</strong></div>
+                          <div><span className="text-slate-500">Subjects:</span> <strong className="text-slate-900 dark:text-white">{formData.subjects}</strong></div>
                         </div>
                       </div>
                     </div>
                   )}
 
-                  {/* Navigation Buttons */}
-                  <div className="flex items-center gap-3 pt-6 border-t border-slate-200 dark:border-slate-800">
+                  {/* Nav Controls */}
+                  <div className="flex items-center gap-4 pt-6 border-t border-slate-100 dark:border-slate-800">
                     {currentStep > 0 && (
                       <Button
                         type="button"
@@ -297,7 +401,7 @@ const TutorApplication: React.FC = () => {
                         onClick={handleNext}
                         fullWidth
                         rightIcon={<ArrowRight size={16} />}
-                        className="shadow-lg shadow-brand-red/20"
+                        className="shadow-lg shadow-brand-red/20 uppercase tracking-widest font-extrabold"
                       >
                         Continue to Step {currentStep + 2}
                       </Button>
@@ -308,7 +412,7 @@ const TutorApplication: React.FC = () => {
                         fullWidth
                         size="lg"
                         rightIcon={<Send size={18} />}
-                        className="uppercase tracking-widest shadow-xl shadow-brand-red/20"
+                        className="uppercase tracking-widest shadow-xl shadow-brand-red/20 font-extrabold"
                       >
                         SUBMIT APPLICATION
                       </Button>
@@ -317,7 +421,8 @@ const TutorApplication: React.FC = () => {
                 </form>
               </div>
             )}
-          </Card>
+          </div>
+
         </div>
       </div>
     </MainLayout>
@@ -325,4 +430,3 @@ const TutorApplication: React.FC = () => {
 };
 
 export default TutorApplication;
-

@@ -8,7 +8,8 @@ import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 
 import { doc, getDoc, setDoc, serverTimestamp, deleteDoc } from 'firebase/firestore';
 import { auth, db } from '../lib/firebase';
 import { useTheme } from '../hooks/useTheme';
-import jaystarblissLogo from '../assets/favicon.png';
+import { JaystarblissIcon } from '../components/common/JaystarblissLogo';
+import SEO from '../components/ui/SEO';
 import './Portal.css'; // Import custom styling
 
 type Role = 'school' | 'student' | 'parent' | 'staff';
@@ -130,6 +131,10 @@ const handleGoogleLogin = async () => {
 
   return (
     <div className="jdh-portal">
+      <SEO 
+        title="Academy & Client Portal" 
+        description="Access your student dashboard, parent reports, staff tools, and school management portal at Jaystarbliss Studios." 
+      />
       <div className="scanlines"></div>
       
       <div className="card">
@@ -137,10 +142,10 @@ const handleGoogleLogin = async () => {
         <div className="deco-panel">
           <div className="deco-left-col">
             <div className="deco-brand">
-              <div className="brand-mark">
-                <img src={jaystarblissLogo} alt="JDH" />
+              <div className="brand-mark flex items-center justify-center">
+                <JaystarblissIcon className="w-10 h-10" />
               </div>
-              <div className="brand-name">Jaystarbliss<br/>Dynamic Hub</div>
+              <div className="brand-name">Jaystarbliss<br/>Studios</div>
             </div>
             
             <div className="deco-content mt-8">

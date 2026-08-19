@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import MainLayout from '../components/layout/MainLayout';
+import SEO from '../components/ui/SEO';
 import { CheckCircle2, ArrowRight, ArrowLeft, Send, User, Layers, Calendar } from 'lucide-react';
-import { Card } from '../components/ui/Card';
 import Button from '../components/ui/Button';
 import ProgressStepper from '../components/ui/ProgressStepper';
 
@@ -106,37 +106,49 @@ const ProjectRequest: React.FC = () => {
 
   return (
     <MainLayout>
-      <div className="bg-brand-slate text-white py-20 lg:py-28">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">Start a Project</h1>
-            <p className="text-xl text-white/80 leading-relaxed font-medium">
-              Tell us about what you want to build or design. Provide as much detail as you can, and we'll get back to you to discuss the next steps.
-            </p>
-          </div>
+      <SEO 
+        title="Start a Project" 
+        description="Tell us about what you want to build or design. Provide as much detail as you can, and we'll get back to you to discuss the next steps." 
+      />
+
+      {/* Header Banner */}
+      <div className="bg-brand-slate text-white py-16 lg:py-24 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10 text-center">
+          <span className="inline-block text-xs font-black uppercase tracking-widest text-brand-red mb-3">
+            Digital Services
+          </span>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight">
+            Start a Project
+          </h1>
+          <p className="text-base sm:text-lg text-white/80 leading-relaxed font-normal max-w-2xl mx-auto">
+            Tell us about what you want to build or design. Provide as much detail as you can, and we'll get back to you to discuss the next steps.
+          </p>
         </div>
       </div>
 
-      <div className="py-16 bg-brand-neutral dark:bg-slate-950">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <Card className="p-8 md:p-12 shadow-xl border-0 ring-1 ring-slate-200 dark:ring-slate-800">
+      {/* Form Area */}
+      <div className="py-16 md:py-24 bg-brand-neutral dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
+          
+          <div className="bg-white dark:bg-slate-950 p-8 sm:p-12 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
             {success ? (
-              <div className="text-center py-16">
-                <div className="w-24 h-24 bg-green-50 dark:bg-green-900/20 rounded-full flex items-center justify-center text-green-500 mx-auto mb-8 shadow-sm">
-                  <CheckCircle2 size={48} />
+              <div className="text-center py-12">
+                <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center text-emerald-500 mx-auto mb-6">
+                  <CheckCircle2 size={42} />
                 </div>
-                <h3 className="text-3xl font-bold text-brand-slate dark:text-white mb-4">Request Received</h3>
-                <p className="text-brand-slate/70 dark:text-gray-400 mb-10 text-lg max-w-md mx-auto">
+                <h3 className="text-2xl sm:text-3xl font-extrabold text-brand-slate dark:text-white mb-3">Request Received</h3>
+                <p className="text-slate-600 dark:text-slate-400 mb-8 text-base max-w-md mx-auto leading-relaxed">
                   Thank you for telling us about your project. Our team will review your requirements and contact you shortly to schedule a consultation.
                 </p>
-                <Button to="/" variant="secondary" size="lg" rightIcon={<ArrowRight size={20} />}>
+                <Button to="/" variant="secondary" size="lg" rightIcon={<ArrowRight size={18} />}>
                   RETURN TO HOME
                 </Button>
               </div>
             ) : (
               <div>
                 {/* Visual Progress Stepper */}
-                <div className="mb-10">
+                <div className="mb-10 pb-8 border-b border-slate-100 dark:border-slate-800">
                   <ProgressStepper
                     steps={steps}
                     currentStep={currentStep}
@@ -147,130 +159,212 @@ const ProjectRequest: React.FC = () => {
                   />
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-8">
-                  {error && (
-                    <div className="p-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl text-sm font-bold border border-red-100 dark:border-red-900/30">
-                      {error}
-                    </div>
-                  )}
-                  
-                  {/* Step 1: Contact Details */}
+                {error && (
+                  <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 rounded-xl text-xs sm:text-sm font-semibold">
+                    {error}
+                  </div>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Step 1: Details */}
                   {currentStep === 0 && (
-                    <div className="space-y-6 animate-in fade-in duration-300">
-                      <div className="border-b border-slate-200 dark:border-slate-800 pb-3">
-                        <h3 className="text-xl font-bold text-brand-slate dark:text-white">1. Your Details</h3>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">Let's know who we are partnering with.</p>
+                    <div className="space-y-6 animate-in fade-in duration-200">
+                      <div>
+                        <h4 className="text-lg font-bold text-brand-slate dark:text-white mb-1">Your Details</h4>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">Tell us who you are and how we can reach you.</p>
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                          <label className="block text-sm font-bold text-brand-slate dark:text-white tracking-wide">Full Name *</label>
-                          <input type="text" name="name" required value={formData.name} onChange={handleChange} placeholder="e.g. Samuel Ade" className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium text-brand-slate dark:text-white" />
+                          <label className="block text-xs font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">
+                            Full Name <span className="text-brand-red">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            name="name"
+                            required
+                            placeholder="Alex Morgan"
+                            value={formData.name}
+                            onChange={handleChange}
+                            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-brand-red text-slate-900 dark:text-white text-sm"
+                          />
                         </div>
+
                         <div className="space-y-2">
-                          <label className="block text-sm font-bold text-brand-slate dark:text-white tracking-wide">Organization / Company</label>
-                          <input type="text" name="organization" value={formData.organization} onChange={handleChange} placeholder="e.g. Acme Tech Solutions" className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium text-brand-slate dark:text-white" />
+                          <label className="block text-xs font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">
+                            Organization / Business
+                          </label>
+                          <input
+                            type="text"
+                            name="organization"
+                            placeholder="Company or Brand Name"
+                            value={formData.organization}
+                            onChange={handleChange}
+                            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-brand-red text-slate-900 dark:text-white text-sm"
+                          />
                         </div>
+
                         <div className="space-y-2">
-                          <label className="block text-sm font-bold text-brand-slate dark:text-white tracking-wide">Email Address *</label>
-                          <input type="email" name="email" required value={formData.email} onChange={handleChange} placeholder="samuel@example.com" className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium text-brand-slate dark:text-white" />
+                          <label className="block text-xs font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">
+                            Email Address <span className="text-brand-red">*</span>
+                          </label>
+                          <input
+                            type="email"
+                            name="email"
+                            required
+                            placeholder="alex@company.com"
+                            value={formData.email}
+                            onChange={handleChange}
+                            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-brand-red text-slate-900 dark:text-white text-sm"
+                          />
                         </div>
+
                         <div className="space-y-2">
-                          <label className="block text-sm font-bold text-brand-slate dark:text-white tracking-wide">Phone Number</label>
-                          <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="+234 ..." className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium text-brand-slate dark:text-white" />
+                          <label className="block text-xs font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">
+                            Phone Number
+                          </label>
+                          <input
+                            type="tel"
+                            name="phone"
+                            placeholder="+234..."
+                            value={formData.phone}
+                            onChange={handleChange}
+                            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-brand-red text-slate-900 dark:text-white text-sm"
+                          />
                         </div>
                       </div>
                     </div>
                   )}
 
-                  {/* Step 2: Project Scope */}
+                  {/* Step 2: Scope */}
                   {currentStep === 1 && (
-                    <div className="space-y-6 animate-in fade-in duration-300">
-                      <div className="border-b border-slate-200 dark:border-slate-800 pb-3">
-                        <h3 className="text-xl font-bold text-brand-slate dark:text-white">2. Project Details</h3>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">Describe what you want to create and your objectives.</p>
+                    <div className="space-y-6 animate-in fade-in duration-200">
+                      <div>
+                        <h4 className="text-lg font-bold text-brand-slate dark:text-white mb-1">Project Scope</h4>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">Describe what you need built or designed.</p>
                       </div>
 
-                      <div className="space-y-6">
-                        <div className="space-y-2">
-                          <label className="block text-sm font-bold text-brand-slate dark:text-white tracking-wide">Service Required *</label>
-                          <select name="service" value={formData.service} onChange={handleChange} className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium text-brand-slate dark:text-white">
-                            <option value="Web Development">Web Development</option>
-                            <option value="Web Application">Web Application</option>
-                            <option value="Graphic Design">Graphic Design</option>
-                            <option value="Branding">Branding</option>
-                            <option value="Digital Infrastructure">Digital Infrastructure</option>
-                            <option value="AI & Digital Solutions">AI & Digital Solutions</option>
-                            <option value="Multiple / Unsure">Multiple / Unsure</option>
-                          </select>
-                        </div>
-                        <div className="space-y-2">
-                          <label className="block text-sm font-bold text-brand-slate dark:text-white tracking-wide">Project Description *</label>
-                          <p className="text-xs text-brand-slate/60 dark:text-gray-400 font-medium">Briefly describe what you want to build or design.</p>
-                          <textarea name="description" required rows={4} placeholder="Describe the core concept, target audience, and key functionality..." value={formData.description} onChange={handleChange} className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium text-brand-slate dark:text-white resize-none"></textarea>
-                        </div>
-                        <div className="space-y-2">
-                          <label className="block text-sm font-bold text-brand-slate dark:text-white tracking-wide">What are you trying to achieve? *</label>
-                          <p className="text-xs text-brand-slate/60 dark:text-gray-400 font-medium">What is the primary milestone or business objective?</p>
-                          <textarea name="goals" required rows={3} placeholder="e.g. Launch a customer portal, increase sales conversions, automate inquiries..." value={formData.goals} onChange={handleChange} className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium text-brand-slate dark:text-white resize-none"></textarea>
-                        </div>
+                      <div className="space-y-2">
+                        <label className="block text-xs font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">
+                          Primary Service Needed
+                        </label>
+                        <select
+                          name="service"
+                          value={formData.service}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-brand-red text-slate-900 dark:text-white text-sm"
+                        >
+                          <option value="Web Development">Web Development</option>
+                          <option value="Mobile App Development">Mobile App Development</option>
+                          <option value="UI/UX Design">UI/UX Design</option>
+                          <option value="Brand Identity">Brand Identity & Graphics</option>
+                          <option value="Digital Media Production">Digital Media Production</option>
+                          <option value="Tech Consulting">Tech Consulting</option>
+                        </select>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="block text-xs font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">
+                          Project Description <span className="text-brand-red">*</span>
+                        </label>
+                        <textarea
+                          name="description"
+                          rows={4}
+                          required
+                          placeholder="What are the key features, purpose, and target users?"
+                          value={formData.description}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-brand-red text-slate-900 dark:text-white text-sm resize-none"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="block text-xs font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">
+                          Main Goal / Target Outcome <span className="text-brand-red">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          name="goals"
+                          required
+                          placeholder="e.g., Increase online conversions, automate registrations"
+                          value={formData.goals}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-brand-red text-slate-900 dark:text-white text-sm"
+                        />
                       </div>
                     </div>
                   )}
 
                   {/* Step 3: Logistics & Budget */}
                   {currentStep === 2 && (
-                    <div className="space-y-6 animate-in fade-in duration-300">
-                      <div className="border-b border-slate-200 dark:border-slate-800 pb-3">
-                        <h3 className="text-xl font-bold text-brand-slate dark:text-white">3. Logistics & Budget</h3>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">Share your timeline expectations and budget parameters.</p>
+                    <div className="space-y-6 animate-in fade-in duration-200">
+                      <div>
+                        <h4 className="text-lg font-bold text-brand-slate dark:text-white mb-1">Logistics & Budget</h4>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">Help us understand your timeline and parameters.</p>
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                          <label className="block text-sm font-bold text-brand-slate dark:text-white tracking-wide">Expected Timeline</label>
-                          <input type="text" name="timeline" placeholder="e.g. 1 month, 6 weeks, ASAP" value={formData.timeline} onChange={handleChange} className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium text-brand-slate dark:text-white" />
+                          <label className="block text-xs font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">
+                            Estimated Timeline
+                          </label>
+                          <input
+                            type="text"
+                            name="timeline"
+                            placeholder="e.g., 4-6 weeks, Immediate"
+                            value={formData.timeline}
+                            onChange={handleChange}
+                            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-brand-red text-slate-900 dark:text-white text-sm"
+                          />
                         </div>
+
                         <div className="space-y-2">
-                          <label className="block text-sm font-bold text-brand-slate dark:text-white tracking-wide">Budget Range</label>
-                          <select name="budget" value={formData.budget} onChange={handleChange} className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium text-brand-slate dark:text-white">
-                            <option value="">Select a range...</option>
-                            <option value="Under ₦100,000">Under ₦100,000</option>
-                            <option value="₦100,000 - ₦500,000">₦100,000 - ₦500,000</option>
-                            <option value="₦500,000 - ₦1,000,000">₦500,000 - ₦1,000,000</option>
-                            <option value="Over ₦1,000,000">Over ₦1,000,000</option>
-                            <option value="Not Sure Yet">Not Sure Yet</option>
-                          </select>
+                          <label className="block text-xs font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">
+                            Budget Range (Optional)
+                          </label>
+                          <input
+                            type="text"
+                            name="budget"
+                            placeholder="e.g., Flexible / $1,000 - $3,000"
+                            value={formData.budget}
+                            onChange={handleChange}
+                            className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-brand-red text-slate-900 dark:text-white text-sm"
+                          />
                         </div>
                       </div>
 
-                      <div className="space-y-6">
-                        <div className="space-y-2">
-                          <label className="block text-sm font-bold text-brand-slate dark:text-white tracking-wide">Existing Website (if applicable)</label>
-                          <input type="url" name="existingWebsite" placeholder="https://" value={formData.existingWebsite} onChange={handleChange} className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium text-brand-slate dark:text-white" />
-                        </div>
-                        <div className="space-y-2">
-                          <label className="block text-sm font-bold text-brand-slate dark:text-white tracking-wide">Reference Links / Notes</label>
-                          <p className="text-xs text-brand-slate/60 dark:text-gray-400 font-medium">Any websites, design inspirations, or additional notes.</p>
-                          <textarea name="references" rows={2} placeholder="Links or ideas you like..." value={formData.references} onChange={handleChange} className="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-brand-red focus:border-brand-red font-medium text-brand-slate dark:text-white resize-none"></textarea>
-                        </div>
+                      <div className="space-y-2">
+                        <label className="block text-xs font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">
+                          Existing Website or Assets (if any)
+                        </label>
+                        <input
+                          type="url"
+                          name="existingWebsite"
+                          placeholder="https://"
+                          value={formData.existingWebsite}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-brand-red text-slate-900 dark:text-white text-sm"
+                        />
+                      </div>
 
-                        {/* Summary */}
-                        <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2 text-sm">
-                          <div className="font-bold text-brand-slate dark:text-white mb-2 text-xs uppercase tracking-wider">Project Summary</div>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
-                            <div><span className="text-slate-500">Contact:</span> <strong className="text-slate-900 dark:text-white">{formData.name}</strong></div>
-                            <div><span className="text-slate-500">Service:</span> <strong className="text-slate-900 dark:text-white">{formData.service}</strong></div>
-                            <div><span className="text-slate-500">Email:</span> <strong className="text-slate-900 dark:text-white">{formData.email}</strong></div>
-                            <div><span className="text-slate-500">Timeline:</span> <strong className="text-slate-900 dark:text-white">{formData.timeline || 'Flexible'}</strong></div>
-                          </div>
-                        </div>
+                      <div className="space-y-2">
+                        <label className="block text-xs font-black uppercase tracking-widest text-slate-700 dark:text-slate-300">
+                          Reference Links / Notes
+                        </label>
+                        <textarea
+                          name="references"
+                          rows={2}
+                          placeholder="Links, inspirations, or additional details..."
+                          value={formData.references}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-brand-red text-slate-900 dark:text-white text-sm resize-none"
+                        />
                       </div>
                     </div>
                   )}
 
-                  {/* Navigation Buttons */}
-                  <div className="flex items-center gap-3 pt-6 border-t border-slate-200 dark:border-slate-800">
+                  {/* Nav Controls */}
+                  <div className="flex items-center gap-4 pt-6 border-t border-slate-100 dark:border-slate-800">
                     {currentStep > 0 && (
                       <Button
                         type="button"
@@ -290,7 +384,7 @@ const ProjectRequest: React.FC = () => {
                         onClick={handleNext}
                         fullWidth
                         rightIcon={<ArrowRight size={16} />}
-                        className="shadow-lg shadow-brand-red/20"
+                        className="shadow-lg shadow-brand-red/20 uppercase tracking-widest font-extrabold"
                       >
                         Continue to Step {currentStep + 2}
                       </Button>
@@ -301,7 +395,7 @@ const ProjectRequest: React.FC = () => {
                         fullWidth
                         size="lg"
                         rightIcon={<Send size={18} />}
-                        className="uppercase tracking-widest shadow-xl shadow-brand-red/20"
+                        className="uppercase tracking-widest shadow-xl shadow-brand-red/20 font-extrabold"
                       >
                         SEND PROJECT REQUEST
                       </Button>
@@ -310,7 +404,8 @@ const ProjectRequest: React.FC = () => {
                 </form>
               </div>
             )}
-          </Card>
+          </div>
+
         </div>
       </div>
     </MainLayout>
@@ -318,4 +413,3 @@ const ProjectRequest: React.FC = () => {
 };
 
 export default ProjectRequest;
-

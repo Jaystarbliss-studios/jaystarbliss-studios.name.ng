@@ -1,10 +1,16 @@
 import React from 'react';
 import { BookOpen, Calendar, Clock, Trophy } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import SEO from '../../components/ui/SEO';
 
 const StudentDashboard: React.FC = () => {
   return (
     <div>
+      <SEO 
+        title="Student Portal Dashboard" 
+        description="View your active courses, schedule, assignments, and learning progress." 
+        noindex={true}
+      />
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Welcome back, Student!</h1>
         <p className="text-gray-500 dark:text-gray-400 mt-1">Here's what's happening with your learning journey.</p>

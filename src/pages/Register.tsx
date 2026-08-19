@@ -11,6 +11,7 @@ import { collection, addDoc, doc, setDoc, serverTimestamp, getDoc, deleteDoc } f
 import { useTheme } from '../hooks/useTheme';
 import ProgressStepper from '../components/ui/ProgressStepper';
 import Tooltip from '../components/ui/Tooltip';
+import SEO from '../components/ui/SEO';
 import './Register.css';
 
 const SUBJECTS = [
@@ -225,14 +226,17 @@ const Register = () => {
 
   return (
     <div className="register-page">
+      <SEO 
+        title="Student & Parent Registration" 
+        description="Register for coding programs, STEM tutoring, robotics courses, and academic tracks at Jaystarbliss Studios." 
+      />
       {/* NAV */}
       <nav className="reg-nav">
         <div className="reg-nav-inner">
           <Link to="/" className="reg-nav-brand">
-            <img className="reg-nav-brand-icon" src="/favicon-16x16.png" alt="Jaystarbliss Hub" />
+            <img className="reg-nav-brand-icon" src="/favicon-16x16.png" alt="Jaystarbliss Studios Logo" />
             <span className="reg-nav-brand-name">
-              Jaystarbliss <span className="hide-xs">Dynamic </span>
-              <span style={{ color: 'var(--madder)' }}>Hub</span>
+              Jaystarbliss <span style={{ color: 'var(--madder)' }}>Studios</span>
             </span>
           </Link>
           <div className="reg-nav-actions">
@@ -290,7 +294,7 @@ const Register = () => {
             
             <div className="reg-form-heading">
               <h2>Create an account</h2>
-              <p>Join Jaystarbliss Dynamic Hub today.</p>
+              <p>Join Jaystarbliss Studios today.</p>
             </div>
 
             {/* MODE TOGGLE */}

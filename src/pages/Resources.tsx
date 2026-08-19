@@ -1,99 +1,109 @@
 import React from 'react';
 import MainLayout from '../components/layout/MainLayout';
-import { BookOpen, FileText, HelpCircle, PenTool } from 'lucide-react';
+import SEO from '../components/ui/SEO';
+import { BookOpen, FileText, HelpCircle, PenTool, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Card, CardContent } from '../components/ui/Card';
-
 
 const Resources: React.FC = () => {
+  const resourceItems = [
+    {
+      title: "FAQ",
+      desc: "Find answers to common questions about our educational programs, digital services, timelines, and how we collaborate.",
+      link: "/faq",
+      label: "VIEW FAQs",
+      icon: HelpCircle,
+      active: true
+    },
+    {
+      title: "Blog",
+      desc: "Articles, case studies, and insights on education, technology, and creativity. Read our thoughts on building better digital experiences.",
+      link: "/blog",
+      label: "VIEW POSTS",
+      icon: PenTool,
+      active: true
+    },
+    {
+      title: "Privacy Policy",
+      desc: "Learn how we collect, use, and protect your personal information when you use our services or enroll in our programs.",
+      link: "#",
+      label: "VIEW POLICY",
+      icon: FileText,
+      active: false
+    },
+    {
+      title: "Terms of Service",
+      desc: "Read the terms and conditions that govern your use of Jaystarbliss Studios' website, programs, and digital services.",
+      link: "#",
+      label: "VIEW TERMS",
+      icon: BookOpen,
+      active: false
+    }
+  ];
+
   return (
     <MainLayout>
-      <div className="bg-brand-slate text-white py-24 lg:py-32 relative overflow-hidden">
-        <div className="container mx-auto px-4 max-w-7xl relative z-10 text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold mb-6 tracking-tight">
+      <SEO 
+        title="Resources & Insights" 
+        description="Tools, articles, guidelines, and answers to help you learn, build, and grow with Jaystarbliss Studios." 
+      />
+
+      {/* Header Banner */}
+      <div className="bg-brand-slate text-white py-20 lg:py-28 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10 text-center">
+          <span className="inline-block text-xs font-black uppercase tracking-widest text-brand-red mb-3">
+            Knowledge Base
+          </span>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight">
             RESOURCES & INSIGHTS
           </h1>
-          <p className="text-xl text-white/80 leading-relaxed font-medium max-w-2xl mx-auto">
-            Tools, articles, and answers to help you learn, build, and grow with Jaystarbliss.
+          <p className="text-base sm:text-lg text-white/80 leading-relaxed font-normal max-w-2xl mx-auto">
+            Tools, articles, and answers to help you learn, build, and grow with Jaystarbliss Studios.
           </p>
         </div>
       </div>
 
-      <div className="py-24 bg-brand-neutral dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800">
-        <div className="container mx-auto px-4 max-w-5xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {/* Resources Editorial Grid */}
+      <div className="py-16 md:py-24 bg-brand-neutral dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             
-            <Link to="/faq" className="group">
-              <Card hoverEffect className="h-full border-0 ring-1 ring-slate-200 dark:ring-slate-800">
-                <CardContent className="p-10 flex flex-col h-full items-start">
-                  <div className="w-16 h-16 bg-red-50 dark:bg-brand-red/10 text-brand-red rounded-xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
-                    <HelpCircle size={32} />
+            {resourceItems.map((item, i) => {
+              const Icon = item.icon;
+              return (
+                <Link 
+                  key={i} 
+                  to={item.link} 
+                  className={`group flex flex-col p-8 sm:p-10 rounded-2xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-brand-red/40 dark:hover:border-brand-red/40 transition-all duration-300 ${!item.active ? 'opacity-70' : ''}`}
+                >
+                  <div className="flex items-center justify-between mb-8">
+                    <div className="w-12 h-12 rounded-xl bg-brand-red/10 text-brand-red flex items-center justify-center group-hover:scale-105 transition-transform">
+                      <Icon size={24} />
+                    </div>
+                    {item.active && (
+                      <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center text-slate-400 group-hover:bg-brand-red group-hover:text-white transition-colors">
+                        <ArrowUpRight size={16} />
+                      </div>
+                    )}
                   </div>
-                  <h2 className="text-2xl font-bold text-brand-slate dark:text-white mb-4">FAQ</h2>
-                  <p className="text-brand-slate/70 dark:text-gray-400 font-medium leading-relaxed mb-8 flex-grow">
-                    Find answers to common questions about our educational programs, digital services, timelines, and how we collaborate.
-                  </p>
-                  <span className="text-brand-red font-bold text-sm uppercase tracking-wider group-hover:text-red-700 dark:group-hover:text-red-400 transition-colors mt-auto">
-                    VIEW FAQs &rarr;
-                  </span>
-                </CardContent>
-              </Card>
-            </Link>
 
-            <Link to="/blog" className="group">
-              <Card hoverEffect className="h-full border-0 ring-1 ring-slate-200 dark:ring-slate-800">
-                <CardContent className="p-10 flex flex-col h-full items-start">
-                  <div className="w-16 h-16 bg-red-50 dark:bg-brand-red/10 text-brand-red rounded-xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
-                    <PenTool size={32} />
-                  </div>
-                  <div className="flex items-center gap-3 mb-4">
-                    <h2 className="text-2xl font-bold text-brand-slate dark:text-white">Blog</h2>
-                    
-                  </div>
-                  <p className="text-brand-slate/70 dark:text-gray-400 font-medium leading-relaxed mb-8 flex-grow">
-                    Articles, case studies, and insights on education, technology, and creativity. Read our thoughts on building better digital experiences.
-                  </p>
-                  <span className="text-brand-red font-bold text-sm uppercase tracking-wider group-hover:text-red-700 dark:group-hover:text-red-400 transition-colors mt-auto">
-                    VIEW POSTS &rarr;
-                  </span>
-                </CardContent>
-              </Card>
-            </Link>
+                  <h2 className="text-2xl font-extrabold text-brand-slate dark:text-white mb-3 group-hover:text-brand-red transition-colors">
+                    {item.title}
+                  </h2>
 
-            <Link to="#" className="group opacity-75">
-              <Card hoverEffect className="h-full border-0 ring-1 ring-slate-200 dark:ring-slate-800">
-                <CardContent className="p-10 flex flex-col h-full items-start">
-                  <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 text-brand-slate/40 dark:text-gray-400 rounded-xl flex items-center justify-center mb-8">
-                    <FileText size={32} />
-                  </div>
-                  <h2 className="text-2xl font-bold text-brand-slate dark:text-white mb-4">Privacy Policy</h2>
-                  <p className="text-brand-slate/70 dark:text-gray-400 font-medium leading-relaxed mb-8 flex-grow">
-                    Learn how we collect, use, and protect your personal information when you use our services or enroll in our programs.
+                  <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 font-normal leading-relaxed mb-8 flex-grow">
+                    {item.desc}
                   </p>
-                  <span className="text-brand-slate/40 dark:text-gray-500 font-bold text-sm uppercase tracking-wider mt-auto">
-                    VIEW POLICY
-                  </span>
-                </CardContent>
-              </Card>
-            </Link>
 
-            <Link to="#" className="group opacity-75">
-              <Card hoverEffect className="h-full border-0 ring-1 ring-slate-200 dark:ring-slate-800">
-                <CardContent className="p-10 flex flex-col h-full items-start">
-                  <div className="w-16 h-16 bg-slate-100 dark:bg-slate-800 text-brand-slate/40 dark:text-gray-400 rounded-xl flex items-center justify-center mb-8">
-                    <BookOpen size={32} />
+                  <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                    <span className="text-xs font-black uppercase tracking-widest text-brand-red group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                      {item.label} &rarr;
+                    </span>
                   </div>
-                  <h2 className="text-2xl font-bold text-brand-slate dark:text-white mb-4">Terms of Service</h2>
-                  <p className="text-brand-slate/70 dark:text-gray-400 font-medium leading-relaxed mb-8 flex-grow">
-                    Read the terms and conditions that govern your use of Jaystarbliss Studios' website, programs, and digital services.
-                  </p>
-                  <span className="text-brand-slate/40 dark:text-gray-500 font-bold text-sm uppercase tracking-wider mt-auto">
-                    VIEW TERMS
-                  </span>
-                </CardContent>
-              </Card>
-            </Link>
-            
+                </Link>
+              );
+            })}
+
           </div>
         </div>
       </div>

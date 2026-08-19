@@ -4,7 +4,8 @@ import { useParams, Link } from 'react-router-dom';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import MainLayout from '../components/layout/MainLayout';
-import { Loader2, ArrowLeft, CheckCircle2, Layers } from 'lucide-react';
+import SEO from '../components/ui/SEO';
+import { Loader2, ArrowLeft, Layers, CheckCircle2 } from 'lucide-react';
 import Button from '../components/ui/Button';
 
 const ServiceDetails: React.FC = () => {
@@ -33,129 +34,161 @@ const ServiceDetails: React.FC = () => {
     if (slug) fetchService();
   }, [slug]);
 
-  if (loading) return <MainLayout><div className="py-32 flex justify-center"><Loader2 className="w-12 h-12 animate-spin text-brand-red" /></div></MainLayout>;
+  if (loading) {
+    return (
+      <MainLayout>
+        <div className="min-h-[60vh] flex items-center justify-center bg-brand-neutral dark:bg-slate-900">
+          <Loader2 className="w-10 h-10 animate-spin text-brand-red" />
+        </div>
+      </MainLayout>
+    );
+  }
   
-  if (error || !service) return (
-    <MainLayout>
-      <div className="py-32 text-center container mx-auto px-4">
-        <h1 className="text-3xl font-bold mb-4 text-brand-slate dark:text-white">Service Not Found</h1>
-        <p className="mb-8 text-brand-slate/60 dark:text-gray-400">The service you are looking for does not exist or is no longer available.</p>
-        <Button to="/services" variant="ghost" leftIcon={<ArrowLeft size={20} />} className="text-brand-red font-bold">
-          Back to Services
-        </Button>
-      </div>
-    </MainLayout>
-  );
+  if (error || !service) {
+    return (
+      <MainLayout>
+        <div className="py-32 text-center container mx-auto px-4">
+          <h1 className="text-3xl font-extrabold mb-4 text-brand-slate dark:text-white">Service Not Found</h1>
+          <p className="mb-8 text-slate-500 dark:text-slate-400">The service you are looking for does not exist or is no longer available.</p>
+          <Button to="/services" variant="ghost" leftIcon={<ArrowLeft size={18} />} className="text-brand-red font-bold">
+            Back to Services
+          </Button>
+        </div>
+      </MainLayout>
+    );
+  }
 
   return (
     <MainLayout>
-      {/* Premium Hero Section */}
-      <div className="bg-brand-slate text-white py-20 lg:py-32 relative overflow-hidden">
-        <div className="absolute top-0 right-0 -translate-y-1/4 translate-x-1/4 w-[800px] h-[800px] bg-brand-red/10 rounded-full blur-[120px] pointer-events-none"></div>
-        <div className="container mx-auto px-4 max-w-6xl relative z-10">
-          <Link to="/services" className="text-white/60 hover:text-white inline-flex items-center gap-2 mb-8 text-sm font-semibold tracking-wide transition-colors uppercase">
-            <ArrowLeft size={16} /> BACK TO SERVICES
+      <SEO 
+        title={service.title} 
+        description={service.shortDescription || `Professional ${service.title} by Jaystarbliss Studios.`} 
+      />
+
+      {/* Hero Section */}
+      <div className="bg-brand-slate text-white py-16 lg:py-24 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10">
+          <Link to="/services" className="text-white/60 hover:text-white inline-flex items-center gap-2 mb-8 text-xs font-bold tracking-widest transition-colors uppercase">
+            <ArrowLeft size={14} /> BACK TO SERVICES
           </Link>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-[1.1]">{service.title}</h1>
-              <p className="text-xl md:text-2xl text-white/70 leading-relaxed mb-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-8">
+              <span className="inline-block text-xs font-black uppercase tracking-widest text-brand-red mb-3">
+                Digital & Creative Capability
+              </span>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-6 leading-tight tracking-tight">
+                {service.title}
+              </h1>
+              <p className="text-base sm:text-lg text-white/80 leading-relaxed mb-8 font-normal max-w-2xl">
                 {service.shortDescription}
               </p>
               <div className="flex flex-wrap gap-4 items-center">
-                <Button to="/contact" variant="primary" size="lg" className="uppercase tracking-widest shadow-lg shadow-brand-red/20">
+                <Button to="/contact" variant="primary" size="lg" className="uppercase tracking-widest font-extrabold shadow-lg shadow-brand-red/20">
                   REQUEST SERVICE
                 </Button>
-                <a href="#details" className="text-white/70 hover:text-white px-6 py-4 font-semibold transition-colors uppercase tracking-wider text-sm">
+                <a href="#details" className="text-white/70 hover:text-white px-5 py-3 font-semibold transition-colors uppercase tracking-wider text-xs">
                   Explore Details
                 </a>
               </div>
             </div>
             
-            {/* Dynamic visual representation of the service */}
-            <div className="hidden lg:flex justify-end"> 
-               <div className="w-full max-w-md aspect-square bg-white/5 border border-white/10 rounded-3xl p-8 relative flex flex-col items-center justify-center">
-                  <div className="absolute inset-0 bg-gradient-to-br from-brand-red/20 to-transparent opacity-20 rounded-3xl"></div>
-                  <Layers className="w-32 h-32 text-brand-red/40 mb-6" />
-                  <div className="text-center relative z-10">
-                    <div className="text-2xl font-bold text-white mb-2">Professional Execution</div>
-                    <div className="text-white/50 font-medium">Built to modern standards</div>
-                  </div>
-               </div>
+            <div className="hidden lg:flex lg:col-span-4 justify-end"> 
+              <div className="w-full max-w-xs aspect-square bg-white/[0.03] border border-white/10 rounded-2xl p-8 flex flex-col items-center justify-center text-center">
+                <Layers className="w-20 h-20 text-brand-red/60 mb-4" />
+                <div className="text-lg font-bold text-white mb-1">Professional Execution</div>
+                <div className="text-xs text-white/50 font-medium">Built to modern industry standards</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
       
       {/* Overview & Content Section */}
-      <div id="details" className="py-24 bg-brand-neutral dark:bg-slate-900 dark:border-slate-800">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+      <div id="details" className="py-16 md:py-24 bg-brand-neutral dark:bg-slate-900">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             
-            <div className="lg:col-span-8">
-              <h2 className="text-3xl font-bold text-brand-slate dark:text-white mb-8">Service Overview</h2>
-              <div className="prose prose-lg max-w-none text-brand-slate/70 dark:text-gray-400 prose-headings:text-brand-slate dark:text-white prose-a:text-brand-red">
-                {service.content ? (
-                  <div className="whitespace-pre-line leading-relaxed quill-content" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(service.content) }} />
-                ) : (
-                  <p>Details about this service are being updated. Our team works closely with you to understand your specific needs, plan the execution, and deliver high-quality results. Contact us to learn more about how we can help with {service.title}.</p>
-                )}
+            <div className="lg:col-span-8 space-y-12">
+              <div className="bg-white dark:bg-slate-950 p-8 sm:p-12 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-slate dark:text-white mb-6 tracking-tight">
+                  Service Overview
+                </h2>
+                <div className="prose prose-lg max-w-none text-slate-700 dark:text-slate-300 font-normal leading-relaxed prose-a:text-brand-red">
+                  {service.content ? (
+                    <div className="whitespace-pre-line leading-relaxed quill-content" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(service.content) }} />
+                  ) : (
+                    <p>Details about this service are being updated. Our team works closely with you to understand your specific needs, plan the execution, and deliver high-quality results. Contact us to learn more about how we can help with {service.title}.</p>
+                  )}
+                </div>
               </div>
               
-              {/* Universal "How We Work" block dynamically adapting to any service */}
-              <div className="mt-16 border-t border-slate-200 dark:border-slate-800 pt-16"> 
-                 <h2 className="text-3xl font-bold text-brand-slate dark:text-white mb-10">How We Execute</h2>
-                 <div className="space-y-8">
-                   <div className="flex gap-6">
-                     <div className="w-12 h-12 bg-white dark:bg-slate-950 rounded-xl flex items-center justify-center text-brand-red font-bold shrink-0 shadow-sm border border-slate-100">01</div>
-                     <div>
-                       <h3 className="text-xl font-bold text-brand-slate dark:text-white mb-2">Understand & Plan</h3>
-                       <p className="text-brand-slate/70 dark:text-gray-400">We start by understanding exactly what you're trying to achieve, mapping out the requirements, and defining success criteria.</p>
-                     </div>
-                   </div>
-                   <div className="flex gap-6">
-                     <div className="w-12 h-12 bg-white dark:bg-slate-950 rounded-xl flex items-center justify-center text-brand-red font-bold shrink-0 shadow-sm border border-slate-100">02</div>
-                     <div>
-                       <h3 className="text-xl font-bold text-brand-slate dark:text-white mb-2">Design & Build</h3>
-                       <p className="text-brand-slate/70 dark:text-gray-400">Our experts execute the work, keeping you in the loop with regular updates and ensuring quality at every step.</p>
-                     </div>
-                   </div>
-                   <div className="flex gap-6">
-                     <div className="w-12 h-12 bg-white dark:bg-slate-950 rounded-xl flex items-center justify-center text-brand-red font-bold shrink-0 shadow-sm border border-slate-100">03</div>
-                     <div>
-                       <h3 className="text-xl font-bold text-brand-slate dark:text-white mb-2">Review & Launch</h3>
-                       <p className="text-brand-slate/70 dark:text-gray-400">We test thoroughly, gather your final feedback, and successfully launch or hand over the completed project.</p>
-                     </div>
-                   </div>
-                 </div>
+              {/* How We Work block */}
+              <div className="bg-white dark:bg-slate-950 p-8 sm:p-12 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm"> 
+                <span className="text-xs font-black uppercase tracking-widest text-brand-red block mb-2">Process</span>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-slate dark:text-white mb-8 tracking-tight">
+                  How We Execute
+                </h2>
+                <div className="divide-y divide-slate-100 dark:divide-slate-800">
+                  <div className="py-6 flex gap-6 items-baseline">
+                    <span className="font-mono text-xl font-extrabold text-brand-red shrink-0">01</span>
+                    <div>
+                      <h3 className="text-lg font-bold text-brand-slate dark:text-white mb-1">Understand & Plan</h3>
+                      <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
+                        We start by understanding exactly what you're trying to achieve, mapping out the requirements, and defining success criteria.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="py-6 flex gap-6 items-baseline">
+                    <span className="font-mono text-xl font-extrabold text-brand-red shrink-0">02</span>
+                    <div>
+                      <h3 className="text-lg font-bold text-brand-slate dark:text-white mb-1">Design & Build</h3>
+                      <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
+                        Our experts execute the work, keeping you in the loop with regular updates and ensuring quality at every step.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="py-6 flex gap-6 items-baseline">
+                    <span className="font-mono text-xl font-extrabold text-brand-red shrink-0">03</span>
+                    <div>
+                      <h3 className="text-lg font-bold text-brand-slate dark:text-white mb-1">Review & Launch</h3>
+                      <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
+                        We test thoroughly, gather your final feedback, and successfully launch or hand over the completed project.
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
             {/* Sticky Sidebar */}
-            <div className="lg:col-span-4">
-              <div className="sticky top-32 bg-white dark:bg-slate-950 rounded-2xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm">
-                <h3 className="text-xl font-bold text-brand-slate dark:text-white mb-6">Ready to start?</h3>
-                <p className="text-brand-slate/70 dark:text-gray-400 mb-8">
-                  Get in touch with us to discuss your requirements, timeline, and pricing for this service.
-                </p>
-                <Button to="/contact" className="w-full justify-center shadow-lg" size="lg">
-                  REQUEST A QUOTE
-                </Button>
-                <ul className="space-y-4 mt-8 pt-8 border-t border-slate-100 dark:border-slate-800">
-                  <li className="flex items-center gap-3 text-sm text-brand-slate/70 dark:text-gray-400 font-bold tracking-wide">
-                    <CheckCircle2 className="text-brand-red w-5 h-5" /> PROFESSIONAL QUALITY
-                  </li>
-                  <li className="flex items-center gap-3 text-sm text-brand-slate/70 dark:text-gray-400 font-bold tracking-wide">
-                    <CheckCircle2 className="text-brand-red w-5 h-5" /> DEDICATED SUPPORT
-                  </li>
-                  <li className="flex items-center gap-3 text-sm text-brand-slate/70 dark:text-gray-400 font-bold tracking-wide">
-                    <CheckCircle2 className="text-brand-red w-5 h-5" /> TRANSPARENT PROCESS
-                  </li>
-                </ul>
+            <div className="lg:col-span-4 lg:sticky lg:top-28">
+              <div className="bg-white dark:bg-slate-950 rounded-2xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+                <div>
+                  <h3 className="text-xl font-extrabold text-brand-slate dark:text-white mb-2">Ready to start?</h3>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-normal">
+                    Get in touch with us to discuss your requirements, timeline, and pricing for this service.
+                  </p>
+                </div>
+
+                <div className="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+                  <Button to="/contact" variant="primary" fullWidth size="lg" className="uppercase tracking-wider font-extrabold">
+                    Request a Quote
+                  </Button>
+                  <Button to="/project-request" variant="secondary" fullWidth size="md" className="uppercase tracking-wider font-bold">
+                    Start Structured Spec
+                  </Button>
+                </div>
+
+                <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
+                  <div className="flex items-center gap-2 text-xs font-bold text-slate-500 dark:text-slate-400">
+                    <CheckCircle2 size={16} className="text-emerald-500" /> Dedicated Technical Lead
+                  </div>
+                </div>
               </div>
             </div>
-            
+
           </div>
         </div>
       </div>

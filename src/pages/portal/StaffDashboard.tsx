@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../../lib/firebase';
 import { collection, query, getDocs } from 'firebase/firestore';
 import { Users, Calendar, FileText } from 'lucide-react';
+import SEO from '../../components/ui/SEO';
 
 const StaffDashboard: React.FC = () => {
   const [resources, setResources] = useState<any[]>([]);
@@ -24,6 +25,11 @@ const StaffDashboard: React.FC = () => {
 
   return (
     <div className="space-y-8">
+      <SEO 
+        title="Staff Workspace Dashboard" 
+        description="Access staff curriculum documents, lesson schedules, and mentor resources." 
+        noindex={true}
+      />
       {/* Welcome Banner */}
       <div className="bg-brand-slate rounded-3xl p-8 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-brand-red rounded-full blur-[80px] opacity-20 -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>

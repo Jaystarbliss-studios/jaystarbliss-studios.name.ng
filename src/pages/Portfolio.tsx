@@ -15,7 +15,6 @@ import {
   ChevronRight
 } from 'lucide-react';
 import DOMPurify from 'dompurify';
-import { Card, CardContent } from '../components/ui/Card';
 import Badge from '../components/ui/Badge';
 import { CardSkeleton } from '../components/ui/Skeleton';
 import EmptyState from '../components/ui/EmptyState';
@@ -67,98 +66,103 @@ const Portfolio: React.FC = () => {
       {/* Header Banner */}
       <div className="bg-brand-slate text-white py-16 lg:py-24 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
-        <div className="container mx-auto px-4 max-w-7xl relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
           
           <div className="max-w-3xl mb-12">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 tracking-tight">
+            <span className="inline-block text-xs font-black uppercase tracking-widest text-brand-red mb-3">
+              Showcase & Interactive Works
+            </span>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-4 tracking-tight">
               Our Work & Showcase
             </h1>
-            <p className="text-lg md:text-xl text-white/80 leading-relaxed">
+            <p className="text-base sm:text-lg text-white/80 leading-relaxed font-normal">
               Explore custom digital platforms built for organizations alongside interactive arcade games engineered by our junior student coders.
             </p>
           </div>
 
-          {/* 3 Interactive Unfolding Banner Tabs */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
+          {/* 3 Interactive Editorial Segment Tabs */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             
             {/* Tab 1: Kids Corner & Arcade */}
-            <div
+            <button
+              type="button"
               onClick={() => setActiveTab('KIDS_CORNER')}
-              className={`cursor-pointer rounded-2xl p-5 md:p-6 transition-all duration-300 relative overflow-hidden group border ${
+              className={`text-left p-6 rounded-2xl transition-all duration-300 relative border ${
                 activeTab === 'KIDS_CORNER'
-                  ? 'bg-gradient-to-br from-amber-500/20 via-orange-500/10 to-transparent border-amber-500/60 shadow-lg shadow-amber-500/10 ring-1 ring-amber-500/40'
-                  : 'bg-white/5 hover:bg-white/10 border-white/10 hover:border-amber-500/40'
+                  ? 'bg-amber-500/10 border-amber-500/60 ring-1 ring-amber-500/40 text-white'
+                  : 'bg-white/[0.04] border-white/10 hover:border-amber-500/30 text-white/80 hover:text-white'
               }`}
             >
-              <div className="flex items-start justify-between mb-3">
-                <div className={`p-3 rounded-xl transition-colors ${
-                  activeTab === 'KIDS_CORNER' ? 'bg-amber-500 text-slate-950 shadow-md' : 'bg-white/10 text-amber-400 group-hover:bg-amber-500/20'
+              <div className="flex items-center justify-between mb-4">
+                <div className={`p-2.5 rounded-xl ${
+                  activeTab === 'KIDS_CORNER' ? 'bg-amber-500 text-slate-950 font-bold' : 'bg-white/10 text-amber-400'
                 }`}>
-                  <Gamepad2 size={24} />
+                  <Gamepad2 size={20} />
                 </div>
-                <span className={`text-[11px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full ${
-                  activeTab === 'KIDS_CORNER' ? 'bg-amber-400 text-slate-950' : 'bg-white/10 text-white/60 group-hover:text-amber-300'
+                <span className={`text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full ${
+                  activeTab === 'KIDS_CORNER' ? 'bg-amber-400 text-slate-950' : 'bg-white/10 text-white/60'
                 }`}>
                   {activeTab === 'KIDS_CORNER' ? 'Active Zone' : 'Explore'}
                 </span>
               </div>
-              <h3 className="text-lg font-bold text-white mb-1 group-hover:text-amber-300 transition-colors flex items-center gap-2">
+              <h3 className="text-lg font-bold text-white mb-1 flex items-center gap-2">
                 <span>Kids Corner & Arcade</span>
-                <ChevronRight size={16} className={`transition-transform duration-200 ${activeTab === 'KIDS_CORNER' ? 'translate-x-1 text-amber-400' : 'opacity-0 group-hover:opacity-100 group-hover:translate-x-1'}`} />
+                <ChevronRight size={16} className={`transition-transform duration-200 ${activeTab === 'KIDS_CORNER' ? 'text-amber-400 translate-x-0.5' : 'opacity-40'}`} />
               </h3>
-              <p className="text-xs text-white/70 leading-relaxed">
+              <p className="text-xs text-white/60 leading-relaxed">
                 Play real Scratch & web games created by our young tech students with full arcade controls.
               </p>
-            </div>
+            </button>
 
             {/* Tab 2: Organisation Featured Projects */}
-            <div
+            <button
+              type="button"
               onClick={() => setActiveTab('ORGANISATION')}
-              className={`cursor-pointer rounded-2xl p-5 md:p-6 transition-all duration-300 relative overflow-hidden group border ${
+              className={`text-left p-6 rounded-2xl transition-all duration-300 relative border ${
                 activeTab === 'ORGANISATION'
-                  ? 'bg-gradient-to-br from-brand-red/25 via-red-950/20 to-transparent border-brand-red/60 shadow-lg shadow-brand-red/10 ring-1 ring-brand-red/40'
-                  : 'bg-white/5 hover:bg-white/10 border-white/10 hover:border-brand-red/40'
+                  ? 'bg-brand-red/10 border-brand-red/60 ring-1 ring-brand-red/40 text-white'
+                  : 'bg-white/[0.04] border-white/10 hover:border-brand-red/30 text-white/80 hover:text-white'
               }`}
             >
-              <div className="flex items-start justify-between mb-3">
-                <div className={`p-3 rounded-xl transition-colors ${
-                  activeTab === 'ORGANISATION' ? 'bg-brand-red text-white shadow-md' : 'bg-white/10 text-red-400 group-hover:bg-brand-red/20'
+              <div className="flex items-center justify-between mb-4">
+                <div className={`p-2.5 rounded-xl ${
+                  activeTab === 'ORGANISATION' ? 'bg-brand-red text-white' : 'bg-white/10 text-red-400'
                 }`}>
-                  <Briefcase size={24} />
+                  <Briefcase size={20} />
                 </div>
-                <span className={`text-[11px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full ${
-                  activeTab === 'ORGANISATION' ? 'bg-brand-red text-white' : 'bg-white/10 text-white/60 group-hover:text-red-300'
+                <span className={`text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full ${
+                  activeTab === 'ORGANISATION' ? 'bg-brand-red text-white' : 'bg-white/10 text-white/60'
                 }`}>
                   {activeTab === 'ORGANISATION' ? 'Active Case Studies' : 'Explore'}
                 </span>
               </div>
-              <h3 className="text-lg font-bold text-white mb-1 group-hover:text-red-300 transition-colors flex items-center gap-2">
+              <h3 className="text-lg font-bold text-white mb-1 flex items-center gap-2">
                 <span>Organisation Solutions</span>
-                <ChevronRight size={16} className={`transition-transform duration-200 ${activeTab === 'ORGANISATION' ? 'translate-x-1 text-brand-red' : 'opacity-0 group-hover:opacity-100 group-hover:translate-x-1'}`} />
+                <ChevronRight size={16} className={`transition-transform duration-200 ${activeTab === 'ORGANISATION' ? 'text-brand-red translate-x-0.5' : 'opacity-40'}`} />
               </h3>
-              <p className="text-xs text-white/70 leading-relaxed">
+              <p className="text-xs text-white/60 leading-relaxed">
                 Enterprise EdTech portals, assessment suites, and hardware workshop toolkits.
               </p>
-            </div>
+            </button>
 
             {/* Tab 3: Magic 3D Particles */}
             <Link
               to="/magic-particles"
-              className="rounded-2xl p-5 md:p-6 transition-all duration-300 relative overflow-hidden group border bg-white/5 hover:bg-gradient-to-br hover:from-cyan-500/20 hover:to-blue-600/10 border-white/10 hover:border-cyan-400/60 shadow-sm hover:shadow-lg hover:shadow-cyan-500/10"
+              className="p-6 rounded-2xl transition-all duration-300 relative border bg-white/[0.04] hover:bg-cyan-500/10 border-white/10 hover:border-cyan-400/50 text-white/80 hover:text-white block group"
             >
-              <div className="flex items-start justify-between mb-3">
-                <div className="p-3 rounded-xl bg-white/10 text-cyan-400 group-hover:bg-cyan-500 group-hover:text-slate-950 transition-colors">
-                  <Sparkles size={24} />
+              <div className="flex items-center justify-between mb-4">
+                <div className="p-2.5 rounded-xl bg-white/10 text-cyan-400 group-hover:bg-cyan-500 group-hover:text-slate-950 transition-colors">
+                  <Sparkles size={20} />
                 </div>
-                <span className="text-[11px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full bg-cyan-500/20 text-cyan-300 group-hover:bg-cyan-400 group-hover:text-slate-950 transition-colors">
+                <span className="text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300">
                   Interactive Lab
                 </span>
               </div>
-              <h3 className="text-lg font-bold text-white mb-1 group-hover:text-cyan-300 transition-colors flex items-center gap-2">
+              <h3 className="text-lg font-bold text-white mb-1 flex items-center gap-2 group-hover:text-cyan-300 transition-colors">
                 <span>Magic 3D Particles</span>
-                <ArrowRight size={16} className="opacity-0 group-hover:opacity-100 transition-all transform group-hover:translate-x-1 text-cyan-400" />
+                <ArrowRight size={16} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
               </h3>
-              <p className="text-xs text-white/70 leading-relaxed">
+              <p className="text-xs text-white/60 leading-relaxed">
                 Control 5,500+ glowing 3D particles with real-time mouse, touch, and webcam gesture physics.
               </p>
             </Link>
@@ -168,8 +172,8 @@ const Portfolio: React.FC = () => {
       </div>
 
       {/* Main Content Area */}
-      <div className="py-14 md:py-20 bg-brand-neutral dark:bg-slate-900 min-h-[60vh]">
-        <div className="container mx-auto px-4 max-w-7xl">
+      <div className="py-16 md:py-24 bg-brand-neutral dark:bg-slate-900 min-h-[60vh]">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
 
           {/* TAB 1: KIDS CORNER & INTERACTIVE GAME ZONE */}
           {activeTab === 'KIDS_CORNER' && (
@@ -178,11 +182,11 @@ const Portfolio: React.FC = () => {
 
           {/* TAB 2: ORGANISATION FEATURED PROJECTS */}
           {activeTab === 'ORGANISATION' && (
-            <div className="space-y-10">
+            <div className="space-y-12">
               
               {/* Search Bar for Organisation Projects */}
-              <div className="flex flex-col md:flex-row items-center justify-between gap-4 bg-white dark:bg-slate-950 p-4 md:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                <div className="relative w-full md:w-80">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white dark:bg-slate-950 p-4 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-800">
+                <div className="relative w-full sm:w-96">
                   <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                   <input
                     type="text"
@@ -203,15 +207,13 @@ const Portfolio: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-2xl font-extrabold text-slate-900 dark:text-white">
-                    Organisation & Client Projects ({filteredOrgProjects.length})
-                  </h3>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                    Enterprise web platforms, school digital systems, and tech consulting solutions.
-                  </p>
-                </div>
+              <div>
+                <h3 className="text-2xl sm:text-3xl font-extrabold text-brand-slate dark:text-white tracking-tight">
+                  Organisation & Client Projects ({filteredOrgProjects.length})
+                </h3>
+                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                  Enterprise web platforms, school digital systems, and tech consulting solutions.
+                </p>
               </div>
 
               {loading ? (
@@ -226,9 +228,12 @@ const Portfolio: React.FC = () => {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {filteredOrgProjects.map((project) => (
-                    <Card key={project.id} hoverEffect className="flex flex-col group overflow-hidden border-0 ring-1 ring-slate-200 dark:ring-slate-800 bg-white dark:bg-slate-950">
+                    <div 
+                      key={project.id} 
+                      className="group flex flex-col rounded-2xl overflow-hidden bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-300"
+                    >
                       {project.featuredImage ? (
-                        <div className="h-64 w-full relative border-b border-slate-200 dark:border-slate-700 overflow-hidden">
+                        <div className="h-64 w-full relative border-b border-slate-200 dark:border-slate-800 overflow-hidden bg-slate-100 dark:bg-slate-900">
                           <img 
                             src={project.featuredImage} 
                             alt={project.title} 
@@ -236,9 +241,9 @@ const Portfolio: React.FC = () => {
                           />
                         </div>
                       ) : (
-                        <div className="h-56 bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center border-b border-slate-200 dark:border-slate-700 relative p-8">
+                        <div className="h-56 bg-brand-slate flex items-center justify-center border-b border-slate-200 dark:border-slate-800 relative p-8">
                           <div className="text-center">
-                            <span className="font-bold text-white/20 text-5xl tracking-widest uppercase block mb-2">
+                            <span className="font-extrabold text-white/20 text-5xl tracking-widest uppercase block mb-2 font-mono">
                               {project.title.substring(0, 3)}
                             </span>
                             <span className="text-xs font-mono text-brand-red uppercase tracking-widest">
@@ -248,13 +253,13 @@ const Portfolio: React.FC = () => {
                         </div>
                       )}
 
-                      <CardContent className="p-6 md:p-8 flex-grow flex flex-col">
-                        <div className="flex justify-between items-start mb-4">
+                      <div className="p-6 sm:p-8 flex-grow flex flex-col">
+                        <div className="flex justify-between items-start gap-4 mb-4">
                           <div>
                             <Badge variant="brand" className="mb-2.5">
                               {project.category || 'Client Project'}
                             </Badge>
-                            <h3 className="text-xl md:text-2xl font-bold text-brand-slate dark:text-white leading-tight">
+                            <h3 className="text-xl sm:text-2xl font-extrabold text-brand-slate dark:text-white leading-tight">
                               {project.title}
                             </h3>
                           </div>
@@ -263,22 +268,23 @@ const Portfolio: React.FC = () => {
                               href={project.liveUrl} 
                               target="_blank" 
                               rel="noopener noreferrer" 
-                              className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-900 flex items-center justify-center text-brand-slate/50 dark:text-gray-400 hover:bg-brand-red hover:text-white transition-colors shrink-0 shadow-sm border border-slate-100 dark:border-slate-800"
+                              className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-900 flex items-center justify-center text-slate-500 dark:text-gray-400 hover:bg-brand-red hover:text-white transition-colors shrink-0 border border-slate-200 dark:border-slate-800"
+                              title="Visit live system"
                             >
-                              <ExternalLink size={18} />
+                              <ExternalLink size={16} />
                             </a>
                           )}
                         </div>
 
                         {project.client && (
-                          <div className="text-xs text-brand-slate/60 dark:text-gray-400 mb-4 font-bold uppercase tracking-wider flex items-center gap-1.5">
+                          <div className="text-xs text-slate-500 dark:text-slate-400 mb-4 font-bold uppercase tracking-wider flex items-center gap-1.5">
                             <Briefcase size={14} className="text-brand-red" />
                             <span>Client: {project.client}</span>
                           </div>
                         )}
 
                         <div 
-                          className="text-brand-slate/70 dark:text-gray-400 text-sm leading-relaxed font-medium quill-content mb-6 flex-grow" 
+                          className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed font-normal quill-content mb-6 flex-grow" 
                           dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(project.description || '') }} 
                         />
 
@@ -288,14 +294,14 @@ const Portfolio: React.FC = () => {
                               href={project.liveUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-2 text-brand-red font-bold text-xs uppercase tracking-wider hover:text-red-700"
+                              className="inline-flex items-center gap-2 text-brand-red font-bold text-xs uppercase tracking-wider hover:text-red-700 dark:hover:text-red-400"
                             >
                               View Live System <ExternalLink size={14} />
                             </a>
                           </div>
                         )}
-                      </CardContent>
-                    </Card>
+                      </div>
+                    </div>
                   ))}
                 </div>
               )}
