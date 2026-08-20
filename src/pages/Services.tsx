@@ -11,6 +11,7 @@ import { stockImages } from '../lib/stockImages';
 import { StaggerGroup } from '../components/ui/Reveal';
 import { staggerItem } from '../components/ui/animationVariants';
 import { motion } from 'framer-motion';
+import { usePageSection } from '../lib/cms';
 
 const getIconComponent = (iconName: string) => {
   const normalizedName = (iconName || "Monitor").toLowerCase();
@@ -42,6 +43,11 @@ const Services: React.FC = () => {
   const [services, setServices] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const { data: heroData } = usePageSection('services', 'hero', {
+    title: 'SOLUTIONS THAT DELIVER.',
+    subtitle: 'From interactive software platforms to enterprise school management systems and branding, we provide end-to-end digital solutions.'
+  });
+
   useEffect(() => {
     const fetchServices = async () => {
       try {
@@ -62,9 +68,11 @@ const Services: React.FC = () => {
       <SEO title="Services" description="Professional technology and creative services designed to elevate your brand." />
       <div className="bg-brand-slate text-white py-20 lg:py-32">
         <div className="container mx-auto px-4 max-w-7xl text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">Our Services</h1>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
+            {heroData.title || 'SOLUTIONS THAT DELIVER.'}
+          </h1>
           <p className="text-xl text-white/80 max-w-3xl mx-auto leading-relaxed">
-            Professional technology and creative services designed to elevate your brand and scale your digital presence.
+            {heroData.subtitle || 'From interactive software platforms to enterprise school management systems and branding, we provide end-to-end digital solutions.'}
           </p>
         </div>
       </div>

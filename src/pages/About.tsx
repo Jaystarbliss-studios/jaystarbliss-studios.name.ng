@@ -2,28 +2,50 @@ import React from 'react';
 import MainLayout from '../components/layout/MainLayout';
 import Button from '../components/ui/Button';
 import SEO from '../components/ui/SEO';
+import { usePageSection } from '../lib/cms';
 
 const About: React.FC = () => {
+  const { data: heroData } = usePageSection('about', 'hero', {
+    title: 'WE TEACH. WE BUILD. WE CREATE.',
+    paragraph1: "Jaystarbliss Studios is a learning, technology and creative company built around a simple idea: people learn better when they get the opportunity to actually use what they're learning.",
+    paragraph2: "What started from a focus on teaching has grown into a broader ecosystem where education, technology and creativity meet.",
+    paragraph3: "Today, Jaystarbliss Studios supports students, families, schools and businesses through practical learning programs, digital services and creative work.",
+    bannerImage: ''
+  });
+
+  const { data: beliefsData } = usePageSection('about', 'beliefs', {
+    sectionTitle: 'WHAT WE BELIEVE',
+    sectionSubtitle: 'The foundational principles that guide how we teach, engineer solutions, and collaborate with our community.',
+    b1Title: 'PRACTICAL SKILLS MATTER',
+    b1Desc: 'Learning should prepare people to do something, not simply remember something.',
+    b2Title: 'CREATIVITY MATTERS',
+    b2Desc: 'Technology is powerful, but creativity is what helps people use it in meaningful ways.',
+    b3Title: 'GOOD WORK TAKES CARE',
+    b3Desc: "Whether we're teaching a student or building a website for a client, we believe the details matter.",
+    b4Title: 'PEOPLE COME FIRST',
+    b4Desc: 'Every student, parent, school and client has different needs. We listen before we recommend.'
+  });
+
   const beliefs = [
     {
       num: "01",
-      title: "PRACTICAL SKILLS MATTER",
-      desc: "Learning should prepare people to do something, not simply remember something."
+      title: beliefsData.b1Title || "PRACTICAL SKILLS MATTER",
+      desc: beliefsData.b1Desc || "Learning should prepare people to do something, not simply remember something."
     },
     {
       num: "02",
-      title: "CREATIVITY MATTERS",
-      desc: "Technology is powerful, but creativity is what helps people use it in meaningful ways."
+      title: beliefsData.b2Title || "CREATIVITY MATTERS",
+      desc: beliefsData.b2Desc || "Technology is powerful, but creativity is what helps people use it in meaningful ways."
     },
     {
       num: "03",
-      title: "GOOD WORK TAKES CARE",
-      desc: "Whether we're teaching a student or building a website for a client, we believe the details matter."
+      title: beliefsData.b3Title || "GOOD WORK TAKES CARE",
+      desc: beliefsData.b3Desc || "Whether we're teaching a student or building a website for a client, we believe the details matter."
     },
     {
       num: "04",
-      title: "PEOPLE COME FIRST",
-      desc: "Every student, parent, school and client has different needs. We listen before we recommend."
+      title: beliefsData.b4Title || "PEOPLE COME FIRST",
+      desc: beliefsData.b4Desc || "Every student, parent, school and client has different needs. We listen before we recommend."
     }
   ];
 
@@ -43,18 +65,12 @@ const About: React.FC = () => {
               About Jaystarbliss Studios
             </span>
             <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold mb-8 tracking-tight leading-[1.08]">
-              WE TEACH. WE BUILD.<br />WE CREATE.
+              {heroData.title || 'WE TEACH. WE BUILD. WE CREATE.'}
             </h1>
             <div className="space-y-6 text-lg sm:text-xl text-white/80 leading-relaxed font-normal max-w-3xl border-l-2 border-brand-red pl-6">
-              <p>
-                Jaystarbliss Studios is a learning, technology and creative company built around a simple idea: people learn better when they get the opportunity to actually use what they're learning.
-              </p>
-              <p>
-                What started from a focus on teaching has grown into a broader ecosystem where education, technology and creativity meet.
-              </p>
-              <p>
-                Today, Jaystarbliss Studios supports students, families, schools and businesses through practical learning programs, digital services and creative work.
-              </p>
+              {heroData.paragraph1 && <p>{heroData.paragraph1}</p>}
+              {heroData.paragraph2 && <p>{heroData.paragraph2}</p>}
+              {heroData.paragraph3 && <p>{heroData.paragraph3}</p>}
             </div>
           </div>
         </div>
@@ -68,10 +84,10 @@ const About: React.FC = () => {
             <div className="lg:col-span-4 lg:sticky lg:top-28">
               <span className="text-xs font-black uppercase tracking-widest text-brand-red block mb-2">Core Philosophy</span>
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-brand-slate dark:text-white tracking-tight">
-                WHAT WE BELIEVE
+                {beliefsData.sectionTitle || 'WHAT WE BELIEVE'}
               </h2>
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-4 leading-relaxed">
-                The foundational principles that guide how we teach, engineer solutions, and collaborate with our community.
+                {beliefsData.sectionSubtitle || 'The foundational principles that guide how we teach, engineer solutions, and collaborate with our community.'}
               </p>
             </div>
 

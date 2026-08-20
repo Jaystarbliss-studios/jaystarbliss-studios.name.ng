@@ -24,7 +24,7 @@ export const JaystarblissIcon: React.FC<{ className?: string; size?: number }> =
         <img
           src={logoImg || '/Untitled design.png'}
           alt="Jaystarbliss Studios Logo"
-          className="w-full h-full object-cover select-none"
+          className="w-full h-full object-cover select-none grayscale contrast-125 brightness-105"
           onError={() => setImgError(true)}
           loading="eager"
         />
@@ -32,7 +32,7 @@ export const JaystarblissIcon: React.FC<{ className?: string; size?: number }> =
         <img
           src="/logo.png"
           alt="Jaystarbliss Studios Logo"
-          className="w-full h-full object-cover select-none"
+          className="w-full h-full object-cover select-none grayscale contrast-125 brightness-105"
           onError={(e) => {
             // Ultimate fallback to direct public path
             (e.target as HTMLImageElement).src = '/Untitled design.png';

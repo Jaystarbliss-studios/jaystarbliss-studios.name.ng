@@ -48,11 +48,23 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close menus on route change
+  // Close menus on route change & manage body scroll lock
   useEffect(() => {
     setMobileMenuOpen(false);
     setActiveDropdown(null);
+    document.body.style.overflow = '';
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
 
   const handleMouseEnter = (menuKey: string) => {
     if (dropdownTimeoutRef.current) {
@@ -73,7 +85,7 @@ const Navbar: React.FC = () => {
 
   // Nav link base class to ensure 100% identical height, baseline, padding and font sizing across all items
   const navLinkClass = (isActive: boolean) => `
-    h-9 inline-flex items-center gap-1 px-2 xl:px-3 rounded-lg text-xs xl:text-sm font-bold whitespace-nowrap transition-all duration-150 select-none
+    h-9 inline-flex items-center gap-1 px-2.5 xl:px-3 rounded-lg text-xs xl:text-sm font-bold whitespace-nowrap transition-all duration-150 select-none
     ${isActive 
       ? 'text-brand-red font-extrabold' 
       : isScrolled 
@@ -85,7 +97,7 @@ const Navbar: React.FC = () => {
   return (
     <>
       <header 
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-200 ${
           isScrolled 
             ? 'bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-sm py-2.5 sm:py-3' 
             : 'bg-gradient-to-b from-black/40 via-transparent to-transparent py-3 sm:py-4'
@@ -102,13 +114,13 @@ const Navbar: React.FC = () => {
             >
               <JaystarblissIcon className="w-8 h-8 sm:w-9 sm:h-9 group-hover:scale-105 transition-transform" />
               <span className={`font-black text-xs sm:text-sm xl:text-base tracking-tight whitespace-nowrap transition-colors ${
-                isScrolled || mobileMenuOpen ? 'text-brand-slate dark:text-white' : 'text-white'
+                isScrolled ? 'text-brand-slate dark:text-white' : 'text-white'
               }`}>
                 JAYSTARBLISS STUDIOS
               </span>
             </Link>
 
-            {/* Desktop Navigation Row (Straight, Perfectly Vertically Centered & Balanced) */}
+            {/* Desktop Navigation Row */}
             <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1.5 shrink-0" aria-label="Main Navigation">
               
               {/* Home */}
@@ -150,7 +162,7 @@ const Navbar: React.FC = () => {
                         to="/programs#academics" 
                         className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors group"
                       >
-                        <div className="p-2 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 shrink-0 group-hover:scale-110 transition-transform">
+                        <div className="p-2 rounded-lg bg-brand-red/10 text-brand-red dark:bg-brand-red/20 shrink-0 group-hover:scale-110 transition-transform">
                           <GraduationCap size={16} />
                         </div>
                         <div>
@@ -163,7 +175,7 @@ const Navbar: React.FC = () => {
                         to="/programs#digital_and_technology" 
                         className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors group"
                       >
-                        <div className="p-2 rounded-lg bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 shrink-0 group-hover:scale-110 transition-transform">
+                        <div className="p-2 rounded-lg bg-brand-red/10 text-brand-red dark:bg-brand-red/20 shrink-0 group-hover:scale-110 transition-transform">
                           <Laptop size={16} />
                         </div>
                         <div>
@@ -176,7 +188,7 @@ const Navbar: React.FC = () => {
                         to="/programs#creative" 
                         className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors group"
                       >
-                        <div className="p-2 rounded-lg bg-pink-500/10 text-pink-600 dark:text-pink-400 shrink-0 group-hover:scale-110 transition-transform">
+                        <div className="p-2 rounded-lg bg-brand-red/10 text-brand-red dark:bg-brand-red/20 shrink-0 group-hover:scale-110 transition-transform">
                           <Palette size={16} />
                         </div>
                         <div>
@@ -189,7 +201,7 @@ const Navbar: React.FC = () => {
                         to="/programs#school_programs" 
                         className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors group"
                       >
-                        <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 shrink-0 group-hover:scale-110 transition-transform">
+                        <div className="p-2 rounded-lg bg-brand-red/10 text-brand-red dark:bg-brand-red/20 shrink-0 group-hover:scale-110 transition-transform">
                           <School size={16} />
                         </div>
                         <div>
@@ -251,7 +263,7 @@ const Navbar: React.FC = () => {
                         to="/portfolio" 
                         className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors group"
                       >
-                        <div className="p-2 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 shrink-0 group-hover:scale-110 transition-transform">
+                        <div className="p-2 rounded-lg bg-brand-red/10 text-brand-red dark:bg-brand-red/20 shrink-0 group-hover:scale-110 transition-transform">
                           <Gamepad2 size={16} />
                         </div>
                         <div>
@@ -264,7 +276,7 @@ const Navbar: React.FC = () => {
                         to="/portfolio" 
                         className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors group"
                       >
-                        <div className="p-2 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 shrink-0 group-hover:scale-110 transition-transform">
+                        <div className="p-2 rounded-lg bg-brand-red/10 text-brand-red dark:bg-brand-red/20 shrink-0 group-hover:scale-110 transition-transform">
                           <Briefcase size={16} />
                         </div>
                         <div>
@@ -277,11 +289,11 @@ const Navbar: React.FC = () => {
                         to="/magic-particles" 
                         className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors group"
                       >
-                        <div className="p-2 rounded-lg bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 shrink-0 group-hover:scale-110 transition-transform">
+                        <div className="p-2 rounded-lg bg-brand-red/10 text-brand-red dark:bg-brand-red/20 shrink-0 group-hover:scale-110 transition-transform">
                           <Sparkles size={16} />
                         </div>
                         <div>
-                          <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-cyan-500">Magic 3D Particles Lab</div>
+                          <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-brand-red">Magic 3D Particles Lab</div>
                           <div className="text-[11px] text-slate-500 dark:text-slate-400">Real-time Three.js gesture & particle simulation</div>
                         </div>
                       </Link>
@@ -325,11 +337,11 @@ const Navbar: React.FC = () => {
                         to="/blog" 
                         className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors group"
                       >
-                        <div className="p-2 rounded-lg bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 shrink-0 group-hover:scale-110 transition-transform">
+                        <div className="p-2 rounded-lg bg-brand-red/10 text-brand-red dark:bg-brand-red/20 shrink-0 group-hover:scale-110 transition-transform">
                           <Newspaper size={16} />
                         </div>
                         <div>
-                          <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-cyan-500">News Corner & Bulletins</div>
+                          <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-brand-red">News Corner & Bulletins</div>
                           <div className="text-[11px] text-slate-500 dark:text-slate-400">Live announcements, events, and awards</div>
                         </div>
                       </Link>
@@ -338,7 +350,7 @@ const Navbar: React.FC = () => {
                         to="/blog" 
                         className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors group"
                       >
-                        <div className="p-2 rounded-lg bg-brand-red/10 text-brand-red shrink-0 group-hover:scale-110 transition-transform">
+                        <div className="p-2 rounded-lg bg-brand-red/10 text-brand-red dark:bg-brand-red/20 shrink-0 group-hover:scale-110 transition-transform">
                           <BookOpen size={16} />
                         </div>
                         <div>
@@ -351,7 +363,7 @@ const Navbar: React.FC = () => {
                         to="/faq" 
                         className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors group"
                       >
-                        <div className="p-2 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 shrink-0 group-hover:scale-110 transition-transform">
+                        <div className="p-2 rounded-lg bg-brand-red/10 text-brand-red dark:bg-brand-red/20 shrink-0 group-hover:scale-110 transition-transform">
                           <HelpCircle size={16} />
                         </div>
                         <div>
@@ -383,7 +395,7 @@ const Navbar: React.FC = () => {
               </Link>
             </nav>
 
-            {/* Desktop Right Actions (Search, Theme, Contact, Login Button) */}
+            {/* Desktop Right Actions */}
             <div className="hidden lg:flex items-center gap-2 xl:gap-3 shrink-0">
               <button 
                 onClick={() => setSearchOpen(true)}
@@ -414,7 +426,7 @@ const Navbar: React.FC = () => {
                 Contact
               </Link>
 
-              {/* High-visibility Action CTA */}
+              {/* Action CTA */}
               <Link 
                 to="/portal" 
                 className="relative inline-flex items-center justify-center overflow-hidden rounded-xl p-[1.5px] focus:outline-none hover:-translate-y-0.5 transition-all shadow-md shadow-brand-red/20 group shrink-0"
@@ -426,12 +438,12 @@ const Navbar: React.FC = () => {
               </Link>
             </div>
 
-            {/* Mobile & Tablet Header Controls */}
-            <div className="flex items-center gap-1 lg:hidden relative z-50">
+            {/* Mobile Header Controls */}
+            <div className="flex items-center gap-1.5 lg:hidden relative z-50">
               <button 
                 onClick={() => setSearchOpen(true)}
                 className={`p-2 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 transition-colors ${
-                  isScrolled || mobileMenuOpen ? 'text-brand-slate dark:text-white' : 'text-white'
+                  isScrolled ? 'text-brand-slate dark:text-white' : 'text-white'
                 }`}
                 aria-label="Search"
               >
@@ -441,7 +453,7 @@ const Navbar: React.FC = () => {
               <button 
                 onClick={toggleTheme}
                 className={`p-2 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 transition-colors ${
-                  isScrolled || mobileMenuOpen ? 'text-brand-slate dark:text-white' : 'text-white'
+                  isScrolled ? 'text-brand-slate dark:text-white' : 'text-white'
                 }`}
                 aria-label="Toggle Theme"
               >
@@ -450,64 +462,99 @@ const Navbar: React.FC = () => {
 
               <button 
                 className={`p-2 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 transition-colors ${
-                  isScrolled || mobileMenuOpen ? 'text-brand-slate dark:text-white' : 'text-white'
+                  isScrolled ? 'text-brand-slate dark:text-white' : 'text-white'
                 }`}
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                aria-label={mobileMenuOpen ? 'Close Menu' : 'Open Menu'}
+                onClick={() => setMobileMenuOpen(true)}
+                aria-label="Open Navigation Menu"
               >
-                {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+                <Menu size={24} />
               </button>
             </div>
 
           </div>
         </div>
+      </header>
 
-        {/* Mobile Fullscreen Drawer with Collapsible Submenus */}
-        <div 
-          className={`fixed inset-0 bg-white/98 dark:bg-slate-900/98 backdrop-blur-lg z-40 lg:hidden transition-all duration-300 ${
-            mobileMenuOpen ? 'opacity-100 pointer-events-auto translate-x-0' : 'opacity-0 pointer-events-none translate-x-full'
-          }`}
-        >
-          <div className="flex flex-col h-full pt-16 px-6 pb-8 overflow-y-auto">
+      {/* Full-Screen Mobile Drawer (Complete view with dedicated top bar & scroll containment) */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden flex flex-col bg-white dark:bg-slate-950 animate-in fade-in duration-200">
+          
+          {/* Mobile Menu Top Header Bar */}
+          <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-950 shrink-0">
+            <Link 
+              to="/" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-2.5"
+            >
+              <JaystarblissIcon className="w-8 h-8" />
+              <span className="font-black text-sm text-brand-slate dark:text-white tracking-tight">
+                JAYSTARBLISS STUDIOS
+              </span>
+            </Link>
+
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={toggleTheme}
+                className="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                aria-label="Toggle Theme"
+              >
+                {theme === 'dark' ? <Sun size={19} /> : <Moon size={19} />}
+              </button>
+              
+              <button 
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2 rounded-lg text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                aria-label="Close Navigation Menu"
+              >
+                <X size={24} />
+              </button>
+            </div>
+          </div>
+
+          {/* Scrollable Navigation Body */}
+          <div className="flex-1 overflow-y-auto px-5 py-6 space-y-4">
             
-            <nav className="flex flex-col gap-1 mt-2">
+            <nav className="flex flex-col gap-1">
+              
               {/* Home */}
               <Link 
                 to="/"
                 onClick={() => setMobileMenuOpen(false)}
-                className={`text-base font-bold py-2.5 border-b border-gray-100 dark:border-slate-800 ${
-                  location.pathname === '/' ? 'text-brand-red' : 'text-brand-slate dark:text-white'
+                className={`flex items-center justify-between py-3 px-3 rounded-xl text-base font-bold transition-colors ${
+                  location.pathname === '/' 
+                    ? 'bg-brand-red/10 text-brand-red' 
+                    : 'text-slate-800 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-900'
                 }`}
               >
-                Home
+                <span>Home</span>
               </Link>
 
               {/* Programs (Accordion) */}
-              <div className="border-b border-gray-100 dark:border-slate-800 pb-1">
+              <div className="rounded-xl overflow-hidden">
                 <button
                   type="button"
                   onClick={() => toggleMobileSubmenu('programs')}
-                  className="w-full py-2.5 flex items-center justify-between text-base font-bold text-brand-slate dark:text-white"
+                  className="w-full py-3 px-3 flex items-center justify-between text-base font-bold text-slate-800 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-900 rounded-xl transition-colors"
                 >
                   <span>Programs</span>
-                  <ChevronDown size={16} className={`transition-transform duration-200 ${mobileExpanded.programs ? 'rotate-180 text-brand-red' : 'text-gray-400'}`} />
+                  <ChevronDown size={16} className={`transition-transform duration-200 ${mobileExpanded.programs ? 'rotate-180 text-brand-red' : 'text-slate-400'}`} />
                 </button>
                 {mobileExpanded.programs && (
-                  <div className="pl-3 pr-2 pb-2.5 space-y-2 animate-in fade-in duration-150">
-                    <Link to="/programs" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 text-xs font-bold text-brand-red">
+                  <div className="pl-3 pr-2 py-2 space-y-1.5 bg-slate-50/70 dark:bg-slate-900/60 rounded-xl my-1 border border-slate-100 dark:border-slate-800">
+                    <Link to="/programs" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-2 text-xs font-bold text-brand-red hover:underline">
                       <ArrowRight size={13} /> Full Programs Catalog
                     </Link>
-                    <Link to="/programs#academics" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300">
-                      <GraduationCap size={14} className="text-blue-500" /> Academics & Tutoring
+                    <Link to="/programs#academics" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-brand-red">
+                      <GraduationCap size={15} className="text-brand-red" /> Academics & Tutoring
                     </Link>
-                    <Link to="/programs#digital_and_technology" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300">
-                      <Laptop size={14} className="text-cyan-500" /> Coding, Tech & AI
+                    <Link to="/programs#digital_and_technology" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-brand-red">
+                      <Laptop size={15} className="text-brand-red" /> Coding, Tech & AI
                     </Link>
-                    <Link to="/programs#creative" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300">
-                      <Palette size={14} className="text-pink-500" /> Creative Arts & Design
+                    <Link to="/programs#creative" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-brand-red">
+                      <Palette size={15} className="text-brand-red" /> Creative Arts & Design
                     </Link>
-                    <Link to="/programs#school_programs" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300">
-                      <School size={14} className="text-emerald-500" /> School STEM Clubs
+                    <Link to="/programs#school_programs" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-brand-red">
+                      <School size={15} className="text-brand-red" /> School STEM Clubs
                     </Link>
                   </div>
                 )}
@@ -517,58 +564,60 @@ const Navbar: React.FC = () => {
               <Link 
                 to="/services"
                 onClick={() => setMobileMenuOpen(false)}
-                className={`text-base font-bold py-2.5 border-b border-gray-100 dark:border-slate-800 ${
-                  location.pathname.startsWith('/services') ? 'text-brand-red' : 'text-brand-slate dark:text-white'
+                className={`flex items-center justify-between py-3 px-3 rounded-xl text-base font-bold transition-colors ${
+                  location.pathname.startsWith('/services') 
+                    ? 'bg-brand-red/10 text-brand-red' 
+                    : 'text-slate-800 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-900'
                 }`}
               >
-                Services
+                <span>Services</span>
               </Link>
 
               {/* Portfolio (Accordion) */}
-              <div className="border-b border-gray-100 dark:border-slate-800 pb-1">
+              <div className="rounded-xl overflow-hidden">
                 <button
                   type="button"
                   onClick={() => toggleMobileSubmenu('portfolio')}
-                  className="w-full py-2.5 flex items-center justify-between text-base font-bold text-brand-slate dark:text-white"
+                  className="w-full py-3 px-3 flex items-center justify-between text-base font-bold text-slate-800 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-900 rounded-xl transition-colors"
                 >
                   <span>Portfolio</span>
-                  <ChevronDown size={16} className={`transition-transform duration-200 ${mobileExpanded.portfolio ? 'rotate-180 text-brand-red' : 'text-gray-400'}`} />
+                  <ChevronDown size={16} className={`transition-transform duration-200 ${mobileExpanded.portfolio ? 'rotate-180 text-brand-red' : 'text-slate-400'}`} />
                 </button>
                 {mobileExpanded.portfolio && (
-                  <div className="pl-3 pr-2 pb-2.5 space-y-2 animate-in fade-in duration-150">
-                    <Link to="/portfolio" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300">
-                      <Gamepad2 size={14} className="text-amber-500" /> Kids Corner & Arcade Games
+                  <div className="pl-3 pr-2 py-2 space-y-1.5 bg-slate-50/70 dark:bg-slate-900/60 rounded-xl my-1 border border-slate-100 dark:border-slate-800">
+                    <Link to="/portfolio" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-brand-red">
+                      <Gamepad2 size={15} className="text-brand-red" /> Kids Corner & Arcade Games
                     </Link>
-                    <Link to="/portfolio" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300">
-                      <Briefcase size={14} className="text-blue-500" /> Organisation Case Studies
+                    <Link to="/portfolio" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-brand-red">
+                      <Briefcase size={15} className="text-brand-red" /> Organisation Case Studies
                     </Link>
-                    <Link to="/magic-particles" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300">
-                      <Sparkles size={14} className="text-cyan-500" /> Magic 3D Particles Playground
+                    <Link to="/magic-particles" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-brand-red">
+                      <Sparkles size={15} className="text-brand-red" /> Magic 3D Particles Playground
                     </Link>
                   </div>
                 )}
               </div>
 
               {/* Resources (Accordion) */}
-              <div className="border-b border-gray-100 dark:border-slate-800 pb-1">
+              <div className="rounded-xl overflow-hidden">
                 <button
                   type="button"
                   onClick={() => toggleMobileSubmenu('resources')}
-                  className="w-full py-2.5 flex items-center justify-between text-base font-bold text-brand-slate dark:text-white"
+                  className="w-full py-3 px-3 flex items-center justify-between text-base font-bold text-slate-800 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-900 rounded-xl transition-colors"
                 >
                   <span>Resources</span>
-                  <ChevronDown size={16} className={`transition-transform duration-200 ${mobileExpanded.resources ? 'rotate-180 text-brand-red' : 'text-gray-400'}`} />
+                  <ChevronDown size={16} className={`transition-transform duration-200 ${mobileExpanded.resources ? 'rotate-180 text-brand-red' : 'text-slate-400'}`} />
                 </button>
                 {mobileExpanded.resources && (
-                  <div className="pl-3 pr-2 pb-2.5 space-y-2 animate-in fade-in duration-150">
-                    <Link to="/blog" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300">
-                      <Newspaper size={14} className="text-cyan-500" /> News Corner Bulletins
+                  <div className="pl-3 pr-2 py-2 space-y-1.5 bg-slate-50/70 dark:bg-slate-900/60 rounded-xl my-1 border border-slate-100 dark:border-slate-800">
+                    <Link to="/blog" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-brand-red">
+                      <Newspaper size={15} className="text-brand-red" /> News Corner Bulletins
                     </Link>
-                    <Link to="/blog" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300">
-                      <BookOpen size={14} className="text-brand-red" /> Tech Blog & Tutorials
+                    <Link to="/blog" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-brand-red">
+                      <BookOpen size={15} className="text-brand-red" /> Tech Blog & Tutorials
                     </Link>
-                    <Link to="/faq" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300">
-                      <HelpCircle size={14} className="text-purple-500" /> FAQ & Help Center
+                    <Link to="/faq" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-brand-red">
+                      <HelpCircle size={15} className="text-brand-red" /> FAQ & Help Center
                     </Link>
                   </div>
                 )}
@@ -578,31 +627,48 @@ const Navbar: React.FC = () => {
               <Link 
                 to="/about"
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-base font-bold py-2.5 border-b border-gray-100 dark:border-slate-800 text-brand-slate dark:text-white"
+                className={`flex items-center justify-between py-3 px-3 rounded-xl text-base font-bold transition-colors ${
+                  location.pathname === '/about' 
+                    ? 'bg-brand-red/10 text-brand-red' 
+                    : 'text-slate-800 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-900'
+                }`}
               >
-                About
+                <span>About</span>
               </Link>
+              
               <Link
                 to="/contact"
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-base font-bold py-2.5 border-b border-gray-100 dark:border-slate-800 text-brand-slate dark:text-white"
+                className={`flex items-center justify-between py-3 px-3 rounded-xl text-base font-bold transition-colors ${
+                  location.pathname === '/contact' 
+                    ? 'bg-brand-red/10 text-brand-red' 
+                    : 'text-slate-800 dark:text-slate-100 hover:bg-slate-50 dark:hover:bg-slate-900'
+                }`}
               >
-                Contact
+                <span>Contact</span>
               </Link>
             </nav>
-            
-            <div className="mt-auto pt-6 flex flex-col gap-3">
+
+            {/* Bottom Actions */}
+            <div className="pt-6 border-t border-slate-100 dark:border-slate-800 flex flex-col gap-3">
               <Link
                 to="/portal"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full bg-brand-slate dark:bg-brand-red text-white py-3 rounded-xl font-black text-center flex items-center justify-center gap-2 uppercase tracking-wider text-xs shadow-md"
+                className="w-full bg-brand-red hover:bg-red-700 text-white py-3.5 rounded-xl font-bold text-center flex items-center justify-center gap-2 uppercase tracking-wider text-sm shadow-md shadow-brand-red/20 transition-colors"
               >
-                LOGIN / SIGNUP
+                PORTAL LOGIN / SIGNUP
+              </Link>
+              <Link
+                to="/register"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white py-3.5 rounded-xl font-bold text-center flex items-center justify-center gap-2 uppercase tracking-wider text-sm transition-colors hover:bg-slate-200 dark:hover:bg-slate-700"
+              >
+                ENROLL IN PROGRAMS
               </Link>
             </div>
           </div>
         </div>
-      </header>
+      )}
 
       <SearchModal 
         isOpen={searchOpen} 

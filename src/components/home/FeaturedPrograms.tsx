@@ -7,10 +7,18 @@ import { getProgramImage } from '../../lib/stockImages';
 import { StaggerGroup, Reveal } from '../ui/Reveal';
 import { staggerItem } from '../ui/animationVariants';
 import { motion } from 'framer-motion';
+import { usePageSection } from '../../lib/cms';
 
 const FeaturedPrograms: React.FC = () => {
   const [programs, setPrograms] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const { data: sectionInfo } = usePageSection('home', 'programs_preview', {
+    title: 'LEARN SOMETHING YOU CAN USE.',
+    subtitle: "Our programs are designed around practical learning. You don't just learn the theory — you get opportunities to practise, create and apply what you've learned.",
+    ctaText: 'VIEW ALL PROGRAMS',
+    ctaLink: '/programs'
+  });
 
   useEffect(() => {
     const fetchFeaturedPrograms = async () => {
@@ -38,20 +46,18 @@ const FeaturedPrograms: React.FC = () => {
   return (
     <section className="py-24 bg-white dark:bg-slate-900 dark:border-slate-800 border-t border-gray-100">
       <div className="container mx-auto px-4 md:px-8 max-w-7xl">
-        <Reveal className="text-center max-w-3xl mx-auto mb-20">
-          <h2 className="text-3xl md:text-5xl font-extrabold text-brand-slate dark:text-white mb-6 tracking-tight">
-            LEARN SOMETHING YOU CAN USE.
+        <Reveal className="text-center max-w-4xl mx-auto mb-14">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[42px] font-extrabold text-brand-slate dark:text-white mb-3 tracking-tight whitespace-normal sm:whitespace-nowrap">
+            {sectionInfo.title || 'LEARN SOMETHING YOU CAN USE.'}
           </h2>
-          <p className="text-xl text-gray-600 dark:text-gray-400 font-medium mb-10">
-            Our programs are designed around practical learning. You don't just
-            learn the theory — you get opportunities to practise, create and
-            apply what you've learned.
+          <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 font-medium mb-8 max-w-2xl mx-auto leading-relaxed">
+            {sectionInfo.subtitle || "Our programs are designed around practical learning. You don't just learn the theory — you get opportunities to practise, create and apply what you've learned."}
           </p>
           <Link
-            to="/programs"
-            className="inline-flex items-center gap-2 bg-brand-slate text-white px-8 py-4 rounded-xl font-bold hover:bg-gray-800 transition-colors shadow-lg"
+            to={sectionInfo.ctaLink || '/programs'}
+            className="inline-flex items-center gap-2 bg-brand-slate text-white px-7 py-3 rounded-xl font-bold hover:bg-gray-800 transition-colors shadow-md text-sm"
           >
-            VIEW ALL PROGRAMS
+            {sectionInfo.ctaText || 'VIEW ALL PROGRAMS'}
           </Link>
         </Reveal>
 

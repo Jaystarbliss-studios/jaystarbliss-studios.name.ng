@@ -3,15 +3,22 @@ import { collection, query, where, getDocs, limit } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { Loader2, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import Badge from '../ui/Badge';
 import DOMPurify from 'dompurify';
 import { StaggerGroup, Reveal } from '../ui/Reveal';
 import { staggerItem } from '../ui/animationVariants';
 import { motion } from 'framer-motion';
+import { usePageSection } from '../../lib/cms';
 
 const FeaturedPortfolio: React.FC = () => {
   const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const { data: sectionInfo } = usePageSection('home', 'portfolio_preview', {
+    title: 'PROVEN RESULTS. REAL IMPACT.',
+    subtitle: 'Explore our latest software engineering deployments and young coder creations.',
+    ctaText: 'VIEW ALL PROJECTS',
+    ctaLink: '/portfolio'
+  });
 
   useEffect(() => {
     const fetchFeaturedProjects = async () => {
@@ -37,16 +44,25 @@ const FeaturedPortfolio: React.FC = () => {
   return (
     <section className="py-24 bg-white dark:bg-slate-950 border-t border-slate-100 dark:border-slate-800">
       <div className="container mx-auto px-4 md:px-8 max-w-7xl">
-        <Reveal className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+        <Reveal className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div className="max-w-2xl">
-            <Badge variant="brand" className="mb-6">SUCCESS STORIES</Badge>
-            <h2 className="text-3xl md:text-5xl font-extrabold text-brand-slate dark:text-white tracking-tight leading-[1.1]">
-              PROVEN RESULTS. <br className="hidden md:block" />
-              REAL IMPACT.
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-brand-slate dark:text-white tracking-tight leading-[1.1]">
+              {sectionInfo.title ? (
+                sectionInfo.title.includes('.') ? (
+                  <>
+                    {sectionInfo.title.split('.')[0]}. <br className="hidden md:block" />
+                    {sectionInfo.title.split('.').slice(1).join('.').trim()}
+                  </>
+                ) : (
+                  sectionInfo.title
+                )
+              ) : (
+                'PROVEN RESULTS. REAL IMPACT.'
+              )}
             </h2>
           </div>
-          <Link to="/portfolio" className="inline-flex items-center gap-2 text-brand-red font-bold hover:text-red-700 transition-colors uppercase tracking-wider text-sm shrink-0">
-            VIEW ALL PROJECTS <ArrowRight size={20} />
+          <Link to={sectionInfo.ctaLink || '/portfolio'} className="inline-flex items-center gap-2 text-brand-red font-bold hover:text-red-700 transition-colors uppercase tracking-wider text-sm shrink-0">
+            {sectionInfo.ctaText || 'VIEW ALL PROJECTS'} <ArrowRight size={20} />
           </Link>
         </Reveal>
         

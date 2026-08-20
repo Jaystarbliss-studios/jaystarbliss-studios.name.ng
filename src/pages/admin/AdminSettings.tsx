@@ -17,7 +17,11 @@ const AdminSettings: React.FC = () => {
     heroSubheading: 'Empowering the next generation of digital creators.',
     twitter: '',
     linkedin: '',
-    instagram: ''
+    instagram: '',
+    cloudinaryCloudName: 'jaystarbliss',
+    cloudinaryUploadPreset: 'jaystarbliss_cms',
+    cloudinaryApiKey: '',
+    cloudinaryApiSecret: ''
   });
 
   useEffect(() => {
@@ -29,6 +33,20 @@ const AdminSettings: React.FC = () => {
         if (docSnap.exists()) {
           const data = docSnap.data();
           setSettings(prev => ({ ...prev, ...data }));
+        }
+
+        // Also check if cloudinary specific settings exist
+        const cloudRef = doc(db, 'settings', 'cloudinary');
+        const cloudSnap = await getDoc(cloudRef);
+        if (cloudSnap.exists()) {
+          const cData = cloudSnap.data();
+          setSettings(prev => ({
+            ...prev,
+            cloudinaryCloudName: cData.cloudName || prev.cloudinaryCloudName,
+            cloudinaryUploadPreset: cData.uploadPreset || prev.cloudinaryUploadPreset,
+            cloudinaryApiKey: cData.apiKey || prev.cloudinaryApiKey,
+            cloudinaryApiSecret: cData.apiSecret || prev.cloudinaryApiSecret
+          }));
         }
       } catch (error) {
         console.error("Error fetching settings:", error);
@@ -59,8 +77,22 @@ const AdminSettings: React.FC = () => {
         updatedAt: serverTimestamp(),
         updatedBy: user?.uid || 'unknown'
       }, { merge: true });
+
+      // Save Cloudinary configuration specifically
+      const cloudinaryRef = doc(db, 'settings', 'cloudinary');
+      await setDoc(cloudinaryRef, {
+        cloudName: settings.cloudinaryCloudName || 'jaystarbliss',
+        uploadPreset: settings.cloudinaryUploadPreset || 'jaystarbliss_cms',
+        apiKey: settings.cloudinaryApiKey || '',
+        apiSecret: settings.cloudinaryApiSecret || '',
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+
+      localStorage.setItem('cloudinary_cloud_name', settings.cloudinaryCloudName);
+      localStorage.setItem('cloudinary_upload_preset', settings.cloudinaryUploadPreset);
+      if (settings.cloudinaryApiKey) localStorage.setItem('cloudinary_api_key', settings.cloudinaryApiKey);
       
-      setMessage({ type: 'success', text: 'Global settings updated successfully!' });
+      setMessage({ type: 'success', text: 'Global & Cloudinary settings updated successfully!' });
     } catch (error) {
       console.error("Error saving settings:", error);
       setMessage({ type: 'error', text: 'Failed to save settings. Please try again.' });
@@ -157,6 +189,71 @@ const AdminSettings: React.FC = () => {
                 onChange={handleChange}
                 rows={2}
                 className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-red"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* Cloudinary Integration */}
+        <section>
+          <div className="flex items-center justify-between border-b pb-2 mb-6">
+            <div>
+              <h2 className="text-xl font-bold text-brand-slate dark:text-white">Cloudinary Image Storage & CDN</h2>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Configure your Cloudinary credentials to upload and manage high-resolution images across all CMS pages.</p>
+            </div>
+            <span className="text-xs font-bold uppercase tracking-wider bg-brand-red/10 text-brand-red px-2.5 py-1 rounded-full">
+              Active Storage
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Cloudinary Cloud Name</label>
+              <input
+                type="text"
+                name="cloudinaryCloudName"
+                value={settings.cloudinaryCloudName}
+                onChange={handleChange}
+                placeholder="e.g. jaystarbliss"
+                className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-red font-mono text-sm"
+              />
+              <p className="text-[11px] text-slate-400 mt-1">Your Cloudinary account cloud name identifier.</p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Unsigned Upload Preset</label>
+              <input
+                type="text"
+                name="cloudinaryUploadPreset"
+                value={settings.cloudinaryUploadPreset}
+                onChange={handleChange}
+                placeholder="e.g. jaystarbliss_cms or ml_default"
+                className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-red font-mono text-sm"
+              />
+              <p className="text-[11px] text-slate-400 mt-1">Created in Cloudinary Settings &gt; Upload &gt; Upload Presets (set to Unsigned).</p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Cloudinary API Key (Optional / Private)</label>
+              <input
+                type="text"
+                name="cloudinaryApiKey"
+                value={settings.cloudinaryApiKey}
+                onChange={handleChange}
+                placeholder="e.g. 123456789012345"
+                className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-red font-mono text-sm"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Cloudinary API Secret (Optional)</label>
+              <input
+                type="password"
+                name="cloudinaryApiSecret"
+                value={settings.cloudinaryApiSecret}
+                onChange={handleChange}
+                placeholder="••••••••••••••••"
+                className="w-full px-4 py-3 rounded-lg border border-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-red font-mono text-sm"
               />
             </div>
           </div>

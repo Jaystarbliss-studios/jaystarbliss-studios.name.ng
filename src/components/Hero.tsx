@@ -2,8 +2,19 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import GalaxyOrbit from "./home/GalaxyOrbit";
+import { usePageSection } from "../lib/cms";
 
 const Hero: React.FC = () => {
+  const { data } = usePageSection('home', 'hero', {
+    tagline: 'DIGITAL INNOVATION & EDUCATION',
+    headingLine1: 'LEARN. BUILD.',
+    headingLine2: 'CREATE. GROW.',
+    description: 'Jaystarbliss Studios empowers the next generation through practical tech education, coding programs for kids, and scalable software solutions.',
+    primaryCtaText: 'START LEARNING',
+    primaryCtaLink: '/register',
+    secondaryCtaText: 'HIRE US',
+    secondaryCtaLink: '/services'
+  });
 
   return (
     <div className="relative min-h-[90vh] bg-brand-slate overflow-hidden flex items-center justify-center pt-20">
@@ -15,40 +26,38 @@ const Hero: React.FC = () => {
         {/* Left Content Area */}
         <div className="text-center lg:text-left max-w-2xl mx-auto lg:mx-0">
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-[1.1] mb-6 tracking-tight">
-            LEARN.
-            <br />
-            BUILD.
+            {data.headingLine1 || 'LEARN. BUILD.'}
             <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-red to-red-400">
-              CREATE.
+              {data.headingLine2 ? data.headingLine2.split(' ')[0] || 'CREATE.' : 'CREATE.'}
             </span>
             <br />
-            GROW.
+            {data.headingLine2 ? data.headingLine2.split(' ').slice(1).join(' ') || 'GROW.' : 'GROW.'}
           </h1>
-          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 mt-8">
+          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-6 mt-8">
             <Link
-              to="/register"
+              to={data.primaryCtaLink || '/register'}
               className="relative inline-flex overflow-hidden rounded-xl p-[2px] focus:outline-none hover:-translate-y-1 transition-transform shadow-[0_10px_20px_rgba(223,70,39,0.3)] group"
             >
               <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#df4627_0%,#F8FAFC_50%,#df4627_100%)]" />
-              <span className="inline-flex h-full w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-[#df4627] to-[#b3290e] px-8 py-4 text-sm font-bold tracking-widest font-mono uppercase text-white backdrop-blur-3xl transition-colors group-hover:opacity-95 border border-transparent">
-                START LEARNING
+              <span className="inline-flex h-full w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-b from-[#df4627] to-[#b3290e] px-7 py-3.5 text-xs sm:text-sm font-bold tracking-widest font-mono uppercase text-white backdrop-blur-3xl transition-colors group-hover:opacity-95 border border-transparent">
+                {data.primaryCtaText || 'START LEARNING'}
               </span>
             </Link>
 
             <Link
-              to="/services"
+              to={data.secondaryCtaLink || '/services'}
               className="relative inline-flex overflow-hidden rounded-xl p-[2px] focus:outline-none hover:-translate-y-1 transition-transform shadow-lg group"
             >
               <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#ffffff_0%,#475569_50%,#ffffff_100%)] opacity-30" />
-              <span className="inline-flex h-full w-full items-center justify-center gap-2 rounded-xl bg-brand-slate px-8 py-4 text-sm font-bold tracking-widest font-mono uppercase text-white backdrop-blur-3xl transition-colors group-hover:bg-slate-800 border border-white/10">
-                HIRE US
+              <span className="inline-flex h-full w-full items-center justify-center gap-2 rounded-xl bg-brand-slate px-7 py-3.5 text-xs sm:text-sm font-bold tracking-widest font-mono uppercase text-white backdrop-blur-3xl transition-colors group-hover:bg-slate-800 border border-white/10">
+                {data.secondaryCtaText || 'HIRE US'}
               </span>
             </Link>
 
             <Link
               to="/portfolio"
-              className="text-white/60 font-semibold hover:text-white transition-colors px-4 py-4 flex items-center gap-2"
+              className="text-white/60 font-semibold hover:text-white transition-colors px-3 py-3 flex items-center gap-2 text-xs sm:text-sm"
             >
               SEE OUR WORK <ArrowRight size={16} />
             </Link>
