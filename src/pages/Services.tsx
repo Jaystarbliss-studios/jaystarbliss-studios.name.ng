@@ -8,7 +8,8 @@ import { Link } from 'react-router-dom';
 import { CardSkeleton } from '../components/ui/Skeleton';
 import EmptyState from '../components/ui/EmptyState';
 import { stockImages } from '../lib/stockImages';
-import { StaggerGroup, staggerItem } from '../components/ui/Reveal';
+import { StaggerGroup } from '../components/ui/Reveal';
+import { staggerItem } from '../components/ui/animationVariants';
 import { motion } from 'framer-motion';
 
 const getIconComponent = (iconName: string) => {
