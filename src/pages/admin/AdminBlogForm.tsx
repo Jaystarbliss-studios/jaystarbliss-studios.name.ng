@@ -5,6 +5,7 @@ import { db } from '../../lib/firebase';
 import { ArrowLeft, Loader2, Newspaper, BookOpen } from 'lucide-react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import PhotoUpload from '../../components/admin/PhotoUpload';
 
 const AdminBlogForm: React.FC = () => {
   const { id } = useParams();
@@ -285,24 +286,12 @@ const AdminBlogForm: React.FC = () => {
           </div>
         </div>
 
-        <div>
-          <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider mb-1.5">
-            Featured Image URL
-          </label>
-          <input
-            type="url"
-            name="featuredImage"
-            value={formData.featuredImage}
-            onChange={handleChange}
-            className="w-full px-4 py-2.5 border border-gray-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-sm"
-            placeholder="https://images.unsplash.com/..."
-          />
-          {formData.featuredImage && (
-            <div className="mt-3 aspect-[21/9] w-full max-w-sm rounded-xl overflow-hidden border border-gray-200 dark:border-slate-700">
-              <img src={formData.featuredImage} alt="Preview" className="w-full h-full object-cover" />
-            </div>
-          )}
-        </div>
+        <PhotoUpload
+          label="Featured Article / Bulletin Photo"
+          value={formData.featuredImage}
+          onChange={(url) => setFormData(prev => ({ ...prev, featuredImage: url }))}
+          helpText="Upload a high-quality cover photo. Uploads to Cloudinary CDN."
+        />
 
         <div>
           <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider mb-1.5">

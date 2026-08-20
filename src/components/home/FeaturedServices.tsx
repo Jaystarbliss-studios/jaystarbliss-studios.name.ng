@@ -6,7 +6,7 @@ import { db } from '../../lib/firebase';
 import { stockImages } from '../../lib/stockImages';
 import { StaggerGroup, Reveal } from '../ui/Reveal';
 import { staggerItem } from '../ui/animationVariants';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
 const getIconComponent = (iconName: string) => {
   const normalizedName = (iconName || "Monitor").toLowerCase();

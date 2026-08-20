@@ -5,6 +5,7 @@ import { db } from '../../lib/firebase';
 import { ArrowLeft, Loader2, Gamepad2, Briefcase } from 'lucide-react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import PhotoUpload from '../../components/admin/PhotoUpload';
 
 const presetIcons = ['gamepad', 'rocket', 'code', 'palette', 'cpu', 'terminal', 'sparkles'];
 
@@ -318,36 +319,28 @@ const AdminPortfolioForm: React.FC = () => {
           </div>
         )}
 
-        {/* Live URL & Featured Image */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
-              Live URL / Scratch Project Link
-            </label>
-            <input
-              type="url"
-              name="liveUrl"
-              value={formData.liveUrl}
-              onChange={handleChange}
-              placeholder="https://scratch.mit.edu/projects/... or https://domain.com"
-              className="w-full px-4 py-2.5 border border-gray-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl focus:ring-2 focus:ring-brand-red text-sm"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
-              Featured Image URL (Optional)
-            </label>
-            <input
-              type="url"
-              name="featuredImage"
-              value={formData.featuredImage}
-              onChange={handleChange}
-              placeholder="https://example.com/screenshot.jpg"
-              className="w-full px-4 py-2.5 border border-gray-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl focus:ring-2 focus:ring-brand-red text-sm"
-            />
-          </div>
+        {/* Live URL */}
+        <div>
+          <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
+            Live URL / Scratch Project Link
+          </label>
+          <input
+            type="url"
+            name="liveUrl"
+            value={formData.liveUrl}
+            onChange={handleChange}
+            placeholder="https://scratch.mit.edu/projects/... or https://domain.com"
+            className="w-full px-4 py-2.5 border border-gray-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl focus:ring-2 focus:ring-brand-red text-sm"
+          />
         </div>
+
+        {/* Featured Photo Upload */}
+        <PhotoUpload
+          label="Project Cover / Screenshot Photo"
+          value={formData.featuredImage}
+          onChange={(url) => setFormData(prev => ({ ...prev, featuredImage: url }))}
+          helpText="Upload a clear screenshot or banner photo for this project."
+        />
 
         {/* Description Rich Text */}
         <div>

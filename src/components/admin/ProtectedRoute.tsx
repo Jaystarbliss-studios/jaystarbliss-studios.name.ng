@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { auth, db } from '../../lib/firebase';
 import { Loader2 } from 'lucide-react';
 
@@ -14,7 +14,7 @@ interface ProtectedRouteProps {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
   children, 
   allowedRoles,
-  redirectPath = '/admin/login' 
+  redirectPath = '/portal' 
 }) => {
   const [loading, setLoading] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -22,39 +22,115 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (currentUser) {
-        try {
-          const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
-          if (userDoc.exists()) {
-            const userData = userDoc.data();
-            let role = userData.role || 'USER';
-            if (currentUser.email === 'johnrufai242@gmail.com') {
-              role = 'SUPER_ADMIN';
-            }
-            
-            // If no specific roles required, but it's an admin path, check for ADMIN
-            if (!allowedRoles) {
-              if (location.pathname.startsWith('/admin')) {
-                 setIsAuthorized(role.includes('ADMIN'));
-              } else {
-                 setIsAuthorized(true);
-              }
-            } else {
-              // Super admin can access anything
-              if (role === 'SUPER_ADMIN') {
-                setIsAuthorized(true);
-              } else {
-                setIsAuthorized(allowedRoles.includes(role));
-              }
-            }
-          } else {
-            setIsAuthorized(false);
-          }
-        } catch (error) {
-          console.error("Error fetching user role:", error);
-          setIsAuthorized(false);
+      if (!currentUser) {
+        setIsAuthorized(false);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        // 1. Check Super Admin by email
+        if (currentUser.email === 'johnrufai242@gmail.com') {
+          sessionStorage.setItem('userRole', 'super_admin');
+          sessionStorage.setItem('userId', currentUser.uid);
+          setIsAuthorized(true);
+          setLoading(false);
+          return;
         }
-      } else {
+
+        let userRole = '';
+        let userName = currentUser.displayName || '';
+
+        // 2. Check users collection
+        const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+        if (userDoc.exists()) {
+          const uData = userDoc.data();
+          userRole = (uData.role || '').toUpperCase();
+          if (uData.name && !userName) userName = uData.name;
+        }
+
+        // 3. Fallback: check individualStudents collection
+        if (!userRole) {
+          const studentQuery = query(
+            collection(db, 'individualStudents'),
+            where('firebaseUid', '==', currentUser.uid)
+          );
+          const studentSnap = await getDocs(studentQuery);
+          if (!studentSnap.empty) {
+            const sData = studentSnap.docs[0].data();
+            userRole = 'STUDENT';
+            sessionStorage.setItem('studentDocId', studentSnap.docs[0].id);
+            if (sData.fullName) userName = sData.fullName;
+          }
+        }
+
+        // 4. Fallback: check parents collection
+        if (!userRole) {
+          const parentDoc = await getDoc(doc(db, 'parents', currentUser.uid));
+          if (parentDoc.exists()) {
+            userRole = 'PARENT';
+            if (parentDoc.data().name) userName = parentDoc.data().name;
+          }
+        }
+
+        // 5. Fallback: check schools collection
+        if (!userRole) {
+          const schoolDoc = await getDoc(doc(db, 'schools', currentUser.uid));
+          if (schoolDoc.exists()) {
+            userRole = 'SCHOOL';
+            if (schoolDoc.data().name) userName = schoolDoc.data().name;
+          }
+        }
+
+        // 6. Fallback: check tutors collection
+        if (!userRole) {
+          const tutorDoc = await getDoc(doc(db, 'tutors', currentUser.uid));
+          if (tutorDoc.exists()) {
+            userRole = 'TUTOR';
+            if (tutorDoc.data().name) userName = tutorDoc.data().name;
+          }
+        }
+
+        // Default to USER if nothing found
+        if (!userRole) {
+          userRole = (sessionStorage.getItem('userRole') || 'USER').toUpperCase();
+        }
+
+        sessionStorage.setItem('userRole', userRole.toLowerCase());
+        sessionStorage.setItem('userId', currentUser.uid);
+        if (userName) sessionStorage.setItem('userName', userName);
+
+        // Normalize roles comparison
+        const normalizedRole = userRole.toUpperCase();
+
+        if (normalizedRole.includes('ADMIN')) {
+          setIsAuthorized(true);
+          setLoading(false);
+          return;
+        }
+
+        if (!allowedRoles || allowedRoles.length === 0) {
+          if (location.pathname.startsWith('/admin')) {
+            setIsAuthorized(normalizedRole.includes('ADMIN'));
+          } else {
+            setIsAuthorized(true);
+          }
+        } else {
+          const normalizedAllowed = allowedRoles.map(r => r.toUpperCase());
+          
+          // Map aliases (e.g. INDIVIDUALSTUDENT -> STUDENT, TUTOR -> STAFF)
+          const isAllowed = normalizedAllowed.some(allowed => {
+            if (allowed === normalizedRole) return true;
+            if (allowed === 'STUDENT' && (normalizedRole === 'INDIVIDUALSTUDENT' || normalizedRole === 'STUDENT')) return true;
+            if (allowed === 'STAFF' && (normalizedRole === 'TUTOR' || normalizedRole === 'STAFF')) return true;
+            if (allowed === 'TUTOR' && (normalizedRole === 'STAFF' || normalizedRole === 'TUTOR')) return true;
+            return false;
+          });
+
+          setIsAuthorized(isAllowed);
+        }
+      } catch (error) {
+        console.error("Error fetching user role in ProtectedRoute:", error);
         setIsAuthorized(false);
       }
       setLoading(false);
@@ -65,7 +141,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-brand-neutral dark:bg-slate-900">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-900">
         <Loader2 className="w-10 h-10 animate-spin text-brand-red" />
       </div>
     );

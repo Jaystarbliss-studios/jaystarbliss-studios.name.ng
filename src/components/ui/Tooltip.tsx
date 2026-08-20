@@ -1,5 +1,5 @@
 import React, { useState, useRef, useId, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 
 export type TooltipPlacement = 'top' | 'bottom' | 'left' | 'right';
 

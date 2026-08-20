@@ -4,7 +4,7 @@ import { GraduationCap, Users, School, Building2, UserCircle } from 'lucide-reac
 import { stockImages } from '../../lib/stockImages';
 import { StaggerGroup, Reveal } from '../ui/Reveal';
 import { staggerItem } from '../ui/animationVariants';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
 const pathways = [
   {

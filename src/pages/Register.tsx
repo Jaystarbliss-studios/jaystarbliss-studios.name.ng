@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { 
   Sun, Moon, CheckCircle2, Users, GraduationCap, AlertCircle, 
   User, Phone, Mail, Lock, ShieldCheck, BookOpen, Contact, UserPlus, Send,
-  ArrowRight, ArrowLeft
+  ArrowRight, ArrowLeft, Briefcase, DollarSign, Calendar, Award, ExternalLink,
+  Clock, MapPin, Sparkles
 } from 'lucide-react';
 import { auth, db } from '../lib/firebase';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
@@ -15,23 +16,58 @@ import SEO from '../components/ui/SEO';
 import './Register.css';
 
 const SUBJECTS = [
-  'Mathematics','English','Physics','Chemistry','Biology',
-  'Literature','Government','CRS','Accounting','Commerce',
-  'Marketing','Programming','Web Dev','AI Tools','Tech Literacy',
-  'Graphic Design','Music','Creative Arts','WAEC Prep','NECO Prep','JAMB Prep'
+  'Mathematics', 'English Language', 'Physics', 'Chemistry', 'Biology',
+  'Coding & Scratch (Kids)', 'Python & Data Science', 'Full-Stack Web Dev (React & Node)',
+  'Robotics & Embedded IoT', 'Artificial Intelligence & ML', 'UI/UX & Product Design',
+  'Graphic Design & Branding', 'Mobile App Development', 'Cybersecurity Basics',
+  'WAEC / NECO / IGCSE Prep', 'JAMB / UTME Masterclass', 'Music Theory & Piano',
+  'Chess & Cognitive Logic'
 ];
 
-const Register = () => {
+const QUALIFICATIONS = [
+  'B.Sc / B.Eng in Computer Science / Engineering',
+  'B.Ed / Certified Education Specialist',
+  'M.Sc / Postgraduate Degree',
+  'HND / National Diploma',
+  'Professional STEM / Coding Instructor',
+  'Undergraduate / Student Mentor',
+  'Self-Taught Senior Software Developer'
+];
+
+const DAYS_OPTIONS = [
+  '1–2 Days per Week (Part-time / Weekday Evenings)',
+  '3–4 Days per Week (Standard Cohort)',
+  '5 Days per Week (Full-Time Academic Instructor)',
+  'Weekends Only (Saturday & Sunday Intensive)'
+];
+
+const TIME_SLOTS = [
+  'Morning Slots (8:00 AM – 12:00 PM)',
+  'Afternoon Slots (12:00 PM – 4:00 PM)',
+  'Evening Slots (4:00 PM – 8:00 PM)',
+  'Flexible / Open Availability'
+];
+
+const Register: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const isDarkMode = theme === 'dark';
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   
-  const [mode, setMode] = useState<'parent' | 'student'>('parent');
+  const [mode, setMode] = useState<'parent' | 'student' | 'tutor'>('parent');
   const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   
+  // Set mode from URL parameter if provided
+  useEffect(() => {
+    const urlMode = searchParams.get('mode');
+    if (urlMode === 'tutor' || urlMode === 'student' || urlMode === 'parent') {
+      setMode(urlMode);
+    }
+  }, [searchParams]);
+
   // Common Fields
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
@@ -47,6 +83,16 @@ const Register = () => {
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
   const [notes, setNotes] = useState('');
 
+  // Tutor Specific Fields
+  const [location, setLocation] = useState('');
+  const [qualification, setQualification] = useState('');
+  const [cvUrl, setCvUrl] = useState('');
+  const [experienceYears, setExperienceYears] = useState('1–3 Years');
+  const [daysPerWeek, setDaysPerWeek] = useState(DAYS_OPTIONS[1]);
+  const [timeSlot, setTimeSlot] = useState(TIME_SLOTS[2]);
+  const [expectedSalary, setExpectedSalary] = useState('');
+  const [tutorBio, setTutorBio] = useState('');
+
   const parentSteps = [
     { id: 'contact', title: 'Basic Info', subtitle: 'Name & email' },
     { id: 'security', title: 'Security', subtitle: 'Set password' },
@@ -59,7 +105,13 @@ const Register = () => {
     { id: 'goals', title: 'Goals & Send', subtitle: 'Submit request' },
   ];
 
-  const steps = mode === 'parent' ? parentSteps : studentSteps;
+  const tutorSteps = [
+    { id: 'contact', title: 'Identity & CV', subtitle: 'Contact & degrees' },
+    { id: 'specialization', title: 'Teaching Tracks', subtitle: 'Subjects & availability' },
+    { id: 'compensation', title: 'Terms & Submit', subtitle: 'Expectations & bio' },
+  ];
+
+  const steps = mode === 'parent' ? parentSteps : mode === 'student' ? studentSteps : tutorSteps;
 
   // Password Strength
   const checkStrength = (pw: string) => {
@@ -83,6 +135,8 @@ const Register = () => {
 
   const validateStep = (stepIdx: number): boolean => {
     setError('');
+    
+    // Step 0 Validation (Common)
     if (stepIdx === 0) {
       if (!fullName.trim()) {
         setError('Please enter your full name.');
@@ -96,9 +150,16 @@ const Register = () => {
         setError('Please enter a valid email address.');
         return false;
       }
+      if (mode === 'tutor') {
+        if (!qualification.trim()) {
+          setError('Please select or specify your highest academic qualification.');
+          return false;
+        }
+      }
       return true;
     }
 
+    // Step 1 Validation
     if (stepIdx === 1) {
       if (mode === 'parent') {
         if (!password) {
@@ -114,13 +175,32 @@ const Register = () => {
           return false;
         }
         return true;
-      } else {
+      } else if (mode === 'student') {
         if (selectedSubjects.length === 0) {
           setError('Please select at least one subject of interest.');
           return false;
         }
         return true;
+      } else if (mode === 'tutor') {
+        if (selectedSubjects.length === 0) {
+          setError('Please select at least one subject or track you are proficient in teaching.');
+          return false;
+        }
+        if (!daysPerWeek) {
+          setError('Please specify your weekly teaching availability.');
+          return false;
+        }
+        return true;
       }
+    }
+
+    // Step 2 Validation (Tutor Compensation)
+    if (stepIdx === 2 && mode === 'tutor') {
+      if (!expectedSalary.trim()) {
+        setError('Please provide your expected monthly remuneration or hourly rate.');
+        return false;
+      }
+      return true;
     }
 
     return true;
@@ -151,7 +231,7 @@ const Register = () => {
         const cred = await createUserWithEmailAndPassword(auth, email, password);
         await sendEmailVerification(cred.user);
         
-        let finalRole = email === 'johnrufai242@gmail.com' ? 'super_admin' : mode;
+        let finalRole = email === 'johnrufai242@gmail.com' ? 'super_admin' : 'parent';
         try {
           const inviteDocRef = doc(db, 'invites', email.toLowerCase());
           const inviteSnap = await getDoc(inviteDocRef);
@@ -176,10 +256,10 @@ const Register = () => {
         await setDoc(doc(db, 'parents', cred.user.uid), data);
         await setDoc(doc(db, 'users', cred.user.uid), data);
         
-        localStorage.setItem('userId', cred.user.uid);
-        localStorage.setItem('userRole', 'parent');
-        localStorage.setItem('userEmail', email);
-        localStorage.setItem('userName', fullName);
+        sessionStorage.setItem('userId', cred.user.uid);
+        sessionStorage.setItem('userRole', 'parent');
+        sessionStorage.setItem('userEmail', email);
+        sessionStorage.setItem('userName', fullName);
         
         setSuccess('Account created! A verification email has been sent. Redirecting to dashboard...');
         
@@ -193,9 +273,10 @@ const Register = () => {
         if (err.code === 'auth/invalid-email') msg = 'Please enter a valid email address.';
         if (err.code === 'auth/network-request-failed') msg = 'Network error. Please check your connection.';
         setError(msg);
+      } finally {
         setLoading(false);
       }
-    } else {
+    } else if (mode === 'student') {
       // Student Request
       try {
         await addDoc(collection(db, 'student_requests'), {
@@ -210,7 +291,7 @@ const Register = () => {
           createdAt: serverTimestamp()
         });
         
-        setSuccess('Request submitted! An admin will review and email your access code within 24 hours.');
+        setSuccess('Student registration request submitted! An admin will review and email your access code within 24 hours.');
         // Clear form
         setFullName(''); setPhone(''); setEmail(''); setStudentClass(''); setParentPhone('');
         setSelectedSubjects([]); setNotes('');
@@ -221,14 +302,46 @@ const Register = () => {
       } finally {
         setLoading(false);
       }
+    } else if (mode === 'tutor') {
+      // Tutor / Instructor Application
+      try {
+        await addDoc(collection(db, 'tutor_applications'), {
+          name: fullName,
+          email: email.toLowerCase(),
+          phone,
+          location,
+          qualification,
+          cvUrl: cvUrl.trim(),
+          subjects: selectedSubjects,
+          experienceYears,
+          daysPerWeek,
+          timeSlot,
+          expectedSalary: expectedSalary.trim(),
+          bio: tutorBio.trim(),
+          status: 'pending',
+          createdAt: serverTimestamp()
+        });
+        
+        setSuccess('Instructor Application submitted successfully! Our Academic Directorate will review your credentials and schedule an interview/onboarding session.');
+        
+        // Clear form
+        setFullName(''); setPhone(''); setEmail(''); setLocation(''); setQualification('');
+        setCvUrl(''); setSelectedSubjects([]); setExpectedSalary(''); setTutorBio('');
+        setCurrentStep(0);
+      } catch (err: any) {
+        setError('Error submitting tutor application. Please try again or contact us.');
+        console.error('Tutor application error:', err);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
   return (
     <div className="register-page">
       <SEO 
-        title="Student & Parent Registration" 
-        description="Register for coding programs, STEM tutoring, robotics courses, and academic tracks at Jaystarbliss Studios." 
+        title="Student, Parent & Tutor Registration | Jaystarbliss Studios" 
+        description="Register for coding programs, STEM tutoring, robotics courses, academic tracks, or apply as an expert tutor at Jaystarbliss Studios." 
       />
       {/* NAV */}
       <nav className="reg-nav">
@@ -257,13 +370,26 @@ const Register = () => {
         <section className="reg-hero-panel">
           <div className="reg-hero-content">
             <h1 className="reg-hero-headline">
-              Ignite Your<br />
-              <em>Potential</em><br />
-              With Expert<br />
-              Mentorship.
+              {mode === 'tutor' ? (
+                <>
+                  Shape The<br />
+                  <em>Next Generation</em><br />
+                  Of Tech & STEM<br />
+                  Pioneers.
+                </>
+              ) : (
+                <>
+                  Ignite Your<br />
+                  <em>Potential</em><br />
+                  With Expert<br />
+                  Mentorship.
+                </>
+              )}
             </h1>
             <p className="reg-hero-sub">
-              Join a community dedicated to mastery and brilliance. Your journey begins with a single step.
+              {mode === 'tutor' 
+                ? 'Join Jaystarbliss Studios as a distinguished instructor. Teach coding, AI, robotics, sciences, and mathematics while enjoying competitive compensation.' 
+                : 'Join a community dedicated to mastery and brilliance. Your journey begins with a single step.'}
             </p>
           </div>
           <div className="reg-hero-features">
@@ -272,17 +398,29 @@ const Register = () => {
                 <CheckCircle2 />
               </div>
               <div>
-                <div className="reg-hero-feature-title">Personalized Learning</div>
-                <div className="reg-hero-feature-desc">Tailored curriculums for every unique student.</div>
+                <div className="reg-hero-feature-title">
+                  {mode === 'tutor' ? 'Flexible Schedules' : 'Personalized Learning'}
+                </div>
+                <div className="reg-hero-feature-desc">
+                  {mode === 'tutor' 
+                    ? 'Choose your preferred teaching days, hours, and delivery format (Online or In-Person).' 
+                    : 'Tailored curriculums for every unique student and pacing requirement.'}
+                </div>
               </div>
             </div>
             <div className="reg-hero-feature">
               <div className="reg-hero-feature-icon gold">
-                <Users />
+                {mode === 'tutor' ? <Award /> : <Users />}
               </div>
               <div>
-                <div className="reg-hero-feature-title">Expert Tutors</div>
-                <div className="reg-hero-feature-desc">Learn from the best in the industry.</div>
+                <div className="reg-hero-feature-title">
+                  {mode === 'tutor' ? 'Competitive Renumeration' : 'Expert Tutors'}
+                </div>
+                <div className="reg-hero-feature-desc">
+                  {mode === 'tutor' 
+                    ? 'Prompt monthly payments, curriculum kits, and professional growth opportunities.' 
+                    : 'Learn from top industry software engineers and certified academic scholars.'}
+                </div>
               </div>
             </div>
           </div>
@@ -293,25 +431,43 @@ const Register = () => {
           <div className="reg-form-card">
             
             <div className="reg-form-heading">
-              <h2>Create an account</h2>
-              <p>Join Jaystarbliss Studios today.</p>
+              <h2>
+                {mode === 'parent' && 'Create Parent Account'}
+                {mode === 'student' && 'Request Student Access'}
+                {mode === 'tutor' && 'Apply as Tutor / Mentor'}
+              </h2>
+              <p>
+                {mode === 'parent' && 'Monitor your child’s progress and manage tuition.'}
+                {mode === 'student' && 'Apply for access codes to your courses & coding labs.'}
+                {mode === 'tutor' && 'Submit your credentials to join our instructional faculty.'}
+              </p>
             </div>
 
-            {/* MODE TOGGLE */}
+            {/* 3-MODE TOGGLE */}
             <div className="reg-mode-toggle">
               <button 
+                type="button"
                 className={`reg-mode-btn ${mode === 'parent' ? 'active' : ''}`}
                 onClick={() => { setMode('parent'); setCurrentStep(0); setError(''); setSuccess(''); }}
               >
-                <Users />
-                Parent Account
+                <Users size={14} />
+                Parent
               </button>
               <button 
+                type="button"
                 className={`reg-mode-btn ${mode === 'student' ? 'active' : ''}`}
                 onClick={() => { setMode('student'); setCurrentStep(0); setError(''); setSuccess(''); }}
               >
-                <GraduationCap />
-                Student Request
+                <GraduationCap size={14} />
+                Student
+              </button>
+              <button 
+                type="button"
+                className={`reg-mode-btn ${mode === 'tutor' ? 'active' : ''}`}
+                onClick={() => { setMode('tutor'); setCurrentStep(0); setError(''); setSuccess(''); }}
+              >
+                <Briefcase size={14} />
+                Tutor / Mentor
               </button>
             </div>
 
@@ -348,7 +504,7 @@ const Register = () => {
               {currentStep === 0 && (
                 <div className="space-y-4 animate-in fade-in duration-300">
                   <div className="reg-info-box" style={{ marginBottom: '1rem' }}>
-                    <strong>Step 1 of 3:</strong> Enter your basic contact details to get started.
+                    <strong>Step 1 of 3:</strong> Enter your identity and contact information.
                   </div>
 
                   <div className="reg-form-row">
@@ -356,14 +512,28 @@ const Register = () => {
                       <label htmlFor="fullName">Full Name *</label>
                       <div className="reg-input-wrap">
                         <User />
-                        <input type="text" id="fullName" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="John Doe" required />
+                        <input 
+                          type="text" 
+                          id="fullName" 
+                          value={fullName} 
+                          onChange={e => setFullName(e.target.value)} 
+                          placeholder="e.g. Samuel Adewale" 
+                          required 
+                        />
                       </div>
                     </div>
                     <div className="reg-form-group">
-                      <label htmlFor="phone">Phone Number *</label>
+                      <label htmlFor="phone">Phone / WhatsApp Number *</label>
                       <div className="reg-input-wrap">
                         <Phone />
-                        <input type="tel" id="phone" value={phone} onChange={e => setPhone(e.target.value)} placeholder="+234 xxx xxx xxxx" required />
+                        <input 
+                          type="tel" 
+                          id="phone" 
+                          value={phone} 
+                          onChange={e => setPhone(e.target.value)} 
+                          placeholder="+234 800 000 0000" 
+                          required 
+                        />
                       </div>
                     </div>
                   </div>
@@ -372,13 +542,91 @@ const Register = () => {
                     <label htmlFor="email">Email Address *</label>
                     <div className="reg-input-wrap">
                       <Mail />
-                      <input type="email" id="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@email.com" required />
+                      <input 
+                        type="email" 
+                        id="email" 
+                        value={email} 
+                        onChange={e => setEmail(e.target.value)} 
+                        placeholder="you@email.com" 
+                        required 
+                      />
                     </div>
                   </div>
+
+                  {/* Tutor Specific Step 1 Fields */}
+                  {mode === 'tutor' && (
+                    <>
+                      <div className="reg-form-row">
+                        <div className="reg-form-group">
+                          <label htmlFor="tLocation">City / State *</label>
+                          <div className="reg-input-wrap">
+                            <MapPin />
+                            <input 
+                              type="text" 
+                              id="tLocation" 
+                              value={location} 
+                              onChange={e => setLocation(e.target.value)} 
+                              placeholder="e.g. Ikeja, Lagos" 
+                            />
+                          </div>
+                        </div>
+
+                        <div className="reg-form-group">
+                          <label htmlFor="tExperience">Years of Teaching Experience</label>
+                          <div className="reg-input-wrap">
+                            <Clock />
+                            <select 
+                              id="tExperience" 
+                              value={experienceYears} 
+                              onChange={e => setExperienceYears(e.target.value)}
+                            >
+                              <option>0–1 Year (Junior / Trainee)</option>
+                              <option>1–3 Years (Intermediate)</option>
+                              <option>3–5 Years (Experienced)</option>
+                              <option>5+ Years (Senior Lead Instructor)</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="reg-form-group">
+                        <label htmlFor="tQual">Highest Qualification / Specialization *</label>
+                        <div className="reg-input-wrap">
+                          <Award />
+                          <input 
+                            type="text" 
+                            id="tQual" 
+                            list="qualifications-list"
+                            value={qualification} 
+                            onChange={e => setQualification(e.target.value)} 
+                            placeholder="e.g. B.Sc Computer Science / Certified STEM Educator" 
+                            required 
+                          />
+                          <datalist id="qualifications-list">
+                            {QUALIFICATIONS.map((q, idx) => <option key={idx} value={q} />)}
+                          </datalist>
+                        </div>
+                      </div>
+
+                      <div className="reg-form-group">
+                        <label htmlFor="tCv">Portfolio / LinkedIn / CV or Resume Link (Optional)</label>
+                        <div className="reg-input-wrap">
+                          <ExternalLink />
+                          <input 
+                            type="url" 
+                            id="tCv" 
+                            value={cvUrl} 
+                            onChange={e => setCvUrl(e.target.value)} 
+                            placeholder="https://linkedin.com/in/... or Google Drive link" 
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
 
-              {/* STEP 2: PARENT SECURITY OR STUDENT SUBJECTS */}
+              {/* STEP 2: PARENT SECURITY OR STUDENT/TUTOR SUBJECTS */}
               {currentStep === 1 && mode === 'parent' && (
                 <div className="space-y-4 animate-in fade-in duration-300">
                   <div className="reg-info-box" style={{ marginBottom: '1rem' }}>
@@ -428,7 +676,7 @@ const Register = () => {
 
                   <div className="reg-form-row" style={{ marginBottom: '1rem' }}>
                     <div className="reg-form-group">
-                      <label htmlFor="sClass">Class / Grade</label>
+                      <label htmlFor="sClass">Class / Grade Level</label>
                       <div className="reg-input-wrap">
                         <BookOpen />
                         <select id="sClass" value={studentClass} onChange={e => setStudentClass(e.target.value)}>
@@ -437,8 +685,8 @@ const Register = () => {
                           <option>Primary 4–6</option>
                           <option>JSS 1</option><option>JSS 2</option><option>JSS 3</option>
                           <option>SS 1</option><option>SS 2</option><option>SS 3</option>
-                          <option>University / Tertiary</option>
-                          <option>Adult Learner</option>
+                          <option>University / Tertiary Cadet</option>
+                          <option>Adult / Career Transition</option>
                         </select>
                       </div>
                     </div>
@@ -470,20 +718,120 @@ const Register = () => {
                 </div>
               )}
 
+              {/* TUTOR STEP 2: TEACHING TRACKS & AVAILABILITY */}
+              {currentStep === 1 && mode === 'tutor' && (
+                <div className="space-y-4 animate-in fade-in duration-300">
+                  <div className="reg-info-box" style={{ marginBottom: '1rem' }}>
+                    <strong>Step 2 of 3:</strong> Select the subjects/technologies you can teach and your weekly availability.
+                  </div>
+
+                  <div className="reg-form-group" style={{ marginBottom: '1rem' }}>
+                    <label>Subjects / Tech Stacks You Can Teach *</label>
+                    <p className="text-xs text-gray-500 mb-2">Select all tracks you are confident instructing:</p>
+                    <div className="reg-subjects-grid">
+                      {SUBJECTS.map((subject, idx) => (
+                        <div className="reg-subject-chip" key={idx}>
+                          <input 
+                            type="checkbox" 
+                            id={`tsubj_${idx}`} 
+                            checked={selectedSubjects.includes(subject)}
+                            onChange={() => handleSubjectChange(subject)}
+                          />
+                          <label htmlFor={`tsubj_${idx}`}>{subject}</label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="reg-form-row">
+                    <div className="reg-form-group">
+                      <label htmlFor="tDays">Weekly Availability Frequency *</label>
+                      <div className="reg-input-wrap">
+                        <Calendar />
+                        <select 
+                          id="tDays" 
+                          value={daysPerWeek} 
+                          onChange={e => setDaysPerWeek(e.target.value)}
+                        >
+                          {DAYS_OPTIONS.map((d, i) => (
+                            <option key={i} value={d}>{d}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="reg-form-group">
+                      <label htmlFor="tSlot">Preferred Class Time Slot</label>
+                      <div className="reg-input-wrap">
+                        <Clock />
+                        <select 
+                          id="tSlot" 
+                          value={timeSlot} 
+                          onChange={e => setTimeSlot(e.target.value)}
+                        >
+                          {TIME_SLOTS.map((t, i) => (
+                            <option key={i} value={t}>{t}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* STEP 3: REVIEW & SUBMIT */}
               {currentStep === 2 && (
                 <div className="space-y-4 animate-in fade-in duration-300">
                   <div className="reg-info-box" style={{ marginBottom: '1rem' }}>
-                    <strong>Step 3 of 3:</strong> Review your details before finalizing your {mode === 'parent' ? 'account' : 'request'}.
+                    <strong>Step 3 of 3:</strong> Review your application summary before final submission.
                   </div>
 
-                  <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3 text-sm">
+                  {/* Tutor Specific Compensation & Bio */}
+                  {mode === 'tutor' && (
+                    <div className="space-y-4">
+                      <div className="reg-form-group">
+                        <label htmlFor="tSalary">Expected Monthly Remuneration / Rate *</label>
+                        <div className="reg-input-wrap">
+                          <DollarSign />
+                          <input 
+                            type="text" 
+                            id="tSalary" 
+                            value={expectedSalary} 
+                            onChange={e => setExpectedSalary(e.target.value)} 
+                            placeholder="e.g. ₦120,000 – ₦200,000 / month or ₦5,000 / hour" 
+                            required 
+                          />
+                        </div>
+                        <p className="text-[11px] text-gray-500 mt-0.5">
+                          Specify your expected monthly remuneration based on your weekly commitment.
+                        </p>
+                      </div>
+
+                      <div className="reg-form-group">
+                        <label htmlFor="tBio">Brief Instructor Bio / Teaching Highlights</label>
+                        <textarea 
+                          className="reg-input-bare" 
+                          id="tBio" 
+                          rows={3}
+                          value={tutorBio} 
+                          onChange={e => setTutorBio(e.target.value)}
+                          placeholder="Tell us about your teaching experience, key projects built, or tools you love teaching..." 
+                          maxLength={2000}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Summary Card */}
+                  <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2.5 text-sm">
                     <div className="flex justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
-                      <span className="text-slate-500 font-medium">Type:</span>
-                      <span className="font-bold text-slate-800 dark:text-white capitalize">{mode} Account</span>
+                      <span className="text-slate-500 font-medium">Application Category:</span>
+                      <span className="font-bold text-slate-800 dark:text-white capitalize">
+                        {mode === 'tutor' ? 'Instructor / Mentor Faculty' : `${mode} Account`}
+                      </span>
                     </div>
                     <div className="flex justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
-                      <span className="text-slate-500 font-medium">Name:</span>
+                      <span className="text-slate-500 font-medium">Full Name:</span>
                       <span className="font-bold text-slate-800 dark:text-white">{fullName}</span>
                     </div>
                     <div className="flex justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
@@ -494,9 +842,23 @@ const Register = () => {
                       <span className="text-slate-500 font-medium">Phone:</span>
                       <span className="font-bold text-slate-800 dark:text-white">{phone}</span>
                     </div>
-                    {mode === 'student' && (
+                    {mode === 'tutor' && qualification && (
+                      <div className="flex justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+                        <span className="text-slate-500 font-medium">Qualification:</span>
+                        <span className="font-bold text-slate-800 dark:text-white">{qualification}</span>
+                      </div>
+                    )}
+                    {mode === 'tutor' && daysPerWeek && (
+                      <div className="flex justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+                        <span className="text-slate-500 font-medium">Availability:</span>
+                        <span className="font-bold text-slate-800 dark:text-white">{daysPerWeek}</span>
+                      </div>
+                    )}
+                    {(mode === 'student' || mode === 'tutor') && (
                       <div>
-                        <span className="text-slate-500 font-medium block mb-1">Subjects Selected ({selectedSubjects.length}):</span>
+                        <span className="text-slate-500 font-medium block mb-1">
+                          Subjects / Tracks Selected ({selectedSubjects.length}):
+                        </span>
                         <div className="flex flex-wrap gap-1.5">
                           {selectedSubjects.map((s, i) => (
                             <span key={i} className="px-2 py-0.5 bg-brand-red/10 text-brand-red text-xs font-bold rounded-md">
@@ -551,8 +913,8 @@ const Register = () => {
                   >
                     <div className="reg-spinner"></div>
                     <span className="reg-btn-text" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem' }}>
-                      {mode === 'parent' ? <UserPlus size={16} /> : <Send size={16} />}
-                      {mode === 'parent' ? 'Complete Registration' : 'Submit Request'}
+                      {mode === 'parent' ? <UserPlus size={16} /> : mode === 'student' ? <Send size={16} /> : <Sparkles size={16} />}
+                      {mode === 'parent' ? 'Complete Registration' : mode === 'student' ? 'Submit Student Request' : 'Submit Tutor Application'}
                     </span>
                   </button>
                 )}
@@ -574,4 +936,3 @@ const Register = () => {
 };
 
 export default Register;
-

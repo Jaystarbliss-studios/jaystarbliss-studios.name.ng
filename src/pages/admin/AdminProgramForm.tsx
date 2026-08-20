@@ -6,6 +6,7 @@ import { doc, getDoc, addDoc, updateDoc, collection } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import PhotoUpload from '../../components/admin/PhotoUpload';
 
 const AdminProgramForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -20,6 +21,7 @@ const AdminProgramForm: React.FC = () => {
     title: '',
     slug: '',
     categoryId: '',
+    image: '',
     shortDescription: '',
     longDescription: '',
     status: 'DRAFT',
@@ -198,6 +200,13 @@ const AdminProgramForm: React.FC = () => {
               />
             </div>
           </div>
+
+          <PhotoUpload
+            label="Program Cover Photo"
+            value={formData.image || ''}
+            onChange={(url) => setFormData(prev => ({ ...prev, image: url }))}
+            helpText="Upload a high-resolution banner photo for this program track."
+          />
 
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">Short Description (Outcome)</label>

@@ -3,7 +3,7 @@ import { ToastProvider } from "./contexts/ToastContext";
 import ErrorBoundary from "./components/ui/ErrorBoundary";
 import PageLoader from "./components/ui/PageLoader";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "motion/react";
 import PageTransition from "./components/ui/PageTransition";
 
 import Home from "./pages/Home";
@@ -25,6 +25,7 @@ import PortalLayout from "./components/portal/PortalLayout";
 import ParentDashboard from "./pages/portal/ParentDashboard";
 import StaffDashboard from "./pages/portal/StaffDashboard";
 import StudentDashboard from "./pages/portal/StudentDashboard";
+import SchoolDashboard from "./pages/portal/SchoolDashboard";
 
 import Resources from "./pages/Resources";
 import Blog from "./pages/Blog";
@@ -47,6 +48,7 @@ import AdminPortfolio from "./pages/admin/AdminPortfolio";
 import AdminPortfolioForm from "./pages/admin/AdminPortfolioForm";
 import AdminKidsProjects from "./pages/admin/AdminKidsProjects";
 import AdminInquiries from "./pages/admin/AdminInquiries";
+import AdminApprovals from "./pages/admin/AdminApprovals";
 import AdminSettings from "./pages/admin/AdminSettings";
 
 import ScrollToTop from "./components/ScrollToTop";
@@ -95,7 +97,7 @@ function AnimatedRoutes() {
         </Route>
         
         <Route path="/portal/school" element={<ProtectedRoute allowedRoles={['SCHOOL']} redirectPath="/portal"><PortalLayout /></ProtectedRoute>}>
-          <Route index element={<div className="p-8 text-center text-gray-500">School Dashboard coming soon</div>} />
+          <Route index element={<SchoolDashboard />} />
         </Route>
 
         {/* Admin Login */}
@@ -118,6 +120,7 @@ function AnimatedRoutes() {
           <Route path="portfolio/:id" element={<AdminPortfolioForm />} />
           <Route path="kids-projects" element={<AdminKidsProjects />} />
           <Route path="inquiries" element={<AdminInquiries />} />
+          <Route path="approvals" element={<AdminApprovals />} />
           <Route path="users" element={<AdminUsers />} />
           <Route path="pages" element={<AdminPages />} />
           <Route path="pages/new" element={<AdminPageForm />} />

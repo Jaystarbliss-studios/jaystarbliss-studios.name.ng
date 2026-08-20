@@ -14,6 +14,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import PhotoUpload from '../../components/admin/PhotoUpload';
 
 interface KidsProjectRecord {
   id?: string;
@@ -458,35 +459,26 @@ const AdminKidsProjects: React.FC = () => {
                 </div>
               )}
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider mb-1">
-                    Image URL (Optional Thumbnail)
-                  </label>
-                  <input
-                    type="url"
-                    name="imageUrl"
-                    value={formData.imageUrl}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2.5 border border-gray-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-sm"
-                    placeholder="https://images.unsplash.com/..."
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider mb-1">
-                    Live Scratch URL (Optional)
-                  </label>
-                  <input
-                    type="url"
-                    name="liveUrl"
-                    value={formData.liveUrl}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2.5 border border-gray-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-sm"
-                    placeholder="https://scratch.mit.edu/projects/1236660351/"
-                  />
-                </div>
+              <div>
+                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider mb-1">
+                  Live Scratch URL (Optional)
+                </label>
+                <input
+                  type="url"
+                  name="liveUrl"
+                  value={formData.liveUrl}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2.5 border border-gray-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-sm"
+                  placeholder="https://scratch.mit.edu/projects/1236660351/"
+                />
               </div>
+
+              <PhotoUpload
+                label="Game Thumbnail / Cover Photo"
+                value={formData.imageUrl}
+                onChange={(url) => setFormData(prev => ({ ...prev, imageUrl: url }))}
+                helpText="Upload a photo / screenshot of the game. Uploads to Cloudinary."
+              />
 
               <div>
                 <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider mb-1">

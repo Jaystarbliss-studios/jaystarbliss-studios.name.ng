@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import SearchModal from '../ui/SearchModal';
 import { Tooltip } from '../ui/Tooltip';
 import { JaystarblissIcon } from '../common/JaystarblissLogo';
@@ -19,7 +19,8 @@ import {
   X,
   Gamepad2,
   Search,
-  ExternalLink
+  ExternalLink,
+  UserCheck
 } from 'lucide-react';
 
 const AdminLayout: React.FC = () => {
@@ -35,6 +36,7 @@ const AdminLayout: React.FC = () => {
     { name: "Portfolio", href: "/admin/portfolio", icon: FolderOpen, desc: "Client case studies" },
     { name: "Kids Projects", href: "/admin/kids-projects", icon: Gamepad2, desc: "Student showcase" },
     { name: "Blog", href: "/admin/blog", icon: FileText, desc: "Articles & news" },
+    { name: "Approvals", href: "/admin/approvals", icon: UserCheck, desc: "Tutor & student applications" },
     { name: "Inquiries", href: "/admin/inquiries", icon: MessageSquare, desc: "Applications & leads" },
     { name: "Users", href: "/admin/users", icon: Users, desc: "User accounts & roles" },
     { name: "Settings", href: "/admin/settings", icon: Settings, desc: "System configuration" },

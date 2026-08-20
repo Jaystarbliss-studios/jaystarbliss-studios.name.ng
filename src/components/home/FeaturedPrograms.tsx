@@ -6,7 +6,7 @@ import { Loader2 } from 'lucide-react';
 import { getProgramImage } from '../../lib/stockImages';
 import { StaggerGroup, Reveal } from '../ui/Reveal';
 import { staggerItem } from '../ui/animationVariants';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { usePageSection } from '../../lib/cms';
 
 const FeaturedPrograms: React.FC = () => {

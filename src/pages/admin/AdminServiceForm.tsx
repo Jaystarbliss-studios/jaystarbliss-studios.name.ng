@@ -6,6 +6,7 @@ import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { Link } from 'react-router-dom';
+import PhotoUpload from '../../components/admin/PhotoUpload';
 
 const AdminServiceForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -19,6 +20,7 @@ const AdminServiceForm: React.FC = () => {
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
+    image: '',
     shortDescription: '',
     content: '',
     status: 'DRAFT',
@@ -149,6 +151,13 @@ const AdminServiceForm: React.FC = () => {
               placeholder="e.g. Monitor, Paintbrush, Globe"
             />
           </div>
+
+          <PhotoUpload
+            label="Service Feature / Banner Photo"
+            value={formData.image || ''}
+            onChange={(url) => setFormData(prev => ({ ...prev, image: url }))}
+            helpText="Upload a banner or feature illustration for this service."
+          />
 
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">Short Description</label>

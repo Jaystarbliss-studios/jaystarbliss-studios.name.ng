@@ -10,7 +10,7 @@ import EmptyState from '../components/ui/EmptyState';
 import { stockImages } from '../lib/stockImages';
 import { StaggerGroup } from '../components/ui/Reveal';
 import { staggerItem } from '../components/ui/animationVariants';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { usePageSection } from '../lib/cms';
 
 const getIconComponent = (iconName: string) => {

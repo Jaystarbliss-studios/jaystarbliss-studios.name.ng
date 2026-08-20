@@ -1,15 +1,38 @@
-import React from 'react';
-import { Outlet, Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Book, Settings, LogOut, LayoutDashboard, User, Calendar, ExternalLink } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'motion/react';
+import { 
+  Book, Settings, LogOut, LayoutDashboard, 
+  Calendar, ExternalLink, Building2 
+} from 'lucide-react';
+import { signOut } from 'firebase/auth';
+import { auth } from '../../lib/firebase';
 import { Tooltip } from '../ui/Tooltip';
 import { JaystarblissIcon } from '../common/JaystarblissLogo';
 import SEO from '../ui/SEO';
 
 const PortalLayout: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const pathParts = location.pathname.split('/');
-  const role = pathParts[2] || 'user'; // e.g., /portal/student -> student
+  const role = pathParts[2] || 'student'; // e.g., /portal/student -> student
+
+  const [displayName, setDisplayName] = useState('Portal User');
+
+  useEffect(() => {
+    const storedName = sessionStorage.getItem('userName') || auth.currentUser?.displayName || auth.currentUser?.email?.split('@')[0] || 'Cadet';
+    setDisplayName(storedName);
+  }, [role]);
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch (e) {
+      console.warn('Sign out error:', e);
+    }
+    sessionStorage.clear();
+    navigate('/portal');
+  };
 
   const getNavLinks = () => {
     const base = [
@@ -20,6 +43,8 @@ const PortalLayout: React.FC = () => {
       base.push({ name: 'My Courses', path: '/portal/student/courses', icon: <Book size={20} />, desc: 'Enrolled Classes & Progress' });
     } else if (role === 'staff') {
       base.push({ name: 'Classes', path: '/portal/staff/classes', icon: <Book size={20} />, desc: 'Teaching Roster & Materials' });
+    } else if (role === 'school') {
+      base.push({ name: 'Students Roster', path: '/portal/school', icon: <Building2 size={20} />, desc: 'School Cadets & Records' });
     }
     base.push({ name: 'Settings', path: `/portal/${role}/settings`, icon: <Settings size={20} />, desc: 'Account Preferences' });
     return base;
@@ -67,14 +92,15 @@ const PortalLayout: React.FC = () => {
           ))}
         </nav>
         <div className="p-4 mt-auto">
-          <Tooltip content="Log out of student/staff portal" placement="top">
-            <Link 
-              to="/portal"
-              className="flex items-center gap-3 px-4 py-3 text-white/60 hover:text-brand-red rounded-xl hover:bg-white/5 transition-colors"
+          <Tooltip content="Log out of portal session" placement="top">
+            <button 
+              type="button"
+              onClick={handleLogout}
+              className="flex items-center gap-3 px-4 py-3 w-full text-left text-white/60 hover:text-brand-red rounded-xl hover:bg-white/5 transition-colors"
             >
               <LogOut size={20} />
               <span className="font-medium hidden md:block">Log Out</span>
-            </Link>
+            </button>
           </Tooltip>
         </div>
       </aside>
@@ -86,14 +112,14 @@ const PortalLayout: React.FC = () => {
             {navLinks.find(l => l.path === location.pathname)?.name || 'Dashboard'}
           </h1>
           <div className="flex items-center gap-4">
-            <Tooltip content={`Signed in as Jane Doe (${role})`} placement="bottom">
+            <Tooltip content={`Signed in as ${displayName} (${role})`} placement="bottom">
               <div className="flex items-center gap-3 cursor-pointer py-1 px-2 rounded-lg hover:bg-gray-50 transition-colors">
                 <div className="text-right hidden sm:block">
-                  <p className="text-sm font-bold text-brand-slate">Jane Doe</p>
+                  <p className="text-sm font-bold text-brand-slate">{displayName}</p>
                   <p className="text-xs text-gray-500 capitalize">{role}</p>
                 </div>
-                <div className="w-10 h-10 rounded-full bg-brand-red/10 text-brand-red flex items-center justify-center border border-brand-red/20">
-                  <User size={20} />
+                <div className="w-10 h-10 rounded-full bg-brand-red/10 text-brand-red flex items-center justify-center border border-brand-red/20 font-bold uppercase text-sm">
+                  {displayName.charAt(0)}
                 </div>
               </div>
             </Tooltip>
