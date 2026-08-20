@@ -200,7 +200,7 @@ const Blog: React.FC = () => {
             </div>
 
             {activeTab === 'NEWS' && (
-              <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0">
+              <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 max-w-full">
                 {['ALL', 'news', 'announcement', 'event', 'achievement', 'update'].map((cat) => (
                   <button
                     key={cat}
@@ -218,7 +218,7 @@ const Blog: React.FC = () => {
             )}
 
             {activeTab === 'BLOG' && (
-              <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0">
+              <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 max-w-full">
                 {['ALL', 'news', 'coding', 'tutorials', 'robotics', 'announcement'].map((cat) => (
                   <button
                     key={cat}

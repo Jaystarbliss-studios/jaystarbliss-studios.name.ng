@@ -142,12 +142,12 @@ const Programs: React.FC = () => {
       </div>
       
       {/* Streamlined Filter & Search Bar */}
-      <div className="bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-slate-800 sticky top-[68px] z-30 shadow-xs">
+      <div className="bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-slate-800 sticky top-[52px] sm:top-[64px] z-30 shadow-xs w-full max-w-full">
         <div className="container mx-auto px-4 max-w-7xl py-3.5">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 w-full max-w-full">
             
             {/* Category Pills */}
-            <div className="flex overflow-x-auto w-full md:w-auto pb-1 md:pb-0 gap-2 hide-scrollbar items-center">
+            <div className="flex overflow-x-auto w-full md:w-auto pb-1 md:pb-0 gap-2 hide-scrollbar items-center max-w-full">
               <button
                 type="button"
                 onClick={() => setSelectedCategory('ALL')}

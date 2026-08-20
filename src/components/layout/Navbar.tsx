@@ -109,11 +109,11 @@ const Navbar: React.FC = () => {
             {/* Brand Logo & Title */}
             <Link 
               to="/" 
-              className="flex items-center gap-2.5 shrink-0 z-50 group select-none"
+              className="flex items-center gap-2 sm:gap-2.5 shrink min-w-0 z-50 group select-none"
               aria-label="Jaystarbliss Studios Homepage"
             >
-              <JaystarblissIcon className="w-8 h-8 sm:w-9 sm:h-9 group-hover:scale-105 transition-transform" />
-              <span className={`font-black text-xs sm:text-sm xl:text-base tracking-tight whitespace-nowrap transition-colors ${
+              <JaystarblissIcon className="w-7 h-7 sm:w-9 sm:h-9 group-hover:scale-105 transition-transform shrink-0" />
+              <span className={`font-black text-xs sm:text-sm xl:text-base tracking-tight whitespace-nowrap truncate transition-colors ${
                 isScrolled ? 'text-brand-slate dark:text-white' : 'text-white'
               }`}>
                 JAYSTARBLISS STUDIOS
@@ -439,35 +439,35 @@ const Navbar: React.FC = () => {
             </div>
 
             {/* Mobile Header Controls */}
-            <div className="flex items-center gap-1.5 lg:hidden relative z-50">
+            <div className="flex items-center gap-1 sm:gap-1.5 lg:hidden relative z-50 shrink-0">
               <button 
                 onClick={() => setSearchOpen(true)}
-                className={`p-2 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 transition-colors ${
+                className={`p-1.5 sm:p-2 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 transition-colors ${
                   isScrolled ? 'text-brand-slate dark:text-white' : 'text-white'
                 }`}
                 aria-label="Search"
               >
-                <Search size={19} />
+                <Search size={18} />
               </button>
               
               <button 
                 onClick={toggleTheme}
-                className={`p-2 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 transition-colors ${
+                className={`p-1.5 sm:p-2 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 transition-colors ${
                   isScrolled ? 'text-brand-slate dark:text-white' : 'text-white'
                 }`}
                 aria-label="Toggle Theme"
               >
-                {theme === 'dark' ? <Sun size={19} /> : <Moon size={19} />}
+                {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
               </button>
 
               <button 
-                className={`p-2 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 transition-colors ${
+                className={`p-1.5 sm:p-2 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 transition-colors ${
                   isScrolled ? 'text-brand-slate dark:text-white' : 'text-white'
                 }`}
                 onClick={() => setMobileMenuOpen(true)}
                 aria-label="Open Navigation Menu"
               >
-                <Menu size={24} />
+                <Menu size={22} />
               </button>
             </div>
 
@@ -477,7 +477,7 @@ const Navbar: React.FC = () => {
 
       {/* Full-Screen Mobile Drawer (Complete view with dedicated top bar & scroll containment) */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden flex flex-col bg-white dark:bg-slate-950 animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 lg:hidden flex flex-col w-full max-w-full h-full bg-white dark:bg-slate-950 overflow-hidden animate-in fade-in duration-200">
           
           {/* Mobile Menu Top Header Bar */}
           <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-950 shrink-0">

@@ -2,11 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  position: relative;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   font-family: 'Poppins', sans-serif;
   background-color: #F8FAFC;
   color: #1E293B;
   transition: background-color 0.25s ease, color 0.25s ease;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 html.dark body {
@@ -34,6 +57,7 @@ html.dark .bg-brand-neutral {
 .galaxy-container {
   display: flex; align-items: center; justify-content: center;
   border-radius: 1.5rem; position: relative; overflow: hidden;
+  width: 100%; max-width: 100%;
 }
 
 .orbit-path {
@@ -41,13 +65,14 @@ html.dark .bg-brand-neutral {
   border: 1px solid rgba(255,255,255,0.07);
   pointer-events: none; z-index: 2;
   top: 50%; left: 50%; transform-origin: center center;
+  max-width: 100%;
 }
-.path-inner-1 { width:400px; height:180px; margin-top:-90px;  margin-left:-200px; }
-.path-inner-2 { width:400px; height:180px; margin-top:-90px;  margin-left:-200px; }
-.path-outer   { width:520px; height:240px; margin-top:-120px; margin-left:-260px; }
+.path-inner-1 { width: min(400px, 90vw); height: min(180px, 45vw); margin-top: calc(min(180px, 45vw) / -2);  margin-left: calc(min(400px, 90vw) / -2); }
+.path-inner-2 { width: min(400px, 90vw); height: min(180px, 45vw); margin-top: calc(min(180px, 45vw) / -2);  margin-left: calc(min(400px, 90vw) / -2); }
+.path-outer   { width: min(520px, 96vw); height: min(240px, 50vw); margin-top: calc(min(240px, 50vw) / -2); margin-left: calc(min(520px, 96vw) / -2); }
 
 .central-hub {
-  width: clamp(80px,12vw,120px); height: clamp(80px,12vw,120px);
+  width: clamp(70px,12vw,120px); height: clamp(70px,12vw,120px);
   background: transparent; border-radius: 50%;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   overflow: hidden; cursor: pointer; flex-shrink: 0;
@@ -57,20 +82,20 @@ html.dark .bg-brand-neutral {
 
 .planet-node {
   position: absolute;
-  width: clamp(32px,4vw,44px); height: clamp(32px,4vw,44px);
+  width: clamp(30px,4vw,44px); height: clamp(30px,4vw,44px);
   background: #1E293B; border: 2px solid currentColor; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; transform: translate(-50%,-50%); z-index: 20;
   will-change: left,top; transition: all 0.25s;
 }
 .planet-node svg {
-  width: clamp(16px,2vw,20px); height: clamp(16px,2vw,20px);
+  width: clamp(14px,2vw,20px); height: clamp(14px,2vw,20px);
 }
 .planet-node:hover { transform: translate(-50%,-50%) scale(1.22); z-index: 60; }
 
 .subject-detail {
   position: absolute; bottom: calc(100% + 15px); left: 50%;
-  transform: translateX(-50%); width: 220px;
+  transform: translateX(-50%); width: 220px; max-width: calc(100vw - 32px);
   background: #1E293B; border: 1px solid currentColor;
   padding: 12px 14px; border-radius: 12px;
   font-size: 11px; color: #fff;

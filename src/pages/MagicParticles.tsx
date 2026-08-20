@@ -1766,7 +1766,7 @@ const MagicParticles: React.FC = () => {
   }
 
   return (
-    <div className="relative min-h-screen bg-slate-950 text-white overflow-hidden select-none font-sans">
+    <div className="relative min-h-screen w-full max-w-full bg-slate-950 text-white overflow-hidden select-none font-sans">
       <SEO 
         title="Interactive 3D Particles & Gesture Flight Lab - Kids Zone" 
         description="Interact with 6,200 glowing 3D particles. Steer starships, cybercars, heroes, and robot dogs with optical hand gestures, or synthesize custom shapes with AI." 

@@ -156,7 +156,7 @@ const GalaxyOrbit: React.FC = () => {
   };
 
   return (
-    <div ref={containerRef} className="galaxy-container w-full h-[400px] sm:h-[500px] md:h-[600px] relative">
+    <div ref={containerRef} className="galaxy-container w-full max-w-full h-[340px] sm:h-[480px] md:h-[580px] relative overflow-hidden">
       <canvas ref={canvasRef} id="trailCanvas" className="absolute inset-0 w-full h-full pointer-events-none z-[5]" />
       
       <div ref={r1Ref} className="orbit-path path-inner-1" />
