@@ -28,6 +28,18 @@ function studentAuthEmail(username: string): string {
   return username.toLowerCase().replace(/[^a-z0-9]/g, '') + '@jdh-student.local';
 }
 
+function deriveStudentAuthPassword(code: string): string {
+  // Firebase Auth requires passwords >= 6 characters.
+  // Deterministically expand short student PINs/codes to maintain valid auth sessions.
+  if (code.length >= 6) return code;
+  return `jdh_std_${code}_2024`;
+}
+
+function deriveSchoolAuthPassword(code: string): string {
+  if (code.length >= 6) return code;
+  return `jdh_sch_${code}_2024`;
+}
+
 const Portal: React.FC = () => {
   const navigate = useNavigate();
   const { theme, toggleTheme } = useTheme();
@@ -110,11 +122,12 @@ const Portal: React.FC = () => {
     const effectiveUsername = (sdata?.username || rawInput).toLowerCase().replace(/\s+/g, '');
     const isRealEmail = rawInput.includes('@') && !rawInput.endsWith('.local');
     const authEmailToUse = isRealEmail ? rawInput.toLowerCase() : studentAuthEmail(effectiveUsername);
+    const authPassword = deriveStudentAuthPassword(code);
 
     let firebaseUid = '';
 
     try {
-      const cred = await signInWithEmailAndPassword(auth, authEmailToUse, code);
+      const cred = await signInWithEmailAndPassword(auth, authEmailToUse, authPassword);
       firebaseUid = cred.user.uid;
     } catch (authErr: any) {
       if (
@@ -124,16 +137,21 @@ const Portal: React.FC = () => {
       ) {
         // First login — auto create Firebase Auth account
         try {
-          const cred = await createUserWithEmailAndPassword(auth, authEmailToUse, code);
+          const cred = await createUserWithEmailAndPassword(auth, authEmailToUse, authPassword);
           firebaseUid = cred.user.uid;
         } catch (createErr: any) {
           if (createErr.code === 'auth/email-already-in-use') {
             throw new Error('Incorrect access code for this student account.');
           }
+          if (createErr.code === 'auth/weak-password') {
+            throw new Error('Access code or password must be at least 6 characters.');
+          }
           throw createErr;
         }
       } else if (authErr.code === 'auth/wrong-password') {
         throw new Error('Access code mismatch. Your instructor may have updated your code — please contact them.');
+      } else if (authErr.code === 'auth/weak-password') {
+        throw new Error('Password should be at least 6 characters.');
       } else {
         throw authErr;
       }
@@ -220,15 +238,22 @@ const Portal: React.FC = () => {
 
     // Sign in or create auth session for school
     const schoolAuthEmail = matchedSchool.email || `school-${matchedSchool.id}@jdh-school.local`;
+    const schoolAuthPassword = deriveSchoolAuthPassword(code);
     let firebaseUid = '';
 
     try {
-      const cred = await signInWithEmailAndPassword(auth, schoolAuthEmail, code);
+      const cred = await signInWithEmailAndPassword(auth, schoolAuthEmail, schoolAuthPassword);
       firebaseUid = cred.user.uid;
     } catch (e: any) {
-      if (e.code === 'auth/user-not-found' || e.code === 'auth/invalid-credential') {
-        const cred = await createUserWithEmailAndPassword(auth, schoolAuthEmail, code);
+      if (
+        e.code === 'auth/user-not-found' || 
+        e.code === 'auth/invalid-credential' ||
+        e.code === 'auth/invalid-login-credentials'
+      ) {
+        const cred = await createUserWithEmailAndPassword(auth, schoolAuthEmail, schoolAuthPassword);
         firebaseUid = cred.user.uid;
+      } else if (e.code === 'auth/weak-password') {
+        throw new Error('Access code or password must be at least 6 characters.');
       } else {
         throw e;
       }
@@ -254,6 +279,14 @@ const Portal: React.FC = () => {
     e.preventDefault();
     setError('');
     setSuccess('');
+
+    if (activeTab === 'parent' || activeTab === 'staff') {
+      if (password.length < 6) {
+        setError('Password should be at least 6 characters.');
+        return;
+      }
+    }
+
     setLoading(true);
 
     try {
@@ -300,10 +333,12 @@ const Portal: React.FC = () => {
     } catch (err: any) {
       console.error('Login error:', err);
       let msg = err.message || 'Invalid credentials. Please try again.';
-      if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
+      if (err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential' || err.code === 'auth/invalid-login-credentials') {
         msg = 'No account found with these credentials. Please check your details or sign up.';
       } else if (err.code === 'auth/wrong-password') {
         msg = 'Incorrect password or access code.';
+      } else if (err.code === 'auth/weak-password') {
+        msg = 'Password should be at least 6 characters.';
       } else if (err.code === 'auth/invalid-email') {
         msg = 'Please enter a valid email address.';
       }

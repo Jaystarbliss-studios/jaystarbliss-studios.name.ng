@@ -888,8 +888,16 @@ const MagicParticles: React.FC = () => {
   };
 
   // Safe cleanup for camera media stream on unmount
+  const handAnimIdRef = useRef<number | null>(null);
+  const handLoopActiveRef = useRef(false);
+
   useEffect(() => {
     return () => {
+      handLoopActiveRef.current = false;
+      if (handAnimIdRef.current) {
+        cancelAnimationFrame(handAnimIdRef.current);
+        handAnimIdRef.current = null;
+      }
       if (cameraUtilsRef.current) {
         try { cameraUtilsRef.current.stop(); } catch {}
         cameraUtilsRef.current = null;
@@ -910,7 +918,7 @@ const MagicParticles: React.FC = () => {
     const isCameraViewVisible = showCameraViewRef.current;
     const canvas = gestureCanvasRef.current;
     
-    // Only render canvas skeleton overlay if user has camera view open (saves high CPU & battery)
+    // Render canvas skeleton overlay if user has camera view open
     if (isCameraViewVisible && canvas) {
       const ctx = canvas.getContext('2d');
       if (ctx) {
@@ -918,11 +926,49 @@ const MagicParticles: React.FC = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
           const landmarks = results.multiHandLandmarks[0];
-          if (window.drawConnectors && window.HAND_CONNECTIONS) {
-            window.drawConnectors(ctx, landmarks, window.HAND_CONNECTIONS, { color: '#00ffff', lineWidth: 2 });
+          const width = canvas.width;
+          const height = canvas.height;
+
+          // Robust native neon skeleton rendering
+          ctx.strokeStyle = '#00ffff';
+          ctx.lineWidth = 2.5;
+          ctx.lineCap = 'round';
+          ctx.lineJoin = 'round';
+          ctx.shadowColor = '#00ffff';
+          ctx.shadowBlur = 4;
+
+          const connections = (window.HAND_CONNECTIONS as [number, number][]) || [
+            [0, 1], [1, 2], [2, 3], [3, 4],
+            [0, 5], [5, 6], [6, 7], [7, 8],
+            [5, 9], [9, 10], [10, 11], [11, 12],
+            [9, 13], [13, 14], [14, 15], [15, 16],
+            [13, 17], [17, 18], [18, 19], [19, 20],
+            [0, 17], [5, 9], [9, 13], [13, 17]
+          ];
+
+          for (const [startIdx, endIdx] of connections) {
+            const p1 = landmarks[startIdx];
+            const p2 = landmarks[endIdx];
+            if (p1 && p2) {
+              ctx.beginPath();
+              ctx.moveTo(p1.x * width, p1.y * height);
+              ctx.lineTo(p2.x * width, p2.y * height);
+              ctx.stroke();
+            }
           }
-          if (window.drawLandmarks) {
-            window.drawLandmarks(ctx, landmarks, { color: '#ff007f', lineWidth: 1, radius: 3 });
+
+          // Draw joints/landmarks with vibrant colors
+          ctx.shadowBlur = 0;
+          for (let i = 0; i < landmarks.length; i++) {
+            const p = landmarks[i];
+            ctx.beginPath();
+            const isFingertip = i === 4 || i === 8 || i === 12 || i === 16 || i === 20;
+            ctx.arc(p.x * width, p.y * height, isFingertip ? 4.5 : 2.5, 0, 2 * Math.PI);
+            ctx.fillStyle = i === 4 || i === 8 ? '#ff007f' : '#38bdf8';
+            ctx.fill();
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 1;
+            ctx.stroke();
           }
         }
         ctx.restore();
@@ -1046,7 +1092,6 @@ const MagicParticles: React.FC = () => {
       const isZPush = scaleGrowth > 1.38 && palmScale > 0.22;
 
       // 9. TEMPORAL RE-VERIFICATION STATE MACHINE
-      // Requires gesture to be held steadily for REQUIRED_FRAMES (~120-140ms) to guarantee 100% precision
       let detectedCandidate: 'NEXT_SHAPE' | 'PREV_SHAPE' | 'SUPER_PULSE' | null = null;
       if (isZPush) {
         detectedCandidate = 'SUPER_PULSE';
@@ -1153,10 +1198,60 @@ const MagicParticles: React.FC = () => {
     }
   }, [switchShape, triggerSuperAnimation, updatePhotoTexture]);
 
-  // Camera & MediaPipe Hands Initialization
-  const startHandTracking = useCallback((videoElement: HTMLVideoElement) => {
+  // Helper to dynamically ensure MediaPipe Hands scripts are loaded
+  const ensureMediaPipeLoaded = useCallback(async (): Promise<boolean> => {
+    if (typeof window.Hands !== 'undefined') return true;
+
+    const loadScript = (src: string): Promise<void> => {
+      return new Promise((resolve) => {
+        const existing = document.querySelector(`script[src="${src}"]`) as HTMLScriptElement;
+        if (existing) {
+          if (existing.getAttribute('data-loaded') === 'true' || (window as any).Hands) {
+            return resolve();
+          }
+          existing.addEventListener('load', () => resolve());
+          existing.addEventListener('error', () => resolve());
+          return;
+        }
+        const script = document.createElement('script');
+        script.src = src;
+        script.crossOrigin = 'anonymous';
+        script.async = true;
+        script.onload = () => {
+          script.setAttribute('data-loaded', 'true');
+          resolve();
+        };
+        script.onerror = () => {
+          console.warn(`Script failed to load: ${src}`);
+          resolve();
+        };
+        document.head.appendChild(script);
+      });
+    };
+
+    try {
+      await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.4.1675466862/camera_utils.js');
+      await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@0.3.1675466124/drawing_utils.js');
+      await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1675469240/hands.js');
+      if (typeof window.Hands !== 'undefined') return true;
+    } catch {
+      // Fallback
+    }
+
     if (typeof window.Hands === 'undefined') {
-      console.warn("MediaPipe Hands library not ready");
+      try {
+        await loadScript('https://unpkg.com/@mediapipe/hands@0.4.1675469240/hands.js');
+      } catch {}
+    }
+    return typeof window.Hands !== 'undefined';
+  }, []);
+
+  // Camera & MediaPipe Hands Initialization
+  const startHandTracking = useCallback(async (videoElement: HTMLVideoElement) => {
+    const isLoaded = await ensureMediaPipeLoaded();
+    if (!isLoaded || typeof window.Hands === 'undefined') {
+      console.warn("MediaPipe Hands library could not be loaded");
+      setCameraError("AI Hand tracking library could not be loaded. Please check your internet connection.");
       return;
     }
 
@@ -1173,50 +1268,63 @@ const MagicParticles: React.FC = () => {
       hands.setOptions({
         maxNumHands: 1,
         modelComplexity: 1,
-        minDetectionConfidence: 0.60,
-        minTrackingConfidence: 0.60
+        minDetectionConfidence: 0.55,
+        minTrackingConfidence: 0.55
       });
 
       hands.onResults(onHandResults);
       handsRef.current = hands;
 
-      if (typeof window.Camera !== 'undefined') {
-        if (cameraUtilsRef.current) {
-          try { cameraUtilsRef.current.stop(); } catch {}
-          cameraUtilsRef.current = null;
-        }
+      // Start reliable, high-performance requestAnimationFrame loop
+      handLoopActiveRef.current = true;
+      if (handAnimIdRef.current) {
+        cancelAnimationFrame(handAnimIdRef.current);
+        handAnimIdRef.current = null;
+      }
 
-        let isFrameProcessing = false;
+      let isProcessing = false;
+      const processFrame = async () => {
+        if (!handLoopActiveRef.current || !cameraActiveRef.current) return;
 
-        const cam = new window.Camera(videoElement, {
-          onFrame: async () => {
-            if (isFrameProcessing) return;
-            if (!handsRef.current || !videoElement) return;
-            if (videoElement.readyState < 2 || videoElement.videoWidth === 0 || videoElement.videoHeight === 0) return;
-
-            isFrameProcessing = true;
+        if (
+          handsRef.current &&
+          videoElement &&
+          videoElement.readyState >= 2 &&
+          videoElement.videoWidth > 0 &&
+          videoElement.videoHeight > 0
+        ) {
+          if (!isProcessing) {
+            isProcessing = true;
             try {
               await handsRef.current.send({ image: videoElement });
             } catch {
-              // Ignore transient frame skips
+              // Ignore single skipped frame
             } finally {
-              isFrameProcessing = false;
+              isProcessing = false;
             }
-          },
-          width: 640,
-          height: 480
-        });
-        cam.start();
-        cameraUtilsRef.current = cam;
-      }
+          }
+        }
+
+        if (handLoopActiveRef.current && cameraActiveRef.current) {
+          handAnimIdRef.current = requestAnimationFrame(processFrame);
+        }
+      };
+
+      handAnimIdRef.current = requestAnimationFrame(processFrame);
     } catch (err) {
       console.error("Error starting MediaPipe hands:", err);
+      setCameraError("Failed to initialize hand tracking neural engine.");
     }
-  }, [onHandResults]);
+  }, [ensureMediaPipeLoaded, onHandResults]);
 
   // Camera Activation with MediaPipe Hands
   const toggleCamera = useCallback(async () => {
     if (cameraActiveRef.current) {
+      handLoopActiveRef.current = false;
+      if (handAnimIdRef.current) {
+        cancelAnimationFrame(handAnimIdRef.current);
+        handAnimIdRef.current = null;
+      }
       if (cameraUtilsRef.current) {
         try { cameraUtilsRef.current.stop(); } catch {}
         cameraUtilsRef.current = null;
@@ -1246,14 +1354,17 @@ const MagicParticles: React.FC = () => {
       }
 
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: 'user',
-            width: { ideal: 640 },
-            height: { ideal: 480 }
-          },
-          audio: false
-        });
+        const [stream] = await Promise.all([
+          navigator.mediaDevices.getUserMedia({
+            video: {
+              facingMode: 'user',
+              width: { ideal: 640 },
+              height: { ideal: 480 }
+            },
+            audio: false
+          }),
+          ensureMediaPipeLoaded()
+        ]);
 
         streamRef.current = stream;
         setCameraActive(true);
@@ -1268,7 +1379,7 @@ const MagicParticles: React.FC = () => {
         setCameraLoading(false);
       }
     }
-  }, []);
+  }, [ensureMediaPipeLoaded]);
 
   // Sync Camera Stream & Trigger Neural Processing
   useEffect(() => {
@@ -1276,17 +1387,24 @@ const MagicParticles: React.FC = () => {
       const video = videoRef.current;
       if (video.srcObject !== streamRef.current) {
         video.srcObject = streamRef.current;
-        video.onloadedmetadata = () => {
-          video.play().then(() => {
-            startHandTracking(video);
-          }).catch(err => {
-            console.warn("Video play error:", err);
-          });
-        };
+      }
+      
+      const handleLoadedData = () => {
         video.play().then(() => {
           startHandTracking(video);
-        }).catch(() => {});
-      }
+        }).catch(err => {
+          console.warn("Video play error:", err);
+        });
+      };
+
+      video.addEventListener('loadeddata', handleLoadedData);
+      video.play().then(() => {
+        startHandTracking(video);
+      }).catch(() => {});
+
+      return () => {
+        video.removeEventListener('loadeddata', handleLoadedData);
+      };
     }
   }, [cameraActive, showCameraView, startHandTracking]);
 

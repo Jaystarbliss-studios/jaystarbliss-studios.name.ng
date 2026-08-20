@@ -72,9 +72,24 @@ const handleGoogleLogin = async () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    const cleanEmail = email.trim();
+    if (!cleanEmail) {
+      setError('Please enter your email address.');
+      showError('Please enter your email address.');
+      return;
+    }
+
+    if (password.length < 6) {
+      const msg = 'Password should be at least 6 characters.';
+      setError(msg);
+      showError(msg);
+      return;
+    }
+
     setLoading(true);
     try {
-      const cred = await signInWithEmailAndPassword(auth, email, password);
+      const cred = await signInWithEmailAndPassword(auth, cleanEmail, password);
       if (cred.user.email !== 'johnrufai242@gmail.com') {
         const userSnap = await getDoc(doc(db, 'users', cred.user.uid));
         const role = userSnap.exists() ? (userSnap.data().role || '').toUpperCase() : '';
@@ -83,8 +98,16 @@ const handleGoogleLogin = async () => {
       success('Successfully logged in!');
       navigate('/admin');
     } catch (err: any) {
-      setError(err.message || 'Invalid credentials');
-      showError(err.message || 'Invalid credentials');
+      let msg = err.message || 'Invalid credentials';
+      if (err.code === 'auth/weak-password') {
+        msg = 'Password should be at least 6 characters.';
+      } else if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-login-credentials') {
+        msg = 'Invalid email or password. Please check your credentials.';
+      } else if (err.code === 'auth/invalid-email') {
+        msg = 'Please enter a valid email address.';
+      }
+      setError(msg);
+      showError(msg);
     } finally {
       setLoading(false);
     }
