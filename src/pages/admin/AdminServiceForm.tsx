@@ -3,10 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { doc, getDoc, addDoc, updateDoc, collection } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import { Link } from 'react-router-dom';
 import PhotoUpload from '../../components/admin/PhotoUpload';
+import RichTextEditor from '../../components/admin/RichTextEditor';
 
 const AdminServiceForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -171,15 +170,15 @@ const AdminServiceForm: React.FC = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">Long Content</label>
-            <ReactQuill theme="snow" value={formData.content} onChange={(value) => setFormData({ ...formData, content: value })} className="bg-white" />
-            {/* <textarea 
-              name="content" 
-              rows={4}
-              value={formData.content}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red"
-            ></textarea> */}
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Long Content</label>
+            <div className="bg-white rounded-xl overflow-hidden border border-gray-200 dark:border-slate-700">
+              <RichTextEditor
+                value={formData.content}
+                onChange={(value) => setFormData({ ...formData, content: value })}
+                placeholder="Write service details and curriculum..."
+                minHeight="180px"
+              />
+            </div>
           </div>
 
           <div className="flex items-center gap-8 py-4 border-t border-gray-100">

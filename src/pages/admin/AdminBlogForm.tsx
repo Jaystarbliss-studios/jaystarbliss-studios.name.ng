@@ -3,8 +3,7 @@ import { useParams, useNavigate, Link, useSearchParams } from 'react-router-dom'
 import { doc, getDoc, addDoc, updateDoc, collection } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { ArrowLeft, Loader2, Newspaper, BookOpen } from 'lucide-react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import RichTextEditor from '../../components/admin/RichTextEditor';
 import PhotoUpload from '../../components/admin/PhotoUpload';
 
 const AdminBlogForm: React.FC = () => {
@@ -312,11 +311,11 @@ const AdminBlogForm: React.FC = () => {
             Detailed Content & Body
           </label>
           <div className="bg-white rounded-xl overflow-hidden border border-gray-200 dark:border-slate-700">
-            <ReactQuill
-              theme="snow"
+            <RichTextEditor
               value={formData.content}
               onChange={(val) => setFormData({ ...formData, content: val })}
-              className="h-[260px] mb-12 text-black"
+              placeholder="Write detailed post content..."
+              minHeight="220px"
             />
           </div>
         </div>

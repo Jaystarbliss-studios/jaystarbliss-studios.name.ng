@@ -1,5 +1,3 @@
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { doc, getDoc, addDoc, updateDoc, collection } from 'firebase/firestore';
@@ -7,6 +5,7 @@ import { db } from '../../lib/firebase';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import PhotoUpload from '../../components/admin/PhotoUpload';
+import RichTextEditor from '../../components/admin/RichTextEditor';
 
 const AdminProgramForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -221,15 +220,15 @@ const AdminProgramForm: React.FC = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">Long Description</label>
-            <ReactQuill theme="snow" value={formData.longDescription} onChange={(value) => setFormData({ ...formData, longDescription: value })} className="bg-white text-black" />
-            {/* <textarea 
-              name="longDescription" 
-              rows={4}
-              value={formData.longDescription}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-red focus:border-brand-red"
-            ></textarea> */}
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Long Description</label>
+            <div className="bg-white rounded-xl overflow-hidden border border-gray-200 dark:border-slate-700">
+              <RichTextEditor
+                value={formData.longDescription}
+                onChange={(value) => setFormData({ ...formData, longDescription: value })}
+                placeholder="Write detailed program description..."
+                minHeight="180px"
+              />
+            </div>
           </div>
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">Curriculum (One item per line)</label>

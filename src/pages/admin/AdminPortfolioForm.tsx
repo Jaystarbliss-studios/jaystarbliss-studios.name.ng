@@ -3,8 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { doc, getDoc, addDoc, updateDoc, collection } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { ArrowLeft, Loader2, Gamepad2, Briefcase } from 'lucide-react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import RichTextEditor from '../../components/admin/RichTextEditor';
 import PhotoUpload from '../../components/admin/PhotoUpload';
 
 const presetIcons = ['gamepad', 'rocket', 'code', 'palette', 'cpu', 'terminal', 'sparkles'];
@@ -348,11 +347,11 @@ const AdminPortfolioForm: React.FC = () => {
             Project Description & Instructions
           </label>
           <div className="bg-white rounded-xl overflow-hidden border border-gray-200 dark:border-slate-700">
-            <ReactQuill
-              theme="snow"
+            <RichTextEditor
               value={formData.description}
               onChange={(val) => setFormData({ ...formData, description: val })}
-              className="h-[180px] mb-12 text-black"
+              placeholder="Write project description and instructions..."
+              minHeight="180px"
             />
           </div>
         </div>
