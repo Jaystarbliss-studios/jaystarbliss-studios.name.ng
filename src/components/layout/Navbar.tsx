@@ -153,7 +153,7 @@ const Navbar: React.FC = () => {
                   <div 
                     className="absolute top-full left-0 w-80 pt-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150"
                   >
-                    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-3 space-y-1">
+                    <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/60 dark:border-white/10 p-3 space-y-1">
                       <div className="px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                         Explore Learning Tracks
                       </div>
@@ -254,7 +254,7 @@ const Navbar: React.FC = () => {
                   <div 
                     className="absolute top-full left-0 w-80 pt-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150"
                   >
-                    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-3 space-y-1">
+                    <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/60 dark:border-white/10 p-3 space-y-1">
                       <div className="px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                         Showcase & Playgrounds
                       </div>
@@ -328,7 +328,7 @@ const Navbar: React.FC = () => {
                   <div 
                     className="absolute top-full left-0 w-80 pt-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150"
                   >
-                    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-3 space-y-1">
+                    <div className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/60 dark:border-white/10 p-3 space-y-1">
                       <div className="px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                         Insights & Knowledge
                       </div>

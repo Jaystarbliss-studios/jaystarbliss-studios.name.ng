@@ -5,6 +5,7 @@ import { collection, query, where, getDocs, doc, updateDoc, increment } from 'fi
 import { db } from '../lib/firebase';
 import { autoSeedCollectionsIfEmpty, defaultNewsBulletins } from '../lib/seedFirestore';
 import { Link } from 'react-router-dom';
+import { motion } from 'motion/react';
 import { 
   Calendar, 
   User, 
@@ -294,10 +295,11 @@ const Blog: React.FC = () => {
                     const IconComponent = catStyle.Icon;
 
                     return (
-                      <div
+                      <motion.div
                         key={item.id}
+                        whileHover={{ y: -6, transition: { duration: 0.28, ease: 'easeOut' } }}
                         onClick={() => handleOpenNewsModal(item)}
-                        className="group flex flex-col rounded-2xl overflow-hidden bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-cyan-500/50 cursor-pointer transition-all duration-300"
+                        className="group flex flex-col rounded-2xl overflow-hidden glass-card hover:border-cyan-500/50 cursor-pointer transition-all duration-300"
                       >
                         {item.featuredImage ? (
                           <div className="aspect-[16/9] w-full overflow-hidden relative bg-slate-100 dark:bg-slate-900">
@@ -347,7 +349,7 @@ const Blog: React.FC = () => {
                             </p>
                           </div>
 
-                          <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                          <div className="pt-3 border-t border-slate-200/50 dark:border-white/10 flex items-center justify-between">
                             <span className="text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center gap-1">
                               <User size={13} /> {item.author || 'Jaystarbliss Studios'}
                             </span>
@@ -356,7 +358,7 @@ const Blog: React.FC = () => {
                             </span>
                           </div>
                         </div>
-                      </div>
+                      </motion.div>
                     );
                   })}
                 </div>
@@ -381,75 +383,81 @@ const Blog: React.FC = () => {
                   {filteredPosts.map(post => {
                     const isNews = post.category?.toLowerCase().includes('news');
                     return (
-                      <Link to={`/blog/${post.slug}`} key={post.id} className="group">
-                        <div 
-                          className={`h-full flex flex-col rounded-2xl overflow-hidden bg-white dark:bg-slate-950 transition-all duration-300 border ${
-                            isNews 
-                              ? 'border-cyan-500/60 ring-1 ring-cyan-500/30' 
-                              : 'border-slate-200 dark:border-slate-800 hover:border-brand-red/40'
-                          }`}
-                        >
-                          {post.featuredImage ? (
-                            <div className="aspect-[16/9] w-full overflow-hidden relative bg-slate-100 dark:bg-slate-900">
-                              <img
-                                src={post.featuredImage}
-                                alt={post.title}
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                              />
-                              {post.category && (
-                                <div className="absolute top-3 left-3">
-                                  <span className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider backdrop-blur-md flex items-center gap-1 ${
+                      <motion.div
+                        key={post.id}
+                        whileHover={{ y: -6, transition: { duration: 0.28, ease: 'easeOut' } }}
+                        className="h-full"
+                      >
+                        <Link to={`/blog/${post.slug}`} className="group block h-full">
+                          <div 
+                            className={`h-full flex flex-col rounded-2xl overflow-hidden glass-card transition-all duration-300 ${
+                              isNews 
+                                ? 'border-cyan-500/60 ring-1 ring-cyan-500/30' 
+                                : 'hover:border-brand-red/40'
+                            }`}
+                          >
+                            {post.featuredImage ? (
+                              <div className="aspect-[16/9] w-full overflow-hidden relative bg-slate-100 dark:bg-slate-900">
+                                <img
+                                  src={post.featuredImage}
+                                  alt={post.title}
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                />
+                                {post.category && (
+                                  <div className="absolute top-3 left-3">
+                                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider backdrop-blur-md flex items-center gap-1 ${
+                                      isNews
+                                        ? 'bg-cyan-500 text-slate-950'
+                                        : 'bg-slate-950/80 text-white border border-white/20'
+                                    }`}>
+                                      {isNews && <Radio size={11} />}
+                                      {post.category}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            ) : (
+                              <div className="aspect-[16/9] w-full bg-slate-100 dark:bg-slate-900 flex flex-col items-center justify-center relative p-6">
+                                {post.category && (
+                                  <span className={`mb-2 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
                                     isNews
                                       ? 'bg-cyan-500 text-slate-950'
-                                      : 'bg-slate-950/80 text-white border border-white/20'
+                                      : 'bg-brand-red/10 text-brand-red'
                                   }`}>
-                                    {isNews && <Radio size={11} />}
                                     {post.category}
                                   </span>
-                                </div>
-                              )}
+                                )}
+                                <span className="text-slate-400 font-bold uppercase tracking-widest text-xs">Jaystarbliss Studios</span>
+                              </div>
+                            )}
+                            <div className="p-6 sm:p-7 flex flex-col flex-grow">
+                              <div className="flex items-center gap-3 text-xs font-bold text-slate-500 dark:text-slate-400 mb-3 tracking-wider uppercase flex-wrap">
+                                {post.createdAt && (
+                                  <div className="flex items-center gap-1.5">
+                                    <Calendar size={13} />
+                                    {new Date(post.createdAt).toLocaleDateString()}
+                                  </div>
+                                )}
+                                {post.author && (
+                                  <div className="flex items-center gap-1.5">
+                                    <User size={13} />
+                                    {post.author}
+                                  </div>
+                                )}
+                              </div>
+                              <h3 className="text-lg font-bold text-brand-slate dark:text-white mb-3 group-hover:text-brand-red transition-colors line-clamp-2 leading-snug">
+                                {post.title}
+                              </h3>
+                              <p className="text-slate-600 dark:text-slate-400 text-xs sm:text-sm font-normal line-clamp-3 mb-6 flex-grow leading-relaxed">
+                                {post.excerpt}
+                              </p>
+                              <span className="text-brand-red font-bold text-xs uppercase tracking-wider group-hover:text-red-700 dark:group-hover:text-red-400 transition-colors mt-auto flex items-center gap-1">
+                                Read Article <ArrowRight size={13} />
+                              </span>
                             </div>
-                          ) : (
-                            <div className="aspect-[16/9] w-full bg-slate-100 dark:bg-slate-900 flex flex-col items-center justify-center relative p-6">
-                              {post.category && (
-                                <span className={`mb-2 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
-                                  isNews
-                                    ? 'bg-cyan-500 text-slate-950'
-                                    : 'bg-brand-red/10 text-brand-red'
-                                }`}>
-                                  {post.category}
-                                </span>
-                              )}
-                              <span className="text-slate-400 font-bold uppercase tracking-widest text-xs">Jaystarbliss Studios</span>
-                            </div>
-                          )}
-                          <div className="p-6 sm:p-7 flex flex-col flex-grow">
-                            <div className="flex items-center gap-3 text-xs font-bold text-slate-500 dark:text-slate-400 mb-3 tracking-wider uppercase flex-wrap">
-                              {post.createdAt && (
-                                <div className="flex items-center gap-1.5">
-                                  <Calendar size={13} />
-                                  {new Date(post.createdAt).toLocaleDateString()}
-                                </div>
-                              )}
-                              {post.author && (
-                                <div className="flex items-center gap-1.5">
-                                  <User size={13} />
-                                  {post.author}
-                                </div>
-                              )}
-                            </div>
-                            <h3 className="text-lg font-bold text-brand-slate dark:text-white mb-3 group-hover:text-brand-red transition-colors line-clamp-2 leading-snug">
-                              {post.title}
-                            </h3>
-                            <p className="text-slate-600 dark:text-slate-400 text-xs sm:text-sm font-normal line-clamp-3 mb-6 flex-grow leading-relaxed">
-                              {post.excerpt}
-                            </p>
-                            <span className="text-brand-red font-bold text-xs uppercase tracking-wider group-hover:text-red-700 dark:group-hover:text-red-400 transition-colors mt-auto flex items-center gap-1">
-                              Read Article <ArrowRight size={13} />
-                            </span>
                           </div>
-                        </div>
-                      </Link>
+                        </Link>
+                      </motion.div>
                     );
                   })}
                 </div>

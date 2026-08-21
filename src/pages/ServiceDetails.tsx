@@ -111,7 +111,7 @@ const ServiceDetails: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             
             <div className="lg:col-span-8 space-y-12">
-              <div className="bg-white dark:bg-slate-950 p-8 sm:p-12 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <div className="bg-white/70 dark:bg-slate-900/60 backdrop-blur-md p-8 sm:p-12 rounded-2xl border border-white/60 dark:border-white/10 shadow-sm">
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-slate dark:text-white mb-6 tracking-tight">
                   Service Overview
                 </h2>
@@ -125,7 +125,7 @@ const ServiceDetails: React.FC = () => {
               </div>
               
               {/* How We Work block */}
-              <div className="bg-white dark:bg-slate-950 p-8 sm:p-12 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm"> 
+              <div className="bg-white/70 dark:bg-slate-900/60 backdrop-blur-md p-8 sm:p-12 rounded-2xl border border-white/60 dark:border-white/10 shadow-sm"> 
                 <span className="text-xs font-black uppercase tracking-widest text-brand-red block mb-2">Process</span>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-slate dark:text-white mb-8 tracking-tight">
                   How We Execute
@@ -164,7 +164,7 @@ const ServiceDetails: React.FC = () => {
 
             {/* Sticky Sidebar */}
             <div className="lg:col-span-4 lg:sticky lg:top-28">
-              <div className="bg-white dark:bg-slate-950 rounded-2xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+              <div className="bg-white/70 dark:bg-slate-900/60 backdrop-blur-md rounded-2xl p-8 border border-white/60 dark:border-white/10 shadow-sm space-y-6">
                 <div>
                   <h3 className="text-xl font-extrabold text-brand-slate dark:text-white mb-2">Ready to start?</h3>
                   <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-normal">

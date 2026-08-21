@@ -50,7 +50,7 @@ const LearningMethod: React.FC = () => {
             <StaggerGroup className="space-y-8" staggerDelay={0.12}>
               {steps.map((step, index) => (
                 <motion.div key={index} variants={staggerItem} className="flex gap-6 group">
-                  <div className="w-16 h-16 rounded-2xl bg-gray-50 dark:bg-slate-950 border border-gray-100 flex items-center justify-center text-xl font-black text-brand-red shrink-0 group-hover:bg-brand-red group-hover:text-white transition-colors">
+                  <div className="w-16 h-16 rounded-2xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-md border border-white/60 dark:border-white/10 flex items-center justify-center text-xl font-black text-brand-red shrink-0 group-hover:bg-brand-red group-hover:text-white group-hover:border-brand-red transition-all shadow-sm">
                     {step.num}
                   </div>
                   <div>

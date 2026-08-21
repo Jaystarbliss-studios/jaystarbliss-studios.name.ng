@@ -64,8 +64,13 @@ const AudiencePathways: React.FC = () => {
 
         <StaggerGroup className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {pathways.map((pathway, index) => (
-            <motion.div key={index} variants={staggerItem} className="h-full">
-              <div className="group relative rounded-2xl overflow-hidden border border-gray-100 flex flex-col h-full hover:shadow-xl hover:shadow-gray-200/50 transition-shadow">
+            <motion.div 
+              key={index} 
+              variants={staggerItem} 
+              whileHover={{ y: -6, transition: { duration: 0.28, ease: 'easeOut' } }}
+              className="h-full"
+            >
+              <div className="group relative rounded-2xl overflow-hidden glass-card flex flex-col h-full">
                 <div className="relative h-40 overflow-hidden">
                   <img
                     src={pathway.image}
@@ -74,18 +79,18 @@ const AudiencePathways: React.FC = () => {
                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-brand-slate/80 via-brand-slate/10 to-transparent" />
-                  <div className="absolute bottom-4 left-6 w-12 h-12 bg-white rounded-xl flex items-center justify-center text-brand-red shadow-lg">
+                  <div className="absolute bottom-4 left-6 w-12 h-12 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md rounded-xl flex items-center justify-center text-brand-red shadow-lg border border-white/50 dark:border-white/10">
                     {pathway.icon}
                   </div>
                 </div>
-                <div className="bg-white dark:bg-slate-900 p-8 flex flex-col flex-grow">
+                <div className="p-6 sm:p-8 flex flex-col flex-grow">
                   <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">{pathway.title}</h3>
-                  <p className="text-gray-600 dark:text-gray-400 mb-8 flex-grow font-medium leading-relaxed">
+                  <p className="text-gray-600 dark:text-gray-400 mb-8 flex-grow font-medium leading-relaxed text-sm sm:text-base">
                     {pathway.description}
                   </p>
                   <Link
                     to={pathway.ctaLink}
-                    className="w-full text-center bg-gray-50 dark:bg-slate-950 text-brand-slate dark:text-white font-bold py-3 rounded-lg hover:bg-brand-red hover:text-white transition-colors uppercase tracking-wide text-sm"
+                    className="w-full text-center bg-slate-100/80 dark:bg-slate-800/80 backdrop-blur-sm text-brand-slate dark:text-white font-bold py-3 rounded-lg hover:bg-brand-red hover:text-white transition-colors uppercase tracking-wide text-sm border border-slate-200/50 dark:border-white/10"
                   >
                     {pathway.ctaText}
                   </Link>

@@ -84,30 +84,34 @@ const FeaturedServices: React.FC = () => {
         ) : (
           <StaggerGroup className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {services.map((service) => (
-              <motion.div key={service.id} variants={staggerItem}>
+              <motion.div 
+                key={service.id} 
+                variants={staggerItem}
+                whileHover={{ y: -6, transition: { duration: 0.28, ease: 'easeOut' } }}
+              >
                 <Link
                   to={`/services/${service.slug}`}
-                  className="group relative flex flex-col justify-end h-[340px] rounded-2xl overflow-hidden border border-white/10"
+                  className="group relative flex flex-col justify-end h-[340px] rounded-2xl sm:rounded-2xl overflow-hidden border border-white/15 hover:border-cyan-400/50 hover:shadow-2xl hover:shadow-cyan-500/10 transition-all duration-300"
                 >
                   <img
                     src={getServiceImage(service.iconName)}
                     alt=""
                     loading="lazy"
-                    className="absolute inset-0 w-full h-full object-cover scale-100 group-hover:scale-110 transition-transform duration-700 ease-out"
+                    className="absolute inset-0 w-full h-full object-cover scale-100 group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-brand-slate via-brand-slate/75 to-brand-slate/20" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-slate via-brand-slate/80 to-brand-slate/30" />
 
-                  <div className="relative z-10 p-8">
-                    <div className="w-12 h-12 bg-white/10 backdrop-blur-sm border border-white/15 rounded-xl flex items-center justify-center mb-6 text-white">
+                  <div className="relative z-10 p-6 sm:p-8">
+                    <div className="w-12 h-12 bg-white/15 backdrop-blur-md border border-white/25 rounded-xl flex items-center justify-center mb-5 text-white group-hover:bg-cyan-500/20 group-hover:border-cyan-400/40 group-hover:text-cyan-300 transition-all">
                       {getIconComponent(service.iconName || 'Monitor')}
                     </div>
-                    <h3 className="text-xl font-bold mb-3">{service.title}</h3>
-                    <p className="text-brand-neutral/70 font-medium leading-relaxed text-sm mb-4 line-clamp-2">
+                    <h3 className="text-xl font-bold mb-2 text-white drop-shadow-sm">{service.title}</h3>
+                    <p className="text-white/80 font-medium leading-relaxed text-sm mb-4 line-clamp-2">
                       {service.shortDescription}
                     </p>
-                    <span className="text-brand-red font-bold text-xs uppercase tracking-wider inline-flex items-center gap-2">
+                    <span className="text-cyan-400 group-hover:text-white font-bold text-xs uppercase tracking-wider inline-flex items-center gap-2 transition-colors drop-shadow">
                       VIEW {service.title.toUpperCase()}
-                      <span className="transition-transform group-hover:translate-x-1">&rarr;</span>
+                      <span className="transition-transform group-hover:translate-x-1.5 text-cyan-300 group-hover:text-white">&rarr;</span>
                     </span>
                   </div>
                 </Link>

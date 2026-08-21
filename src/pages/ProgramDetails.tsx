@@ -116,7 +116,7 @@ const ProgramDetails: React.FC = () => {
       {/* Details Section */}
       <div className="py-16 md:py-24 bg-brand-neutral dark:bg-slate-900">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl">
-          <div className="bg-white dark:bg-slate-950 p-8 sm:p-12 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="bg-white/70 dark:bg-slate-900/60 backdrop-blur-md p-8 sm:p-12 rounded-2xl border border-white/60 dark:border-white/10 shadow-sm">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-brand-slate dark:text-white mb-6 tracking-tight">
               About This Program
             </h2>

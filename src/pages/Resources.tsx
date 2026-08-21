@@ -3,6 +3,7 @@ import MainLayout from '../components/layout/MainLayout';
 import SEO from '../components/ui/SEO';
 import { BookOpen, FileText, HelpCircle, PenTool, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { motion } from 'motion/react';
 
 const Resources: React.FC = () => {
   const resourceItems = [
@@ -71,36 +72,41 @@ const Resources: React.FC = () => {
             {resourceItems.map((item, i) => {
               const Icon = item.icon;
               return (
-                <Link 
-                  key={i} 
-                  to={item.link} 
-                  className={`group flex flex-col p-8 sm:p-10 rounded-2xl bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-brand-red/40 dark:hover:border-brand-red/40 transition-all duration-300 ${!item.active ? 'opacity-70' : ''}`}
+                <motion.div
+                  key={i}
+                  whileHover={{ y: -6, transition: { duration: 0.28, ease: 'easeOut' } }}
+                  className="h-full"
                 >
-                  <div className="flex items-center justify-between mb-8">
-                    <div className="w-12 h-12 rounded-xl bg-brand-red/10 text-brand-red flex items-center justify-center group-hover:scale-105 transition-transform">
-                      <Icon size={24} />
-                    </div>
-                    {item.active && (
-                      <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center text-slate-400 group-hover:bg-brand-red group-hover:text-white transition-colors">
-                        <ArrowUpRight size={16} />
+                  <Link 
+                    to={item.link} 
+                    className={`group flex flex-col h-full p-6 sm:p-10 rounded-2xl glass-card transition-all duration-300 ${!item.active ? 'opacity-70' : ''}`}
+                  >
+                    <div className="flex items-center justify-between mb-6 sm:mb-8">
+                      <div className="w-12 h-12 rounded-xl bg-brand-red/10 text-brand-red flex items-center justify-center group-hover:scale-105 transition-transform">
+                        <Icon size={24} />
                       </div>
-                    )}
-                  </div>
+                      {item.active && (
+                        <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center text-slate-400 group-hover:bg-brand-red group-hover:text-white transition-colors">
+                          <ArrowUpRight size={16} />
+                        </div>
+                      )}
+                    </div>
 
-                  <h2 className="text-2xl font-extrabold text-brand-slate dark:text-white mb-3 group-hover:text-brand-red transition-colors">
-                    {item.title}
-                  </h2>
+                    <h2 className="text-2xl font-extrabold text-brand-slate dark:text-white mb-3 group-hover:text-brand-red transition-colors">
+                      {item.title}
+                    </h2>
 
-                  <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 font-normal leading-relaxed mb-8 flex-grow">
-                    {item.desc}
-                  </p>
+                    <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 font-normal leading-relaxed mb-8 flex-grow">
+                      {item.desc}
+                    </p>
 
-                  <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                    <span className="text-xs font-black uppercase tracking-widest text-brand-red group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
-                      {item.label} &rarr;
-                    </span>
-                  </div>
-                </Link>
+                    <div className="pt-4 border-t border-slate-200/50 dark:border-white/10 flex items-center justify-between">
+                      <span className="text-xs font-black uppercase tracking-widest text-brand-red group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                        {item.label} &rarr;
+                      </span>
+                    </div>
+                  </Link>
+                </motion.div>
               );
             })}
 

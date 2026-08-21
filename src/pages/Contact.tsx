@@ -124,7 +124,7 @@ const Contact: React.FC = () => {
 
               </div>
 
-              <div className="p-6 rounded-2xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+              <div className="p-6 rounded-2xl bg-white/70 dark:bg-slate-900/60 backdrop-blur-md border border-white/60 dark:border-white/10 shadow-sm">
                 <h4 className="text-sm font-bold text-brand-slate dark:text-white mb-1">Operating Hours</h4>
                 <p className="text-xs text-slate-500 dark:text-slate-400">
                   Monday – Friday: 9:00 AM – 6:00 PM WAT<br />
@@ -135,7 +135,7 @@ const Contact: React.FC = () => {
 
             {/* Form Column */}
             <div className="lg:col-span-7">
-              <div className="bg-white dark:bg-slate-950 p-8 sm:p-10 md:p-12 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <div className="bg-white/70 dark:bg-slate-900/60 backdrop-blur-md p-8 sm:p-10 md:p-12 rounded-2xl border border-white/60 dark:border-white/10 shadow-sm">
                 {success ? (
                   <div className="text-center py-12">
                     <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center text-green-500 mx-auto mb-6">

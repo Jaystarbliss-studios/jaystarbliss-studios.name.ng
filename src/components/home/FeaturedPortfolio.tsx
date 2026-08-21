@@ -77,15 +77,20 @@ const FeaturedPortfolio: React.FC = () => {
         ) : (
           <StaggerGroup className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {projects.map((project) => (
-              <motion.div key={project.id} variants={staggerItem} className="group flex flex-col bg-slate-50 dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-100 dark:border-slate-800 hover:shadow-xl hover:shadow-brand-slate/5 transition-all duration-300">
-                <div className="h-64 bg-gradient-to-br from-brand-slate to-slate-700 flex items-center justify-center relative overflow-hidden">
+              <motion.div 
+                key={project.id} 
+                variants={staggerItem} 
+                whileHover={{ y: -6, transition: { duration: 0.28, ease: 'easeOut' } }}
+                className="group flex flex-col glass-card rounded-2xl sm:rounded-3xl overflow-hidden"
+              >
+                <div className="h-56 sm:h-64 bg-gradient-to-br from-brand-slate to-slate-700 flex items-center justify-center relative overflow-hidden">
                   <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0d_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0d_1px,transparent_1px)] bg-[size:2.5rem_2.5rem]"></div>
                   <div className="absolute -right-10 -bottom-10 w-48 h-48 bg-brand-red/20 rounded-full blur-3xl"></div>
-                  <span className="font-bold text-white/25 text-6xl tracking-widest uppercase group-hover:scale-110 group-hover:text-white/35 transition-all duration-500 relative z-10">
+                  <span className="font-bold text-white/25 text-5xl sm:text-6xl tracking-widest uppercase group-hover:scale-110 group-hover:text-white/35 transition-all duration-500 relative z-10">
                     {project.title.substring(0, 2)}
                   </span>
                 </div>
-                <div className="p-10 flex flex-col flex-grow">
+                <div className="p-6 sm:p-10 flex flex-col flex-grow">
                   <div className="flex items-center gap-4 mb-6">
                     <span className="text-xs font-bold text-brand-red tracking-wider uppercase">
                       {project.category || 'Case Study'}

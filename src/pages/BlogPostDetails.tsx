@@ -156,7 +156,7 @@ const BlogPostDetails: React.FC = () => {
 
         {/* Content Section */}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl py-12 sm:py-16">
-          <div className="bg-white dark:bg-slate-950 p-8 sm:p-12 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="bg-white/70 dark:bg-slate-900/60 backdrop-blur-md p-8 sm:p-12 rounded-2xl border border-white/60 dark:border-white/10 shadow-sm">
             <div className="prose prose-lg dark:prose-invert prose-headings:font-bold prose-a:text-brand-red max-w-none text-slate-700 dark:text-slate-300 leading-relaxed">
               <div className="quill-content" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content || '') }} />
             </div>

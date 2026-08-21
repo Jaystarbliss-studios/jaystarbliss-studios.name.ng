@@ -4,6 +4,7 @@ import { db } from '../lib/firebase';
 import { autoSeedCollectionsIfEmpty, defaultOrganisationProjects } from '../lib/seedFirestore';
 import MainLayout from '../components/layout/MainLayout';
 import SEO from '../components/ui/SEO';
+import { motion } from 'motion/react';
 import { 
   ExternalLink, 
   Gamepad2, 
@@ -228,9 +229,10 @@ const Portfolio: React.FC = () => {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {filteredOrgProjects.map((project) => (
-                    <div 
+                    <motion.div 
                       key={project.id} 
-                      className="group flex flex-col rounded-2xl overflow-hidden bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-300"
+                      whileHover={{ y: -6, transition: { duration: 0.28, ease: 'easeOut' } }}
+                      className="group flex flex-col rounded-2xl overflow-hidden glass-card"
                     >
                       {project.featuredImage ? (
                         <div className="h-64 w-full relative border-b border-slate-200 dark:border-slate-800 overflow-hidden bg-slate-100 dark:bg-slate-900">
@@ -246,7 +248,7 @@ const Portfolio: React.FC = () => {
                             <span className="font-extrabold text-white/20 text-5xl tracking-widest uppercase block mb-2 font-mono">
                               {project.title.substring(0, 3)}
                             </span>
-                            <span className="text-xs font-mono text-brand-red uppercase tracking-widest">
+                            <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest">
                               {project.category || 'Enterprise Solution'}
                             </span>
                           </div>
@@ -289,7 +291,7 @@ const Portfolio: React.FC = () => {
                         />
 
                         {project.liveUrl && (
-                          <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
+                          <div className="pt-4 border-t border-slate-200/50 dark:border-white/10">
                             <a
                               href={project.liveUrl}
                               target="_blank"
@@ -301,7 +303,7 @@ const Portfolio: React.FC = () => {
                           </div>
                         )}
                       </div>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
               )}

@@ -3,6 +3,7 @@ import MainLayout from '../components/layout/MainLayout';
 import Button from '../components/ui/Button';
 import SEO from '../components/ui/SEO';
 import { usePageSection } from '../lib/cms';
+import { motion } from 'motion/react';
 
 const About: React.FC = () => {
   const { data: heroData } = usePageSection('about', 'hero', {
@@ -141,25 +142,31 @@ const About: React.FC = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
             
-            <div className="p-8 sm:p-12 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-brand-red/50 transition-all duration-300 relative overflow-hidden">
-              <span className="text-xs font-black uppercase tracking-widest text-brand-red block mb-4">Direction</span>
+            <motion.div 
+              whileHover={{ y: -6, transition: { duration: 0.28, ease: 'easeOut' } }}
+              className="p-6 sm:p-12 rounded-2xl glass-card bg-white/10 backdrop-blur-md border border-white/20 hover:border-cyan-400/50 hover:bg-white/15 transition-all duration-300 relative overflow-hidden shadow-lg"
+            >
+              <span className="text-xs font-black uppercase tracking-widest text-cyan-400 block mb-4">Direction</span>
               <h2 className="text-2xl sm:text-3xl font-extrabold mb-4 text-white tracking-tight">
                 OUR VISION
               </h2>
               <p className="text-base sm:text-lg text-white/80 leading-relaxed font-normal">
                 To build a company where education, technology and creativity work together to give people practical skills, useful digital tools and better opportunities to create.
               </p>
-            </div>
+            </motion.div>
             
-            <div className="p-8 sm:p-12 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-brand-red/50 transition-all duration-300 relative overflow-hidden">
-              <span className="text-xs font-black uppercase tracking-widest text-brand-red block mb-4">Commitment</span>
+            <motion.div 
+              whileHover={{ y: -6, transition: { duration: 0.28, ease: 'easeOut' } }}
+              className="p-6 sm:p-12 rounded-2xl glass-card bg-white/10 backdrop-blur-md border border-white/20 hover:border-cyan-400/50 hover:bg-white/15 transition-all duration-300 relative overflow-hidden shadow-lg"
+            >
+              <span className="text-xs font-black uppercase tracking-widest text-cyan-400 block mb-4">Commitment</span>
               <h2 className="text-2xl sm:text-3xl font-extrabold mb-4 text-white tracking-tight">
                 OUR MISSION
               </h2>
               <p className="text-base sm:text-lg text-white/80 leading-relaxed font-normal">
                 To provide practical education, reliable digital solutions and thoughtful creative services that help individuals and organizations learn, build and grow.
               </p>
-            </div>
+            </motion.div>
 
           </div>
         </div>
