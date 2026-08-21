@@ -108,7 +108,7 @@ const Services: React.FC = () => {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-brand-slate via-brand-slate/85 to-brand-slate/20" />
                     <div className="relative z-10 p-6 sm:p-8">
-                      <div className="w-13 h-13 bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl flex items-center justify-center mb-5 text-white group-hover:bg-cyan-500/20 group-hover:border-cyan-400/50 group-hover:text-cyan-300 transition-all">
+                      <div className="w-12 h-12 shrink-0 aspect-square bg-white/15 backdrop-blur-md border border-white/25 rounded-xl flex items-center justify-center mb-5 text-white group-hover:bg-cyan-500/20 group-hover:border-cyan-400/50 group-hover:text-cyan-300 transition-all shadow-sm">
                         {getIconComponent(service.iconName)}
                       </div>
                       <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">{service.title}</h3>

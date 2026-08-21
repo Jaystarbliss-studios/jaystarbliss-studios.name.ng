@@ -101,7 +101,7 @@ const FeaturedServices: React.FC = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-brand-slate via-brand-slate/80 to-brand-slate/30" />
 
                   <div className="relative z-10 p-6 sm:p-8">
-                    <div className="w-12 h-12 bg-white/15 backdrop-blur-md border border-white/25 rounded-xl flex items-center justify-center mb-5 text-white group-hover:bg-cyan-500/20 group-hover:border-cyan-400/40 group-hover:text-cyan-300 transition-all">
+                    <div className="w-12 h-12 shrink-0 aspect-square bg-white/15 backdrop-blur-md border border-white/25 rounded-xl flex items-center justify-center mb-5 text-white group-hover:bg-cyan-500/20 group-hover:border-cyan-400/40 group-hover:text-cyan-300 transition-all shadow-sm">
                       {getIconComponent(service.iconName || 'Monitor')}
                     </div>
                     <h3 className="text-xl font-bold mb-2 text-white drop-shadow-sm">{service.title}</h3>
