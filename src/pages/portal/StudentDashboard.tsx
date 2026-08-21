@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   BookOpen, Clock, Trophy, Video, ExternalLink, 
-  FileText, Download, Bell, Sparkles 
+  FileText, Download, Bell 
 } from 'lucide-react';
 import { 
   collection, query, where, getDocs, doc, getDoc, 
@@ -9,6 +9,7 @@ import {
 } from 'firebase/firestore';
 import { auth, db } from '../../lib/firebase';
 import SEO from '../../components/ui/SEO';
+import { AchievementBadgeGrid } from '../../components/ecosystem/AchievementBadge';
 
 interface StudentInfo {
   id?: string;
@@ -248,10 +249,6 @@ const StudentDashboard: React.FC = () => {
         <div className="absolute top-0 right-0 w-80 h-80 bg-brand-red/20 rounded-full blur-[100px] pointer-events-none"></div>
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-red/20 border border-brand-red/30 text-brand-red text-xs font-bold tracking-wider uppercase mb-3">
-              <Sparkles size={12} />
-              Student Learning Hub
-            </div>
             <h1 className="text-2xl md:text-3xl font-black text-white">
               Welcome, {student?.fullName || 'Cadet'}!
             </h1>
@@ -274,7 +271,7 @@ const StudentDashboard: React.FC = () => {
 
       {/* Live Metrics Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-gray-200/80 dark:border-slate-800 shadow-sm flex items-center gap-4">
+        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-gray-200/80 dark:border-slate-800 shadow-xs flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center flex-shrink-0">
             <BookOpen size={24} />
           </div>
@@ -284,8 +281,8 @@ const StudentDashboard: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-gray-200/80 dark:border-slate-800 shadow-sm flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-brand-red/10 text-brand-red flex items-center justify-center flex-shrink-0">
+        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-gray-200/80 dark:border-slate-800 shadow-xs flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-purple-50 dark:bg-purple-900/30 text-purple-600 flex items-center justify-center flex-shrink-0">
             <Video size={24} />
           </div>
           <div>
@@ -294,7 +291,7 @@ const StudentDashboard: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-gray-200/80 dark:border-slate-800 shadow-sm flex items-center gap-4">
+        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-gray-200/80 dark:border-slate-800 shadow-xs flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-900/30 text-amber-600 flex items-center justify-center flex-shrink-0">
             <FileText size={24} />
           </div>
@@ -304,7 +301,7 @@ const StudentDashboard: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-gray-200/80 dark:border-slate-800 shadow-sm flex items-center gap-4">
+        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-gray-200/80 dark:border-slate-800 shadow-xs flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-green-50 dark:bg-green-900/30 text-green-600 flex items-center justify-center flex-shrink-0">
             <Trophy size={24} />
           </div>
@@ -314,6 +311,13 @@ const StudentDashboard: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Student Achievement & Mastery Badges Section */}
+      <AchievementBadgeGrid 
+        studentName={student?.fullName}
+        title="My Achievement & Mastery Badges"
+        subtitle="Earn verifiable badges and XP as you complete 5-stage milestones and projects."
+      />
 
       {/* Main Content Sections */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

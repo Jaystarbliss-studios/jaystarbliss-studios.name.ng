@@ -5,9 +5,10 @@ import {
 } from 'firebase/firestore';
 import { 
   GraduationCap, PlusCircle, CreditCard, 
-  Bell, CheckCircle2, Clock, UserPlus, Sparkles 
+  Bell, CheckCircle2, Clock, UserPlus, Award
 } from 'lucide-react';
 import SEO from '../../components/ui/SEO';
+import { AchievementBadge, PRESET_ACHIEVEMENTS } from '../../components/ecosystem/AchievementBadge';
 
 const ParentDashboard: React.FC = () => {
   const [children, setChildren] = useState<any[]>([]);
@@ -173,9 +174,6 @@ const ParentDashboard: React.FC = () => {
         <div className="absolute top-0 right-0 w-80 h-80 bg-brand-red/20 rounded-full blur-[100px] pointer-events-none"></div>
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-red/20 border border-brand-red/30 text-brand-red text-xs font-bold tracking-wider uppercase mb-3">
-              <Sparkles size={12} /> Parent & Guardian Hub
-            </div>
             <h1 className="text-2xl md:text-3xl font-black text-white">
               Parent Guardian Portal
             </h1>
@@ -317,6 +315,31 @@ const ParentDashboard: React.FC = () => {
             ))}
           </div>
         )}
+      </div>
+
+      {/* Student Achievements & Mastery Badges Showcase for Parents */}
+      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-gray-200/80 dark:border-slate-800 p-6 sm:p-8 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 flex items-center justify-center">
+              <Award size={22} />
+            </div>
+            <div>
+              <h3 className="text-lg font-black text-slate-900 dark:text-white">Student Achievements & Certifications</h3>
+              <p className="text-xs text-slate-500">Track and celebrate tangible skills earned by your children across the 5-stage framework.</p>
+            </div>
+          </div>
+
+          <span className="text-xs font-bold text-slate-500 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-xl self-start sm:self-auto">
+            {PRESET_ACHIEVEMENTS.filter(b => b.unlockedAt).length} Badges Earned
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {PRESET_ACHIEVEMENTS.slice(0, 4).map(badge => (
+            <AchievementBadge key={badge.id} badge={badge} />
+          ))}
+        </div>
       </div>
 
       {/* Tuition & Announcements Row */}

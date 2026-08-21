@@ -91,29 +91,33 @@ const Services: React.FC = () => {
           ) : (
             <StaggerGroup className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {services.map((service) => (
-                <motion.div key={service.id} variants={staggerItem}>
+                <motion.div 
+                  key={service.id} 
+                  variants={staggerItem}
+                  whileHover={{ y: -6, transition: { duration: 0.28, ease: 'easeOut' } }}
+                >
                   <Link
                     to={`/services/${service.slug}`}
-                    className="group relative flex flex-col justify-end h-[320px] rounded-2xl overflow-hidden"
+                    className="group relative flex flex-col justify-end h-[340px] rounded-2xl overflow-hidden glass-card hover:border-cyan-400/50 transition-all duration-300"
                   >
                     <img
                       src={getServiceImage(service.iconName)}
                       alt=""
                       loading="lazy"
-                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-brand-slate via-brand-slate/70 to-brand-slate/10" />
-                    <div className="relative z-10 p-8">
-                      <div className="w-14 h-14 bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl flex items-center justify-center mb-6 text-white group-hover:bg-brand-red group-hover:border-brand-red transition-colors">
+                    <div className="absolute inset-0 bg-gradient-to-t from-brand-slate via-brand-slate/85 to-brand-slate/20" />
+                    <div className="relative z-10 p-6 sm:p-8">
+                      <div className="w-13 h-13 bg-white/15 backdrop-blur-sm border border-white/20 rounded-xl flex items-center justify-center mb-5 text-white group-hover:bg-cyan-500/20 group-hover:border-cyan-400/50 group-hover:text-cyan-300 transition-all">
                         {getIconComponent(service.iconName)}
                       </div>
-                      <h3 className="text-2xl font-bold text-white mb-3">{service.title}</h3>
-                      <p className="text-white/70 leading-relaxed mb-4 text-sm line-clamp-2">
+                      <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">{service.title}</h3>
+                      <p className="text-white/80 leading-relaxed mb-4 text-sm line-clamp-2">
                         {service.shortDescription}
                       </p>
-                      <span className="font-bold text-sm uppercase tracking-wider text-white inline-flex items-center gap-2">
+                      <span className="font-bold text-xs uppercase tracking-wider text-cyan-400 group-hover:text-white inline-flex items-center gap-1.5 transition-colors">
                         Learn More
-                        <span className="transition-transform group-hover:translate-x-1">&rarr;</span>
+                        <span className="transition-transform group-hover:translate-x-1.5">&rarr;</span>
                       </span>
                     </div>
                   </Link>

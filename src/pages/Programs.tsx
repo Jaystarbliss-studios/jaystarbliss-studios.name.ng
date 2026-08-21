@@ -12,81 +12,125 @@ import {
   Laptop, 
   Palette, 
   Music, 
-  FileText, 
-  Users, 
-  School, 
+  Brain,
+  Gamepad2,
+  Baby,
+  Users,
   BookOpen, 
   Search, 
   X,
   Layers,
-  ArrowRight
+  ArrowRight,
+  Compass,
+  UserCheck
 } from 'lucide-react';
+import StageArchitectureBanner from '../components/ecosystem/StageArchitectureBanner';
+import LearningSchoolsGrid from '../components/ecosystem/LearningSchoolsGrid';
+import LearningPathBuilder from '../components/ecosystem/LearningPathBuilder';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 
-interface CategoryMeta {
-  label: string;
-  IconComponent: React.FC<{ size?: number; className?: string }>;
-  description: string;
-}
-
-const CATEGORY_MAP: Record<string, CategoryMeta> = {
-  ALL_PROGRAMS: { 
-    label: 'All Tracks', 
-    IconComponent: Layers, 
-    description: 'Explore our complete ecosystem of foundational academics, digital technology, creative arts, and school STEM clubs.' 
-  },
-  ACADEMICS: { 
-    label: 'Academics', 
-    IconComponent: GraduationCap, 
-    description: 'Core foundational subjects taught with deep understanding, reasoning, and practical application.' 
-  },
-  DIGITAL_AND_TECHNOLOGY: { 
-    label: 'Digital & Tech', 
-    IconComponent: Laptop, 
-    description: 'Scratch game coding, web development, Python, AI literacy, and robotic engineering.' 
-  },
-  CREATIVE: { 
-    label: 'Creative Arts', 
-    IconComponent: Palette, 
-    description: 'Graphic design, branding, digital illustration, and visual media communication.' 
-  },
-  MUSIC: { 
-    label: 'Music', 
-    IconComponent: Music, 
-    description: 'Piano keyboards, violin, recorder, vocal training, and music theory.' 
-  },
-  EXAM_PREPARATION: { 
-    label: 'Exam Prep', 
-    IconComponent: FileText, 
-    description: 'High-yield preparation for WAEC, NECO, JAMB, Cambridge Checkpoint, and IGCSE.' 
-  },
-  PERSONALIZED_LEARNING: { 
-    label: 'Private Tutoring', 
-    IconComponent: Users, 
-    description: 'One-on-one tailored academic mentorship and accelerated learning roadmaps.' 
-  },
-  SCHOOL_PROGRAMS: { 
-    label: 'School STEM Clubs', 
-    IconComponent: School, 
-    description: 'Curriculum-aligned Smart Tech, Coding, and Robotics clubs designed for partner schools.' 
-  }
+const SCHOOL_FILTER_MAP: Record<string, { label: string; icon: React.FC<{ size?: number; className?: string }> }> = {
+  ALL: { label: 'All 8 Academies', icon: Layers },
+  'technology-programming': { label: 'Tech & Coding', icon: Laptop },
+  'digital-literacy': { label: 'Digital Literacy', icon: Brain },
+  'creative-design': { label: 'Creative Design', icon: Palette },
+  'music-performing-arts': { label: 'Music & Instruments', icon: Music },
+  'academic-excellence': { label: 'Academic Excellence', icon: GraduationCap },
+  'strategy-games': { label: 'Chess & Strategy', icon: Gamepad2 },
+  'young-creators': { label: 'Young Creators', icon: Baby },
+  'private-tutoring': { label: 'Private Mentorship', icon: Users }
 };
 
-const CATEGORY_ORDER = [
-  'ALL_PROGRAMS',
-  'ACADEMICS', 
-  'DIGITAL_AND_TECHNOLOGY', 
-  'CREATIVE', 
-  'MUSIC', 
-  'EXAM_PREPARATION', 
-  'PERSONALIZED_LEARNING', 
-  'SCHOOL_PROGRAMS'
-];
+const CANONICAL_SCHOOL_MAP: Record<string, { schoolId: string; filterKey: string }> = {
+  'tech-programming': { schoolId: 'tech-programming', filterKey: 'technology-programming' },
+  'technology-programming': { schoolId: 'tech-programming', filterKey: 'technology-programming' },
+  'tech': { schoolId: 'tech-programming', filterKey: 'technology-programming' },
+  'coding': { schoolId: 'tech-programming', filterKey: 'technology-programming' },
+  'digital_and_technology': { schoolId: 'tech-programming', filterKey: 'technology-programming' },
+  'digital-technology': { schoolId: 'tech-programming', filterKey: 'technology-programming' },
+  'digital-literacy': { schoolId: 'digital-literacy', filterKey: 'digital-literacy' },
+  'literacy': { schoolId: 'digital-literacy', filterKey: 'digital-literacy' },
+  'creative-design': { schoolId: 'creative-design', filterKey: 'creative-design' },
+  'creative': { schoolId: 'creative-design', filterKey: 'creative-design' },
+  'design': { schoolId: 'creative-design', filterKey: 'creative-design' },
+  'music-performing-arts': { schoolId: 'music-performing-arts', filterKey: 'music-performing-arts' },
+  'music': { schoolId: 'music-performing-arts', filterKey: 'music-performing-arts' },
+  'instruments': { schoolId: 'music-performing-arts', filterKey: 'music-performing-arts' },
+  'academic-excellence': { schoolId: 'academic-excellence', filterKey: 'academic-excellence' },
+  'academics': { schoolId: 'academic-excellence', filterKey: 'academic-excellence' },
+  'academic': { schoolId: 'academic-excellence', filterKey: 'academic-excellence' },
+  'strategy-games': { schoolId: 'strategy-games', filterKey: 'strategy-games' },
+  'strategy': { schoolId: 'strategy-games', filterKey: 'strategy-games' },
+  'chess': { schoolId: 'strategy-games', filterKey: 'strategy-games' },
+  'young-creators': { schoolId: 'young-creators', filterKey: 'young-creators' },
+  'young': { schoolId: 'young-creators', filterKey: 'young-creators' },
+  'early-learners': { schoolId: 'young-creators', filterKey: 'young-creators' },
+  'private-tutoring': { schoolId: 'private-tutoring', filterKey: 'private-tutoring' },
+  'tutoring': { schoolId: 'private-tutoring', filterKey: 'private-tutoring' },
+  'school-partnership': { schoolId: 'tech-programming', filterKey: 'ALL' },
+  'school_programs': { schoolId: 'tech-programming', filterKey: 'ALL' },
+  'school-programs': { schoolId: 'tech-programming', filterKey: 'ALL' }
+};
 
 const Programs: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
+  const [activeView, setActiveView] = useState<'ecosystem' | 'pathfinder' | 'catalog'>('ecosystem');
+  const [selectedSchoolId, setSelectedSchoolId] = useState<string>('tech-programming');
   const [programs, setPrograms] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
+  const [selectedSchoolFilter, setSelectedSchoolFilter] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Handle URL hashes and query parameters (e.g. /programs?school=academic-excellence or /programs#digital_and_technology)
+  useEffect(() => {
+    const rawSchool = searchParams.get('school') || searchParams.get('category');
+    const rawTab = searchParams.get('tab') || searchParams.get('view');
+    const rawHash = location.hash.replace(/^#/, '').toLowerCase();
+
+    let targetSchoolKey = rawSchool?.toLowerCase() || (rawHash && CANONICAL_SCHOOL_MAP[rawHash] ? rawHash : null);
+
+    if (rawTab === 'catalog' || rawHash === 'catalog' || rawHash === 'courses') {
+      setActiveView('catalog');
+      if (targetSchoolKey && CANONICAL_SCHOOL_MAP[targetSchoolKey]) {
+        setSelectedSchoolFilter(CANONICAL_SCHOOL_MAP[targetSchoolKey].filterKey);
+      }
+      setTimeout(() => {
+        const el = document.getElementById('catalog-section');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+      return;
+    }
+
+    if (rawTab === 'pathfinder' || rawHash === 'pathfinder') {
+      setActiveView('pathfinder');
+      setTimeout(() => {
+        const el = document.getElementById('pathfinder-section');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+      return;
+    }
+
+    if (targetSchoolKey && CANONICAL_SCHOOL_MAP[targetSchoolKey]) {
+      const match = CANONICAL_SCHOOL_MAP[targetSchoolKey];
+      setActiveView('ecosystem');
+      setSelectedSchoolId(match.schoolId);
+      setSelectedSchoolFilter(match.filterKey);
+
+      setTimeout(() => {
+        const el = document.getElementById('school-hub') || document.getElementById('programs-content');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 150);
+    } else if (rawHash === 'ecosystem' || rawHash === 'academies' || rawHash === 'programs-content' || rawHash === 'programs-section') {
+      setActiveView('ecosystem');
+      setTimeout(() => {
+        const el = document.getElementById('programs-content');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  }, [location.pathname, location.search, location.hash, searchParams]);
 
   useEffect(() => {
     const fetchPrograms = async () => {
@@ -104,194 +148,282 @@ const Programs: React.FC = () => {
   }, []);
 
   const filteredPrograms = programs.filter(p => {
-    const matchesCat = selectedCategory === 'ALL' || (p.categoryId || 'ACADEMICS') === selectedCategory;
+    const matchesCategory = selectedSchoolFilter === 'ALL' || (p.categoryId || '').toLowerCase().includes(selectedSchoolFilter.replace('-', '_')) || (p.schoolId || '') === selectedSchoolFilter;
     const matchesSearch = !searchQuery || 
       p.title?.toLowerCase().includes(searchQuery.toLowerCase()) || 
       p.shortDescription?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.targetAudience?.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCat && matchesSearch;
+    return matchesCategory && matchesSearch;
   });
-
-  const groupedPrograms = filteredPrograms.reduce((acc, program) => {
-    const cat = program.categoryId || 'ACADEMICS';
-    if (!acc[cat]) acc[cat] = [];
-    acc[cat].push(program);
-    return acc;
-  }, {} as Record<string, any[]>);
 
   return (
     <MainLayout>
       <SEO 
-        title="Programs & Learning Tracks" 
-        description="Explore our ecosystem of educational, coding, robotics, and creative programs for kids, teens, and schools." 
+        title="Jaystarbliss Learning Ecosystem | 8 Academies & Progressive Pathways" 
+        description="Explore the multi-disciplinary learning ecosystem: Technology & Coding, Digital Literacy, Creative Design, Music, Academic Excellence, Chess, and Young Creators." 
       />
 
       {/* Hero Header */}
       <div className="bg-brand-slate text-white py-16 lg:py-24 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
         <div className="container mx-auto px-4 max-w-7xl relative z-10">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 tracking-tight">
-              Ecosystem of Learning Programs
-            </h1>
-            <p className="text-lg md:text-xl text-white/80 leading-relaxed">
-              From foundational sciences to full-stack coding, AI literacy, and creative arts. Find the ideal roadmap for yourself, your child, or your school.
-            </p>
-          </div>
-        </div>
-      </div>
-      
-      {/* Streamlined Filter & Search Bar */}
-      <div className="bg-white dark:bg-slate-950 border-b border-gray-200 dark:border-slate-800 sticky top-[52px] sm:top-[64px] z-30 shadow-xs w-full max-w-full">
-        <div className="container mx-auto px-4 max-w-7xl py-3.5">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4 w-full max-w-full">
-            
-            {/* Category Pills */}
-            <div className="flex overflow-x-auto w-full md:w-auto pb-1 md:pb-0 gap-2 hide-scrollbar items-center max-w-full">
+          
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+            <div className="max-w-3xl">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
+                One Ecosystem. 8 Specialized Academies. Infinite Potential.
+              </h1>
+              <p className="text-base sm:text-lg text-white/80 mt-4 leading-relaxed max-w-2xl">
+                Jaystarbliss Studios is more than tutoring — we build tailored learning pathways across technology, music, digital literacy, creative arts, and academic excellence with our proven 5-stage mastery framework.
+              </p>
+            </div>
+
+            {/* Quick Action Hub */}
+            <div className="shrink-0 flex flex-col sm:flex-row lg:flex-col gap-3">
               <button
                 type="button"
-                onClick={() => setSelectedCategory('ALL')}
-                className={`whitespace-nowrap px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
-                  selectedCategory === 'ALL' 
-                    ? 'bg-brand-red text-white shadow-sm' 
-                    : 'bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800'
-                }`}
+                onClick={() => {
+                  setActiveView('pathfinder');
+                  const el = document.getElementById('pathfinder-section');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="bg-brand-red hover:bg-red-700 text-white px-6 py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-brand-red/20 transition-all text-center"
               >
-                <Layers size={14} />
-                <span>All Programs</span>
+                <Compass size={16} />
+                <span>Build My Child's Pathway</span>
               </button>
 
-              {CATEGORY_ORDER.filter(c => c !== 'ALL_PROGRAMS').map(catKey => {
-                const meta = CATEGORY_MAP[catKey];
-                const Icon = meta.IconComponent;
-                const isActive = selectedCategory === catKey;
-
-                return (
-                  <button
-                    key={catKey}
-                    type="button"
-                    onClick={() => setSelectedCategory(catKey)}
-                    className={`whitespace-nowrap px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
-                      isActive 
-                        ? 'bg-brand-red text-white shadow-sm' 
-                        : 'bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800'
-                    }`}
-                  >
-                    <Icon size={14} />
-                    <span>{meta.label}</span>
-                  </button>
-                );
-              })}
+              <Link
+                to="/tutors"
+                className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-6 py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all text-center"
+              >
+                <UserCheck size={16} />
+                <span>Find a Dedicated Mentor</span>
+              </Link>
             </div>
-
-            {/* Quick Search */}
-            <div className="relative w-full md:w-64 shrink-0">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-              <input
-                type="text"
-                placeholder="Search programs..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-8 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-medium focus:outline-none focus:ring-2 focus:ring-brand-red"
-              />
-              {searchQuery && (
-                <button 
-                  type="button" 
-                  onClick={() => setSearchQuery('')} 
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-                >
-                  <X size={14} />
-                </button>
-              )}
-            </div>
-
           </div>
+
+          {/* Sub-Navigation View Switcher */}
+          <div className="flex flex-wrap gap-2 pt-10 mt-6 border-t border-white/10">
+            {[
+              { id: 'ecosystem', label: '8 Learning Academies', icon: Layers },
+              { id: 'pathfinder', label: 'Pathfinder (Custom Program Builder)', icon: Compass },
+              { id: 'catalog', label: 'Program Catalog & Courses', icon: BookOpen }
+            ].map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeView === tab.id;
+
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setActiveView(tab.id as any)}
+                  className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
+                    isActive
+                      ? 'bg-white text-slate-900 shadow-md'
+                      : 'bg-white/10 text-white/80 hover:text-white hover:bg-white/15'
+                  }`}
+                >
+                  <Icon size={14} />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
         </div>
       </div>
 
-      {/* Program Listings */}
-      <div className="py-14 md:py-20 bg-brand-neutral dark:bg-slate-900 min-h-[50vh]">
-        <div className="container mx-auto px-4 max-w-7xl">
-          {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[1, 2, 3, 4, 5, 6].map(i => <CardSkeleton key={i} />)}
-            </div>
-          ) : filteredPrograms.length === 0 ? (
-            <EmptyState 
-              title="No Programs Match Your Criteria" 
-              description={selectedCategory === 'ALL' ? "We are currently updating our program tracks. Please check back soon or reach out for custom tutoring." : `No programs found under this track. Try changing your search or filter.`}
-            />
-          ) : (
-            <div className="space-y-16">
-              {CATEGORY_ORDER.filter(c => c !== 'ALL_PROGRAMS').map(categoryId => {
-                const catPrograms = groupedPrograms[categoryId];
-                if (!catPrograms || catPrograms.length === 0) return null;
-                const catInfo = CATEGORY_MAP[categoryId] || { label: categoryId, IconComponent: BookOpen, description: '' };
-                const Icon = catInfo.IconComponent;
-                
-                return (
-                  <div key={categoryId} id={categoryId.toLowerCase()} className="space-y-6">
-                    <div className="border-b border-slate-200 dark:border-slate-800 pb-4">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2.5 rounded-xl bg-brand-red/10 text-brand-red">
-                          <Icon size={22} />
-                        </div>
-                        <div>
-                          <h2 className="text-2xl font-extrabold text-brand-slate dark:text-white">
-                            {catInfo.label}
-                          </h2>
-                          {catInfo.description && (
-                            <p className="text-xs md:text-sm text-brand-slate/70 dark:text-gray-400 mt-0.5">
-                              {catInfo.description}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {catPrograms.map((program: any) => (
-                        <Card key={program.id} hoverEffect className="flex flex-col group bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
-                          <CardContent className="p-6 md:p-7 flex-grow flex flex-col">
-                            <h3 className="text-xl font-bold text-brand-slate dark:text-white mb-3 leading-snug group-hover:text-brand-red transition-colors">
-                              {program.title}
-                            </h3>
-                            <p className="text-xs md:text-sm text-brand-slate/70 dark:text-gray-400 mb-6 line-clamp-3 leading-relaxed flex-grow">
-                              {program.shortDescription || (program.longDescription ? program.longDescription.substring(0, 120) + '...' : '')}
-                            </p>
-                            
-                            <div className="space-y-2 text-xs text-brand-slate/70 dark:text-gray-400 pt-4 border-t border-slate-100 dark:border-slate-800/80">
-                              {program.targetAudience && (
-                                <div className="flex items-center justify-between">
-                                  <span className="font-bold text-brand-slate dark:text-slate-300">Audience:</span> 
-                                  <span className="capitalize">{program.targetAudience.replace(/_/g, ' ')}</span>
-                                </div>
-                              )}
-                              <div className="flex items-center justify-between">
-                                <span className="font-bold text-brand-slate dark:text-slate-300">Format:</span> 
-                                <span>{program.deliveryFormat === 'ONLINE' ? 'Online' : program.deliveryFormat === 'PHYSICAL' ? 'In-Person' : 'Hybrid'}</span>
-                              </div>
-                            </div>
-                          </CardContent>
-                          
-                          <CardFooter className="p-6 pt-0 flex items-center justify-between mt-auto">
-                            <span className="font-black text-brand-slate dark:text-white text-base">
-                              {program.pricing && program.pricing.trim() !== '' ? program.pricing : 'Contact Us'}
-                            </span>
-                            <Button to={`/programs/${program.slug || program.id}`} variant="secondary" size="sm" className="font-bold text-xs uppercase tracking-wider">
-                              VIEW DETAILS <ArrowRight size={14} className="ml-1" />
-                            </Button>
-                          </CardFooter>
-                        </Card>
-                      ))}
-                    </div>
-                  </div>
-                );
-              })}
+      {/* Main Section Content based on active view */}
+      <div id="programs-content" className="py-16 bg-slate-50 dark:bg-slate-950 scroll-mt-20">
+        <div className="container mx-auto px-4 max-w-7xl space-y-16">
+          
+          {/* Section: 5-Stage Architecture Standard */}
+          <StageArchitectureBanner />
+
+          {/* View 1: 8 Learning Schools & Deep Dive */}
+          {activeView === 'ecosystem' && (
+            <div id="ecosystem-section" className="space-y-8 scroll-mt-24">
+              <div className="max-w-3xl">
+                <div className="text-xs font-black uppercase tracking-wider text-brand-red">
+                  Explore by Academy
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-1">
+                  The 8 Schools of the Jaystarbliss Ecosystem
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+                  Click on any academy below to review its specialized levels, topics, and discipline progression.
+                </p>
+              </div>
+
+              <LearningSchoolsGrid 
+                selectedSchoolId={selectedSchoolId}
+                onSchoolChange={(id) => {
+                  setSelectedSchoolId(id);
+                  const matching = Object.values(CANONICAL_SCHOOL_MAP).find(c => c.schoolId === id);
+                  if (matching) setSelectedSchoolFilter(matching.filterKey);
+                }}
+              />
             </div>
           )}
+
+          {/* View 2: Pathfinder / Custom Program Builder */}
+          {activeView === 'pathfinder' && (
+            <div id="pathfinder-section" className="space-y-8 scroll-mt-24">
+              <div className="max-w-3xl">
+                <div className="text-xs font-black uppercase tracking-wider text-brand-red">
+                  Interactive Roadmap Generator
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-1">
+                  Build a Bespoke Multi-Disciplinary Program
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+                  Tailor a schedule that blends coding with academics, music with creative design, or exam drills with digital literacy.
+                </p>
+              </div>
+
+              <LearningPathBuilder />
+            </div>
+          )}
+
+          {/* View 3: Program Catalog & Course Cards */}
+          {activeView === 'catalog' && (
+            <div id="catalog-section" className="space-y-8 scroll-mt-24">
+              
+              {/* Filter & Search Bar */}
+              <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs flex flex-col md:flex-row items-center justify-between gap-4">
+                
+                {/* Search Input */}
+                <div className="relative w-full md:w-80">
+                  <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search courses..."
+                    className="w-full pl-9 pr-4 py-2 rounded-xl text-xs bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border-0 outline-none focus:ring-2 focus:ring-brand-red"
+                  />
+                  {searchQuery && (
+                    <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
+                      <X size={14} />
+                    </button>
+                  )}
+                </div>
+
+                {/* Academy Filter Pills */}
+                <div className="flex overflow-x-auto gap-1.5 pb-1 max-w-full hide-scrollbar">
+                  {Object.entries(SCHOOL_FILTER_MAP).map(([key, meta]) => {
+                    const Icon = meta.icon;
+                    const isSelected = selectedSchoolFilter === key;
+
+                    return (
+                      <button
+                        key={key}
+                        type="button"
+                        onClick={() => setSelectedSchoolFilter(key)}
+                        className={`whitespace-nowrap px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                          isSelected
+                            ? 'bg-brand-red text-white'
+                            : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+                        }`}
+                      >
+                        <Icon size={13} />
+                        <span>{meta.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Published Courses Grid */}
+              {loading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <CardSkeleton />
+                  <CardSkeleton />
+                  <CardSkeleton />
+                </div>
+              ) : filteredPrograms.length === 0 ? (
+                <div className="bg-white dark:bg-slate-900 rounded-3xl p-12 text-center border border-slate-200 dark:border-slate-800">
+                  <EmptyState 
+                    title="No Courses Found" 
+                    description="No courses match your filter. You can still use the Pathfinder tool above to generate a bespoke learning plan!"
+                  />
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredPrograms.map((program) => (
+                    <Card key={program.id} hoverEffect floatEffect className="flex flex-col justify-between">
+                      <CardContent className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-black uppercase tracking-wider text-brand-red bg-brand-red/10 px-2 py-0.5 rounded-md">
+                            {program.categoryId ? program.categoryId.replace(/_/g, ' ') : 'Academy Course'}
+                          </span>
+                          <span className="text-[11px] font-bold text-slate-500">
+                            {program.deliveryFormat || 'Online / Physical'}
+                          </span>
+                        </div>
+
+                        <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
+                          {program.title}
+                        </h3>
+
+                        <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-3 leading-relaxed">
+                          {program.shortDescription}
+                        </p>
+
+                        {program.targetAudience && (
+                          <div className="text-[11px] text-slate-500">
+                            <strong>For:</strong> {program.targetAudience}
+                          </div>
+                        )}
+                      </CardContent>
+
+                      <CardFooter className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                        <div className="text-xs font-bold text-slate-500">
+                          Flexible Schedule
+                        </div>
+                        <Button
+                          to={`/programs/${program.slug || program.id}`}
+                          size="sm"
+                          className="font-bold text-xs bg-brand-red hover:bg-red-700 text-white"
+                          rightIcon={<ArrowRight size={13} />}
+                        >
+                          View Pathway
+                        </Button>
+                      </CardFooter>
+                    </Card>
+                  ))}
+                </div>
+              )}
+
+            </div>
+          )}
+
+          {/* Quick Institutional / School Bar */}
+          <div className="p-8 rounded-3xl bg-gradient-to-r from-slate-900 via-brand-slate to-slate-900 text-white flex flex-col md:flex-row items-center justify-between gap-6 border border-slate-800 shadow-xl">
+            <div className="space-y-1 text-center md:text-left">
+              <div className="text-xs font-black uppercase tracking-widest text-brand-red">
+                Institutional Partnerships
+              </div>
+              <h3 className="text-xl sm:text-2xl font-black">
+                Bringing the Ecosystem to Your School?
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-300 max-w-xl">
+                Explore our Tier 1 (1 day/wk), Tier 2 (2 days/wk), and Tier 3 (3 days/wk) school STEM, Coding, Music, and Chess delivery models.
+              </p>
+            </div>
+            <Button
+              to="/school-partnership"
+              className="shrink-0 bg-brand-red hover:bg-red-700 text-white font-extrabold uppercase tracking-wider text-xs px-6 py-3 shadow-lg shadow-brand-red/20"
+              rightIcon={<ArrowRight size={14} />}
+            >
+              School Delivery Tiers
+            </Button>
+          </div>
+
         </div>
       </div>
+
     </MainLayout>
   );
 };

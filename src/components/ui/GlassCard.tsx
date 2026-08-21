@@ -8,22 +8,24 @@ interface Ripple {
   id: number;
 }
 
-interface CardProps extends Omit<HTMLMotionProps<'div'>, 'children'> {
+export interface GlassCardProps extends Omit<HTMLMotionProps<'div'>, 'children'> {
   children?: React.ReactNode;
   hoverEffect?: boolean;
   floatEffect?: boolean;
   rippleEffect?: boolean;
   scrollReveal?: boolean;
+  subtle?: boolean;
   delay?: number;
 }
 
-export const Card: React.FC<CardProps> = ({ 
+export const GlassCard: React.FC<GlassCardProps> = ({ 
   children, 
   className = '', 
   hoverEffect = true,
   floatEffect = true,
   rippleEffect = true,
   scrollReveal = true,
+  subtle = false,
   delay = 0,
   onClick,
   ...props 
@@ -56,35 +58,40 @@ export const Card: React.FC<CardProps> = ({
     }
   }, [rippleEffect, onClick]);
 
-  const baseClasses = 'glass-card glass-ripple-container rounded-2xl relative overflow-hidden';
+  const baseCardClasses = subtle 
+    ? 'glass-card-subtle glass-ripple-container rounded-2xl relative overflow-hidden' 
+    : 'glass-card glass-ripple-container rounded-2xl relative overflow-hidden';
+  
   const hoverClasses = hoverEffect 
-    ? 'hover:border-cyan-500/50 hover:shadow-xl hover:shadow-cyan-500/10' 
+    ? 'hover:border-cyan-500/50 hover:shadow-xl hover:shadow-cyan-500/10 cursor-pointer' 
     : '';
 
+  // Scroll-triggered Fade-In-Up motion animation
   const motionProps = scrollReveal ? {
     initial: { opacity: 0, y: 28 },
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true, margin: '-30px' },
     transition: { 
-      duration: 0.52, 
+      duration: 0.55, 
       delay, 
       ease: 'easeOut' as const
     },
   } : {};
-  
+
   return (
     <motion.div 
       ref={cardRef}
-      className={`${baseClasses} ${hoverClasses} ${className}`}
+      className={`${baseCardClasses} ${hoverClasses} ${className}`}
       onClick={handleCardClick}
-      whileHover={floatEffect || hoverEffect ? { 
-        y: -5,
+      whileHover={floatEffect ? { 
+        y: -6,
         transition: { duration: 0.28, ease: 'easeOut' as const } 
       } : undefined}
-      whileTap={rippleEffect ? { scale: 0.99 } : undefined}
+      whileTap={rippleEffect ? { scale: 0.985 } : undefined}
       {...motionProps}
       {...props}
     >
+      {/* Click-based Ripple Elements */}
       {ripples.map(ripple => (
         <span
           key={ripple.id}
@@ -97,25 +104,10 @@ export const Card: React.FC<CardProps> = ({
           }}
         />
       ))}
+
       {children}
     </motion.div>
   );
 };
 
-export const CardHeader: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, className = '', ...props }) => (
-  <div className={`p-5 sm:p-6 border-b border-slate-200/50 dark:border-white/10 ${className}`} {...props}>
-    {children}
-  </div>
-);
-
-export const CardContent: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, className = '', ...props }) => (
-  <div className={`p-5 sm:p-6 ${className}`} {...props}>
-    {children}
-  </div>
-);
-
-export const CardFooter: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, className = '', ...props }) => (
-  <div className={`p-5 sm:p-6 border-t border-slate-200/50 dark:border-white/10 bg-white/30 dark:bg-slate-950/30 ${className}`} {...props}>
-    {children}
-  </div>
-);
+export default GlassCard;

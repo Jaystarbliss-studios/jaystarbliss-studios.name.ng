@@ -19,6 +19,7 @@ import ProjectRequest from "./pages/ProjectRequest";
 import SchoolPartnership from "./pages/SchoolPartnership";
 import TutorApplication from "./pages/TutorApplication";
 import FAQ from "./pages/FAQ";
+import FindTutor from "./pages/FindTutor";
 import Portal from "./pages/Portal";
 import Register from "./pages/Register";
 import PortalLayout from "./components/portal/PortalLayout";
@@ -52,6 +53,7 @@ import AdminApprovals from "./pages/admin/AdminApprovals";
 import AdminSettings from "./pages/admin/AdminSettings";
 
 import ScrollToTop from "./components/ScrollToTop";
+import GlassRippleListener from "./components/ui/GlassRippleListener";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -75,6 +77,8 @@ function AnimatedRoutes() {
         <Route path="/blog/:slug" element={<PageTransition><BlogPostDetails /></PageTransition>} />
         <Route path="/project-request" element={<PageTransition><ProjectRequest /></PageTransition>} />
         <Route path="/school-partnership" element={<PageTransition><SchoolPartnership /></PageTransition>} />
+        <Route path="/tutors" element={<PageTransition><FindTutor /></PageTransition>} />
+        <Route path="/find-tutor" element={<PageTransition><FindTutor /></PageTransition>} />
         <Route path="/tutor-application" element={<PageTransition><TutorApplication /></PageTransition>} />
         <Route path="/faq" element={<PageTransition><FAQ /></PageTransition>} />
 
@@ -140,6 +144,7 @@ function App() {
           <Router>
             <PageLoader />
             <ScrollToTop />
+            <GlassRippleListener />
             <AnimatedRoutes />
           </Router>
         </ToastProvider>

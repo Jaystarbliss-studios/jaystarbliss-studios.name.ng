@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { db, auth } from '../../lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { 
-  Users, Calendar, GraduationCap, ShieldCheck, Sparkles,
+  Users, Calendar, GraduationCap, ShieldCheck,
   BookOpen, FileText, ExternalLink, Download, CheckCircle2, Clock, 
   Award, Layers
 } from 'lucide-react';
@@ -211,9 +211,6 @@ const SchoolDashboard: React.FC = () => {
         <div className="absolute top-0 right-0 w-80 h-80 bg-brand-red/20 rounded-full blur-[100px] pointer-events-none"></div>
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-red/20 border border-brand-red/30 text-brand-red text-xs font-bold tracking-wider uppercase mb-3">
-              <Sparkles size={12} /> Institutional Partner Portal
-            </div>
             <h1 className="text-2xl md:text-3xl font-black text-white">
               {schoolData?.name || 'Partner Academy'} Console
             </h1>

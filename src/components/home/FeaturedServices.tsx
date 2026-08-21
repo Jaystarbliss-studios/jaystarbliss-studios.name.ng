@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Monitor, Paintbrush, Database, Globe, Briefcase, Cpu, Loader2 } from 'lucide-react';
+import { Monitor, Paintbrush, Database, Globe, Briefcase, Cpu } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { collection, query, where, getDocs, limit } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
@@ -7,6 +7,7 @@ import { stockImages } from '../../lib/stockImages';
 import { StaggerGroup, Reveal } from '../ui/Reveal';
 import { staggerItem } from '../ui/animationVariants';
 import { motion } from 'motion/react';
+import { GlassGridSkeleton } from '../ui/GlassCardSkeleton';
 
 const getIconComponent = (iconName: string) => {
   const normalizedName = (iconName || "Monitor").toLowerCase();
@@ -74,9 +75,7 @@ const FeaturedServices: React.FC = () => {
         </Reveal>
 
         {loading ? (
-          <div className="flex justify-center py-20">
-            <Loader2 className="animate-spin text-brand-red w-10 h-10" />
-          </div>
+          <GlassGridSkeleton count={3} variant="service" />
         ) : services.length === 0 ? (
           <div className="text-center py-20 bg-white/5 rounded-2xl border border-white/10 text-white/50">
             <p>No featured services currently available. Please check back later.</p>

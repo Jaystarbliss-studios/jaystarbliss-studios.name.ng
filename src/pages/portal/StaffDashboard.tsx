@@ -5,7 +5,7 @@ import {
 } from 'firebase/firestore';
 import { 
   Users, FileText, Video, 
-  Clock, Sparkles, CheckCircle2, UserCheck 
+  Clock, CheckCircle2, UserCheck 
 } from 'lucide-react';
 import SEO from '../../components/ui/SEO';
 
@@ -117,9 +117,6 @@ const StaffDashboard: React.FC = () => {
         <div className="absolute top-0 right-0 w-80 h-80 bg-brand-red/20 rounded-full blur-[100px] pointer-events-none"></div>
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-red/20 border border-brand-red/30 text-brand-red text-xs font-bold tracking-wider uppercase mb-3">
-              <Sparkles size={12} /> Mentor & Tutor Console
-            </div>
             <h1 className="text-2xl md:text-3xl font-black text-white">
               Instructor Dashboard
             </h1>

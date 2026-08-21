@@ -228,9 +228,13 @@ const Portfolio: React.FC = () => {
                 />
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {filteredOrgProjects.map((project) => (
+                  {filteredOrgProjects.map((project, idx) => (
                     <motion.div 
                       key={project.id} 
+                      initial={{ opacity: 0, y: 28 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: '-30px' }}
+                      transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.21, 0.47, 0.32, 0.98] }}
                       whileHover={{ y: -6, transition: { duration: 0.28, ease: 'easeOut' } }}
                       className="group flex flex-col rounded-2xl overflow-hidden glass-card"
                     >

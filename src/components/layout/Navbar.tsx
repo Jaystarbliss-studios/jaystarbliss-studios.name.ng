@@ -18,7 +18,9 @@ import {
   Newspaper,
   BookOpen,
   HelpCircle,
-  ArrowRight
+  ArrowRight,
+  Music,
+  Brain
 } from 'lucide-react';
 import { useTheme } from '../../hooks/useTheme';
 import { useKeyboardShortcut } from '../../hooks/useKeyboardShortcut';
@@ -53,7 +55,7 @@ const Navbar: React.FC = () => {
     setMobileMenuOpen(false);
     setActiveDropdown(null);
     document.body.style.overflow = '';
-  }, [location.pathname]);
+  }, [location.pathname, location.search, location.hash]);
 
   useEffect(() => {
     if (mobileMenuOpen) {
@@ -159,7 +161,7 @@ const Navbar: React.FC = () => {
                       </div>
                       
                       <Link 
-                        to="/programs#academics" 
+                        to="/programs?school=academic-excellence#programs-content" 
                         className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors group"
                       >
                         <div className="p-2 rounded-lg bg-brand-red/10 text-brand-red dark:bg-brand-red/20 shrink-0 group-hover:scale-110 transition-transform">
@@ -172,7 +174,7 @@ const Navbar: React.FC = () => {
                       </Link>
 
                       <Link 
-                        to="/programs#digital_and_technology" 
+                        to="/programs?school=technology-programming#programs-content" 
                         className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors group"
                       >
                         <div className="p-2 rounded-lg bg-brand-red/10 text-brand-red dark:bg-brand-red/20 shrink-0 group-hover:scale-110 transition-transform">
@@ -185,7 +187,20 @@ const Navbar: React.FC = () => {
                       </Link>
 
                       <Link 
-                        to="/programs#creative" 
+                        to="/programs?school=digital-literacy#programs-content" 
+                        className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors group"
+                      >
+                        <div className="p-2 rounded-lg bg-brand-red/10 text-brand-red dark:bg-brand-red/20 shrink-0 group-hover:scale-110 transition-transform">
+                          <Brain size={16} />
+                        </div>
+                        <div>
+                          <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-brand-red">Digital Literacy & Tools</div>
+                          <div className="text-[11px] text-slate-500 dark:text-slate-400">Touch typing, Microsoft Office, Excel & Smart Search</div>
+                        </div>
+                      </Link>
+
+                      <Link 
+                        to="/programs?school=creative-design#programs-content" 
                         className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors group"
                       >
                         <div className="p-2 rounded-lg bg-brand-red/10 text-brand-red dark:bg-brand-red/20 shrink-0 group-hover:scale-110 transition-transform">
@@ -198,7 +213,20 @@ const Navbar: React.FC = () => {
                       </Link>
 
                       <Link 
-                        to="/programs#school_programs" 
+                        to="/programs?school=music-performing-arts#programs-content" 
+                        className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors group"
+                      >
+                        <div className="p-2 rounded-lg bg-brand-red/10 text-brand-red dark:bg-brand-red/20 shrink-0 group-hover:scale-110 transition-transform">
+                          <Music size={16} />
+                        </div>
+                        <div>
+                          <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-brand-red">Music & Performing Arts</div>
+                          <div className="text-[11px] text-slate-500 dark:text-slate-400">Keyboard, piano, recorder, violin & music theory</div>
+                        </div>
+                      </Link>
+
+                      <Link 
+                        to="/school-partnership" 
                         className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors group"
                       >
                         <div className="p-2 rounded-lg bg-brand-red/10 text-brand-red dark:bg-brand-red/20 shrink-0 group-hover:scale-110 transition-transform">
@@ -212,7 +240,7 @@ const Navbar: React.FC = () => {
 
                       <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
                         <Link 
-                          to="/programs" 
+                          to="/programs?tab=catalog#catalog-section" 
                           className="flex items-center justify-between px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800/50 text-xs font-bold text-brand-red hover:bg-brand-red/10 transition-colors"
                         >
                           <span>View Full Program Catalog</span>
@@ -541,19 +569,25 @@ const Navbar: React.FC = () => {
                 </button>
                 {mobileExpanded.programs && (
                   <div className="pl-3 pr-2 py-2 space-y-1.5 bg-slate-50/70 dark:bg-slate-900/60 rounded-xl my-1 border border-slate-100 dark:border-slate-800">
-                    <Link to="/programs" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-2 text-xs font-bold text-brand-red hover:underline">
+                    <Link to="/programs?tab=catalog#catalog-section" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-2 text-xs font-bold text-brand-red hover:underline">
                       <ArrowRight size={13} /> Full Programs Catalog
                     </Link>
-                    <Link to="/programs#academics" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-brand-red">
+                    <Link to="/programs?school=academic-excellence#programs-content" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-brand-red">
                       <GraduationCap size={15} className="text-brand-red" /> Academics & Tutoring
                     </Link>
-                    <Link to="/programs#digital_and_technology" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-brand-red">
+                    <Link to="/programs?school=technology-programming#programs-content" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-brand-red">
                       <Laptop size={15} className="text-brand-red" /> Coding, Tech & AI
                     </Link>
-                    <Link to="/programs#creative" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-brand-red">
+                    <Link to="/programs?school=digital-literacy#programs-content" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-brand-red">
+                      <Brain size={15} className="text-brand-red" /> Digital Literacy & Tools
+                    </Link>
+                    <Link to="/programs?school=creative-design#programs-content" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-brand-red">
                       <Palette size={15} className="text-brand-red" /> Creative Arts & Design
                     </Link>
-                    <Link to="/programs#school_programs" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-brand-red">
+                    <Link to="/programs?school=music-performing-arts#programs-content" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-brand-red">
+                      <Music size={15} className="text-brand-red" /> Music & Performing Arts
+                    </Link>
+                    <Link to="/school-partnership" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-brand-red">
                       <School size={15} className="text-brand-red" /> School STEM Clubs
                     </Link>
                   </div>

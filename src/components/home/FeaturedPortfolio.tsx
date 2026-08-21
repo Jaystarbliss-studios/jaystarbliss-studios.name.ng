@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { collection, query, where, getDocs, limit } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
-import { Loader2, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import { StaggerGroup, Reveal } from '../ui/Reveal';
 import { staggerItem } from '../ui/animationVariants';
 import { motion } from 'motion/react';
 import { usePageSection } from '../../lib/cms';
+import { GlassGridSkeleton } from '../ui/GlassCardSkeleton';
 
 const FeaturedPortfolio: React.FC = () => {
   const [projects, setProjects] = useState<any[]>([]);
@@ -67,9 +68,7 @@ const FeaturedPortfolio: React.FC = () => {
         </Reveal>
         
         {loading ? (
-          <div className="flex justify-center py-20">
-            <Loader2 className="animate-spin text-brand-red w-10 h-10" />
-          </div>
+          <GlassGridSkeleton count={2} columns="grid-cols-1 md:grid-cols-2" variant="portfolio" />
         ) : projects.length === 0 ? (
           <Reveal className="text-center py-20 bg-slate-50 dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 text-slate-500">
             <p>We are currently curating our featured portfolio cases. Check back soon.</p>

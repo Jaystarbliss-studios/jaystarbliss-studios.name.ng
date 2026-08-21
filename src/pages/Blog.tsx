@@ -285,7 +285,7 @@ const Blog: React.FC = () => {
                 />
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredNews.map((item) => {
+                  {filteredNews.map((item, idx) => {
                     const catStyle = categoryColors[item.category?.toLowerCase()] || {
                       bg: 'bg-slate-100 dark:bg-slate-800',
                       text: 'text-slate-600 dark:text-slate-300',
@@ -297,6 +297,10 @@ const Blog: React.FC = () => {
                     return (
                       <motion.div
                         key={item.id}
+                        initial={{ opacity: 0, y: 28 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: '-30px' }}
+                        transition={{ duration: 0.5, delay: idx * 0.07, ease: [0.21, 0.47, 0.32, 0.98] }}
                         whileHover={{ y: -6, transition: { duration: 0.28, ease: 'easeOut' } }}
                         onClick={() => handleOpenNewsModal(item)}
                         className="group flex flex-col rounded-2xl overflow-hidden glass-card hover:border-cyan-500/50 cursor-pointer transition-all duration-300"
@@ -380,11 +384,15 @@ const Blog: React.FC = () => {
                 />
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredPosts.map(post => {
+                  {filteredPosts.map((post, idx) => {
                     const isNews = post.category?.toLowerCase().includes('news');
                     return (
                       <motion.div
                         key={post.id}
+                        initial={{ opacity: 0, y: 28 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: '-30px' }}
+                        transition={{ duration: 0.5, delay: idx * 0.07, ease: [0.21, 0.47, 0.32, 0.98] }}
                         whileHover={{ y: -6, transition: { duration: 0.28, ease: 'easeOut' } }}
                         className="h-full"
                       >

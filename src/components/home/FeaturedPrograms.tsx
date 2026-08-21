@@ -2,21 +2,44 @@ import React, { useState, useEffect } from 'react';
 import { collection, query, where, getDocs, limit } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { Link } from 'react-router-dom';
-import { Loader2 } from 'lucide-react';
 import { getProgramImage } from '../../lib/stockImages';
 import { StaggerGroup, Reveal } from '../ui/Reveal';
 import { staggerItem } from '../ui/animationVariants';
 import { motion } from 'motion/react';
 import { usePageSection } from '../../lib/cms';
+import { GlassGridSkeleton } from '../ui/GlassCardSkeleton';
+import { 
+  Laptop, 
+  Palette, 
+  Music, 
+  Brain, 
+  GraduationCap, 
+  Gamepad2, 
+  Baby, 
+  Users,
+  ArrowRight,
+  Compass
+} from 'lucide-react';
+
+const ECOSYSTEM_TEASERS = [
+  { name: 'Tech & Coding', icon: Laptop, path: '/programs' },
+  { name: 'Digital Literacy', icon: Brain, path: '/programs' },
+  { name: 'Creative Design', icon: Palette, path: '/programs' },
+  { name: 'Music & Instruments', icon: Music, path: '/programs' },
+  { name: 'Academic Clinic', icon: GraduationCap, path: '/programs' },
+  { name: 'Chess & Strategy', icon: Gamepad2, path: '/programs' },
+  { name: 'Young Creators', icon: Baby, path: '/programs' },
+  { name: 'Private Mentorship', icon: Users, path: '/tutors' }
+];
 
 const FeaturedPrograms: React.FC = () => {
   const [programs, setPrograms] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   const { data: sectionInfo } = usePageSection('home', 'programs_preview', {
-    title: 'LEARN SOMETHING YOU CAN USE.',
-    subtitle: "Our programs are designed around practical learning. You don't just learn the theory — you get opportunities to practise, create and apply what you've learned.",
-    ctaText: 'VIEW ALL PROGRAMS',
+    title: 'THE JAYSTARBLISS LEARNING ECOSYSTEM',
+    subtitle: "A progressive multi-disciplinary framework designed around practical creation, project portfolios, and tailored learning pathways.",
+    ctaText: 'EXPLORE ALL 8 ACADEMIES',
     ctaLink: '/programs'
   });
 
@@ -46,28 +69,60 @@ const FeaturedPrograms: React.FC = () => {
   return (
     <section className="py-24 bg-white dark:bg-slate-900 dark:border-slate-800 border-t border-gray-100">
       <div className="container mx-auto px-4 md:px-8 max-w-7xl">
-        <Reveal className="text-center max-w-4xl mx-auto mb-14">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[42px] font-extrabold text-brand-slate dark:text-white mb-3 tracking-tight whitespace-normal sm:whitespace-nowrap">
-            {sectionInfo.title || 'LEARN SOMETHING YOU CAN USE.'}
+        
+        {/* Header */}
+        <Reveal className="text-center max-w-4xl mx-auto mb-12">
+          <span className="text-xs font-black uppercase tracking-widest text-brand-red mb-2 block">
+            Progressive Multi-Disciplinary Academies
+          </span>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[42px] font-extrabold text-brand-slate dark:text-white mb-3 tracking-tight">
+            {sectionInfo.title}
           </h2>
           <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 font-medium mb-8 max-w-2xl mx-auto leading-relaxed">
-            {sectionInfo.subtitle || "Our programs are designed around practical learning. You don't just learn the theory — you get opportunities to practise, create and apply what you've learned."}
+            {sectionInfo.subtitle}
           </p>
-          <Link
-            to={sectionInfo.ctaLink || '/programs'}
-            className="inline-flex items-center gap-2 bg-brand-slate text-white px-7 py-3 rounded-xl font-bold hover:bg-gray-800 transition-colors shadow-md text-sm"
-          >
-            {sectionInfo.ctaText || 'VIEW ALL PROGRAMS'}
-          </Link>
+
+          {/* 8 Schools Quick Pills */}
+          <div className="flex flex-wrap justify-center gap-2 mb-8 max-w-4xl mx-auto">
+            {ECOSYSTEM_TEASERS.map((school) => {
+              const Icon = school.icon;
+              return (
+                <Link
+                  key={school.name}
+                  to={school.path}
+                  className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 hover:bg-brand-red/10 hover:text-brand-red dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 flex items-center gap-2 transition-all shadow-2xs"
+                >
+                  <Icon size={14} className="text-brand-red" />
+                  <span>{school.name}</span>
+                </Link>
+              );
+            })}
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-3">
+            <Link
+              to={sectionInfo.ctaLink || '/programs'}
+              className="inline-flex items-center gap-2 bg-brand-red text-white px-7 py-3 rounded-xl font-bold hover:bg-red-700 transition-colors shadow-lg shadow-brand-red/20 text-xs uppercase tracking-wider"
+            >
+              <span>{sectionInfo.ctaText || 'EXPLORE ALL 8 ACADEMIES'}</span>
+              <ArrowRight size={14} />
+            </Link>
+
+            <Link
+              to="/programs"
+              className="inline-flex items-center gap-2 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white hover:bg-slate-200 dark:hover:bg-slate-700 px-6 py-3 rounded-xl font-bold transition-colors text-xs uppercase tracking-wider"
+            >
+              <Compass size={14} />
+              <span>Build Child's Plan</span>
+            </Link>
+          </div>
         </Reveal>
 
         {loading ? (
-          <div className="flex justify-center py-12">
-            <Loader2 className="animate-spin text-brand-red w-10 h-10" />
-          </div>
+          <GlassGridSkeleton count={3} variant="program" />
         ) : programs.length === 0 ? (
           <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-            <p>No featured programs currently available.</p>
+            <p>Explore all 8 Learning Schools in our comprehensive curriculum catalog.</p>
           </div>
         ) : (
           <StaggerGroup className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -75,50 +130,53 @@ const FeaturedPrograms: React.FC = () => {
               <motion.div
                 key={program.id}
                 variants={staggerItem}
-                className="flex flex-col bg-gray-50 dark:bg-slate-950 rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition-shadow group"
+                whileHover={{ y: -6, transition: { duration: 0.28, ease: 'easeOut' } }}
+                className="flex flex-col glass-card rounded-2xl sm:rounded-3xl overflow-hidden group border border-slate-200/80 dark:border-slate-800"
               >
                 <div className="relative h-44 overflow-hidden">
                   <img
                     src={getProgramImage(program.categoryId)}
                     alt=""
                     loading="lazy"
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                   <div className="absolute bottom-4 left-4 flex gap-2 flex-wrap">
-                    <span className="inline-block px-3 py-1 bg-white/90 backdrop-blur-sm text-brand-slate text-xs font-bold uppercase tracking-wider rounded-full shadow-sm">
-                      {program.categoryId || 'General'}
+                    <span className="inline-block px-3 py-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm text-brand-slate dark:text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-xs">
+                      {program.categoryId ? program.categoryId.replace(/_/g, ' ') : 'Academy'}
                     </span>
                     {program.targetAudience && (
-                      <span className="inline-block px-3 py-1 bg-brand-red text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-sm">
+                      <span className="inline-block px-3 py-1 bg-brand-red text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-xs">
                         {program.targetAudience.replace('_', ' ')}
                       </span>
                     )}
                   </div>
                 </div>
-                <div className="p-8 flex-grow">
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 leading-tight group-hover:text-brand-red transition-colors">
+
+                <div className="p-6 sm:p-8 flex-grow flex flex-col">
+                  <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-3 leading-tight group-hover:text-brand-red transition-colors">
                     {program.title}
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-400 mb-6 font-medium">
+                  <p className="text-gray-600 dark:text-gray-400 mb-6 font-medium text-sm leading-relaxed flex-grow">
                     {program.shortDescription}
                   </p>
-                  <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                    <span className="font-semibold w-20 text-gray-700">
+                  <div className="flex items-center text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <span className="w-20 text-gray-700 dark:text-gray-300">
                       Format:
                     </span>
-                    {program.deliveryFormat || 'ONLINE'}
+                    <span className="text-brand-red dark:text-red-400">{program.deliveryFormat || 'ONLINE / IN-PERSON'}</span>
                   </div>
                 </div>
-                <div className="p-6 bg-white dark:bg-slate-900 dark:border-slate-800 border-t border-gray-100 flex items-center justify-between mt-auto">
-                  <span className="font-bold text-gray-900 dark:text-white text-lg">
-                    {program.pricing || 'Contact Us'}
+
+                <div className="p-5 sm:p-6 bg-white/40 dark:bg-slate-950/40 border-t border-slate-200/50 dark:border-white/10 flex items-center justify-between mt-auto">
+                  <span className="font-extrabold text-gray-700 dark:text-gray-300 text-xs uppercase tracking-wider">
+                    Custom Learning Plan
                   </span>
                   <Link
-                    to={`/programs/${program.slug}`}
-                    className="bg-brand-slate text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-gray-800 transition-colors uppercase"
+                    to={`/programs/${program.slug || program.id}`}
+                    className="bg-brand-slate text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs font-bold hover:bg-gray-800 transition-colors uppercase tracking-wider"
                   >
-                    VIEW PROGRAM
+                    VIEW PATHWAY
                   </Link>
                 </div>
               </motion.div>
