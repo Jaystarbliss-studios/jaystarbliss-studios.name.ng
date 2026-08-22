@@ -158,7 +158,7 @@ export const LearningPathBuilder: React.FC<LearningPathBuilderProps> = ({ onSucc
               Build Your Child's Learning Pathway
             </h2>
             <p className="text-slate-300 text-xs sm:text-sm mt-1 max-w-2xl">
-              Combine subjects across our 8 Academies into a unified, balanced learning schedule. Zero public prices — we tailor every roadmap to individual goals.
+              Combine subjects across our 8 Programs into a unified, balanced learning schedule. Zero public prices — we tailor every roadmap to individual goals.
             </p>
           </div>
 

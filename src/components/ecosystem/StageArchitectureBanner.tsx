@@ -102,7 +102,7 @@ export const StageArchitectureBanner: React.FC<{ compact?: boolean }> = ({ compa
 
               <div className="shrink-0 flex items-center gap-2 text-xs font-bold text-slate-400">
                 <CheckCircle2 size={16} className="text-emerald-400" />
-                <span>Integrated in all 8 Academies</span>
+                <span>Integrated in all 8 Programs</span>
               </div>
             </div>
           </motion.div>

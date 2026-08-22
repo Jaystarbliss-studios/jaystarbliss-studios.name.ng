@@ -10,11 +10,13 @@ const AdminSettings: React.FC = () => {
   
   const [settings, setSettings] = useState({
     companyName: 'Jaystarbliss Studios',
-    contactEmail: 'hello@jaystarbliss.com',
-    contactPhone: '+234 123 456 7890',
+    contactEmail: 'jaystarblissstudios@gmail.com',
+    contactPhone: '+234 913 651 8194',
+    secondaryPhone: '+234 913 052 9010',
+    googleBusinessUrl: 'https://share.google/mqVU8pAgKEDjOfGHe',
     address: 'Lagos, Nigeria',
     heroHeading: 'LEARN. CREATE. INNOVATE.',
-    heroSubheading: 'Empowering the next generation of digital creators.',
+    heroSubheading: 'Empowering learners of all ages and building scalable modern tech solutions.',
     twitter: '',
     linkedin: '',
     instagram: '',
@@ -145,11 +147,31 @@ const AdminSettings: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Contact Phone</label>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Primary Contact Phone</label>
               <input
                 type="text"
                 name="contactPhone"
                 value={settings.contactPhone}
+                onChange={handleChange}
+                className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-red"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Secondary Contact Phone</label>
+              <input
+                type="text"
+                name="secondaryPhone"
+                value={settings.secondaryPhone}
+                onChange={handleChange}
+                className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-red"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Google Business Profile URL</label>
+              <input
+                type="text"
+                name="googleBusinessUrl"
+                value={settings.googleBusinessUrl}
                 onChange={handleChange}
                 className="w-full px-4 py-3 rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-red"
               />

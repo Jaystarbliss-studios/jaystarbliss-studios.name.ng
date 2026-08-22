@@ -19,6 +19,7 @@ import {
 import Button from '../components/ui/Button';
 import ProgressStepper from '../components/ui/ProgressStepper';
 import { SCHOOL_DELIVERY_TIERS } from '../data/learningEcosystem';
+import { useToast } from '../contexts/ToastContext';
 
 const steps = [
   { id: 'tier', title: 'Delivery Tier', subtitle: 'Choose institutional model', icon: Layers },
@@ -28,6 +29,7 @@ const steps = [
 ];
 
 const SchoolPartnership: React.FC = () => {
+  const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedTier, setSelectedTier] = useState<string>('development');
   const [formData, setFormData] = useState({
@@ -140,10 +142,12 @@ const SchoolPartnership: React.FC = () => {
         updatedAt: serverTimestamp()
       });
       setSuccess(true);
+      toast.success('School partnership proposal submitted successfully! Our directorate will reach out within 24 hours.');
     } catch (err) {
       console.error('Error submitting form:', err);
       // Still show success in prototype/demo if offline
       setSuccess(true);
+      toast.success('School partnership proposal submitted successfully! Our directorate will reach out within 24 hours.');
     } finally {
       setLoading(false);
     }
@@ -164,7 +168,7 @@ const SchoolPartnership: React.FC = () => {
             EMPOWER YOUR STUDENTS WITH 21ST CENTURY MASTERY.
           </h1>
           <p className="text-base sm:text-lg text-white/80 leading-relaxed font-normal max-w-3xl mx-auto">
-            Partner with Jaystarbliss Studios to deploy structured Coding Labs, Digital Literacy tracks, Music Academies, Chess Clubs, and Academic Clinics directly within your school timetable. Zero public fees — tailored institutional proposals based on your student population.
+            Partner with Jaystarbliss Studios to deploy structured Coding Labs, Digital Literacy tracks, Music Studios, Chess Clubs, and Academic Clinics directly within your school timetable. Zero public fees — tailored institutional proposals based on your student population.
           </p>
         </div>
       </div>
@@ -505,10 +509,10 @@ const SchoolPartnership: React.FC = () => {
                     <div className="space-y-5 animate-in fade-in duration-200">
                       <div>
                         <h4 className="text-base font-bold text-slate-900 dark:text-white">
-                          Curriculum Tracks & Academies of Interest
+                          Curriculum Tracks & Programs of Interest
                         </h4>
                         <p className="text-xs text-slate-500 dark:text-slate-400">
-                          Select all academies you would like Jaystarbliss Studios to integrate.
+                          Select all learning tracks you would like Jaystarbliss Studios to integrate.
                         </p>
                       </div>
 

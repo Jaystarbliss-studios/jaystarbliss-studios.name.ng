@@ -27,13 +27,14 @@ import {
 import StageArchitectureBanner from '../components/ecosystem/StageArchitectureBanner';
 import LearningSchoolsGrid from '../components/ecosystem/LearningSchoolsGrid';
 import LearningPathBuilder from '../components/ecosystem/LearningPathBuilder';
+import InteractiveTrackRoadmap from '../components/ecosystem/InteractiveTrackRoadmap';
 import PageHeader from '../components/ui/PageHeader';
 import { pageHeaderImages, getProgramImage } from '../lib/stockImages';
 import { usePageSection } from '../lib/cms';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
 
 const SCHOOL_FILTER_MAP: Record<string, { label: string; icon: React.FC<{ size?: number; className?: string }> }> = {
-  ALL: { label: 'All 8 Academies', icon: Layers },
+  ALL: { label: 'All 8 Programs', icon: Layers },
   'technology-programming': { label: 'Tech & Coding', icon: Laptop },
   'digital-literacy': { label: 'Digital Literacy', icon: Brain },
   'creative-design': { label: 'Creative Design', icon: Palette },
@@ -83,20 +84,29 @@ const Programs: React.FC = () => {
     subtitle: "find a specialised learning pathway",
     bannerImage: ''
   });
-  const [activeView, setActiveView] = useState<'ecosystem' | 'pathfinder' | 'catalog'>('ecosystem');
+  const [activeView, setActiveView] = useState<'ecosystem' | 'roadmap' | 'pathfinder' | 'catalog'>('ecosystem');
   const [selectedSchoolId, setSelectedSchoolId] = useState<string>('tech-programming');
   const [programs, setPrograms] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedSchoolFilter, setSelectedSchoolFilter] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Handle URL hashes and query parameters (e.g. /programs?school=academic-excellence or /programs#digital_and_technology)
+  // Handle URL hashes and query parameters (e.g. /programs?tab=roadmap or /programs#roadmap)
   useEffect(() => {
     const rawSchool = searchParams.get('school') || searchParams.get('category');
     const rawTab = searchParams.get('tab') || searchParams.get('view');
     const rawHash = location.hash.replace(/^#/, '').toLowerCase();
 
     let targetSchoolKey = rawSchool?.toLowerCase() || (rawHash && CANONICAL_SCHOOL_MAP[rawHash] ? rawHash : null);
+
+    if (rawTab === 'roadmap' || rawHash === 'roadmap' || rawHash === 'visual-roadmap') {
+      setActiveView('roadmap');
+      setTimeout(() => {
+        const el = document.getElementById('roadmap-section') || document.getElementById('visual-roadmap');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+      return;
+    }
 
     if (rawTab === 'catalog' || rawHash === 'catalog' || rawHash === 'courses') {
       setActiveView('catalog');
@@ -131,7 +141,7 @@ const Programs: React.FC = () => {
           el.scrollIntoView({ behavior: 'smooth' });
         }
       }, 150);
-    } else if (rawHash === 'ecosystem' || rawHash === 'academies' || rawHash === 'programs-content' || rawHash === 'programs-section') {
+    } else if (rawHash === 'ecosystem' || rawHash === 'academies' || rawHash === 'programs' || rawHash === 'programs-content' || rawHash === 'programs-section') {
       setActiveView('ecosystem');
       setTimeout(() => {
         const el = document.getElementById('programs-content');
@@ -204,12 +214,13 @@ const Programs: React.FC = () => {
           </Link>
         </div>
 
-        {/* Clear 3-Way Mode Selector — each is a distinct destination, not a nested tab */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {/* 4-Way Mode Selector */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { id: 'ecosystem', label: '8 Learning Academies', hint: 'Browse every subject we teach, organized by school', icon: Layers },
-            { id: 'pathfinder', label: 'Pathfinder', hint: 'Answer a few questions, get a custom plan', icon: Compass },
-            { id: 'catalog', label: 'Program Catalog', hint: 'Search & filter every course directly', icon: BookOpen }
+            { id: 'ecosystem', label: '8 Core Programs', hint: 'Browse every subject we teach, organized by program', icon: Layers },
+            { id: 'roadmap', label: 'Visual Roadmap', hint: 'Interactive step-by-step milestone path across all tracks', icon: Compass },
+            { id: 'pathfinder', label: 'Custom Pathfinder', hint: 'Answer a few questions, get a tailored schedule', icon: UserCheck },
+            { id: 'catalog', label: 'Program Catalog', hint: 'Search & filter all courses & workshops directly', icon: BookOpen }
           ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeView === tab.id;
@@ -224,7 +235,7 @@ const Programs: React.FC = () => {
                 }}
                 className={`text-left p-5 rounded-2xl border transition-all duration-200 flex flex-col gap-3 ${
                   isActive
-                    ? 'bg-white text-brand-slate border-white shadow-xl'
+                    ? 'bg-white text-brand-slate border-white shadow-xl scale-[1.02]'
                     : 'bg-white/[0.06] text-white border-white/15 hover:bg-white/[0.12] hover:border-white/30'
                 }`}
               >
@@ -248,7 +259,7 @@ const Programs: React.FC = () => {
           {/* Section: 5-Stage Architecture Standard */}
           <StageArchitectureBanner />
 
-          {/* View 1: 8 Learning Schools & Deep Dive */}
+          {/* View 1: 8 Core Programs & Deep Dive */}
           {activeView === 'ecosystem' && (
             <div id="ecosystem-section" className="space-y-8 scroll-mt-24">
               <div className="max-w-3xl">
@@ -256,7 +267,7 @@ const Programs: React.FC = () => {
                   Explore by Program
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-1">
-                  Our Learning programs
+                  Our Programs
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
                   Click on any program below to review its specialized levels, topics, and discipline progression.
@@ -274,7 +285,14 @@ const Programs: React.FC = () => {
             </div>
           )}
 
-          {/* View 2: Pathfinder / Custom Program Builder */}
+          {/* View 2: Interactive Visual Roadmap for Learning Tracks */}
+          {activeView === 'roadmap' && (
+            <div id="roadmap-section" className="space-y-8 scroll-mt-24">
+              <InteractiveTrackRoadmap />
+            </div>
+          )}
+
+          {/* View 3: Pathfinder / Custom Program Builder */}
           {activeView === 'pathfinder' && (
             <div id="pathfinder-section" className="space-y-8 scroll-mt-24">
               <div className="max-w-3xl">
@@ -307,38 +325,32 @@ const Programs: React.FC = () => {
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search courses..."
-                    className="w-full pl-9 pr-4 py-2 rounded-xl text-xs bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border-0 outline-none focus:ring-2 focus:ring-brand-red"
+                    placeholder="Search courses by keyword..."
+                    className="w-full pl-9 pr-8 py-2.5 rounded-xl text-xs bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-brand-red transition-all"
                   />
                   {searchQuery && (
-                    <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
+                    <button onClick={() => setSearchQuery('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
                       <X size={14} />
                     </button>
                   )}
                 </div>
 
-                {/* Program Filter Pills */}
-                <div className="flex overflow-x-auto gap-1.5 pb-1 max-w-full hide-scrollbar">
-                  {Object.entries(SCHOOL_FILTER_MAP).map(([key, meta]) => {
-                    const Icon = meta.icon;
-                    const isSelected = selectedSchoolFilter === key;
-
-                    return (
-                      <button
-                        key={key}
-                        type="button"
-                        onClick={() => setSelectedSchoolFilter(key)}
-                        className={`whitespace-nowrap px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
-                          isSelected
-                            ? 'bg-brand-red text-white'
-                            : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
-                        }`}
-                      >
-                        <Icon size={13} />
-                        <span>{meta.label}</span>
-                      </button>
-                    );
-                  })}
+                {/* Program Filter Dropdown */}
+                <div className="relative w-full md:w-64">
+                  <select
+                    value={selectedSchoolFilter}
+                    onChange={(e) => setSelectedSchoolFilter(e.target.value)}
+                    className="w-full pl-4 pr-9 py-2.5 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 outline-none focus:ring-2 focus:ring-brand-red cursor-pointer appearance-none transition-all"
+                  >
+                    {Object.entries(SCHOOL_FILTER_MAP).map(([key, meta]) => (
+                      <option key={key} value={key}>
+                        {meta.label}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                    ▼
+                  </div>
                 </div>
               </div>
 

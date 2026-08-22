@@ -8,6 +8,7 @@ import {
   Clock, CheckCircle2, UserCheck 
 } from 'lucide-react';
 import SEO from '../../components/ui/SEO';
+import { DashboardGreeting } from '../../components/portal/DashboardGreeting';
 
 const StaffDashboard: React.FC = () => {
   const [resources, setResources] = useState<any[]>([]);
@@ -112,28 +113,13 @@ const StaffDashboard: React.FC = () => {
         noindex={true}
       />
 
-      {/* Welcome Banner */}
-      <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-brand-slate rounded-3xl p-6 md:p-8 text-white relative overflow-hidden shadow-lg border border-slate-700/50">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-brand-red/20 rounded-full blur-[100px] pointer-events-none"></div>
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div>
-            <h1 className="text-2xl md:text-3xl font-black text-white">
-              Instructor Dashboard
-            </h1>
-            <p className="text-slate-300 text-sm md:text-base mt-1 max-w-xl">
-              Deliver interactive lessons, broadcast meeting links to students, and review institute curriculum.
-            </p>
-          </div>
-
-          <button 
-            type="button"
-            onClick={() => setShowLinkModal(true)}
-            className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-brand-red hover:bg-red-700 text-white font-bold rounded-xl shadow-md transition-colors text-sm"
-          >
-            <Video size={16} /> Broadcast Class Link
-          </button>
-        </div>
-      </div>
+      {/* Dynamic Timezone Greeting Banner */}
+      <DashboardGreeting 
+        name="Faculty & Instructor Console"
+        role="STEM Mentor"
+        subtitle="Deliver interactive lessons, broadcast meeting links to students, and review institute curriculum."
+        badge={`${students.length} Active Cadets`}
+      />
 
       {successMsg && (
         <div className="p-4 rounded-xl bg-green-50 dark:bg-green-950/30 border border-green-200 text-green-800 dark:text-green-300 text-sm flex items-center gap-3">

@@ -4,6 +4,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 import { auth, db } from '../../lib/firebase';
 import { Loader2 } from 'lucide-react';
+import ChangePasswordModal from '../portal/ChangePasswordModal';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -18,6 +19,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 }) => {
   const [loading, setLoading] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
+  const [mustResetPassword, setMustResetPassword] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -40,6 +42,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
         let userRole = '';
         let userName = currentUser.displayName || '';
+        let forceReset = false;
 
         // 2. Check users collection
         const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
@@ -47,6 +50,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
           const uData = userDoc.data();
           userRole = (uData.role || '').toUpperCase();
           if (uData.name && !userName) userName = uData.name;
+          if (uData.forcePasswordReset === true) forceReset = true;
         }
 
         // 3. Fallback: check individualStudents collection
@@ -61,6 +65,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
             userRole = 'STUDENT';
             sessionStorage.setItem('studentDocId', studentSnap.docs[0].id);
             if (sData.fullName) userName = sData.fullName;
+            if (sData.forcePasswordReset === true) forceReset = true;
           }
         }
 
@@ -68,8 +73,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
         if (!userRole) {
           const parentDoc = await getDoc(doc(db, 'parents', currentUser.uid));
           if (parentDoc.exists()) {
+            const pData = parentDoc.data();
             userRole = 'PARENT';
-            if (parentDoc.data().name) userName = parentDoc.data().name;
+            if (pData.name) userName = pData.name;
+            if (pData.forcePasswordReset === true) forceReset = true;
           }
         }
 
@@ -77,8 +84,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
         if (!userRole) {
           const schoolDoc = await getDoc(doc(db, 'schools', currentUser.uid));
           if (schoolDoc.exists()) {
+            const scData = schoolDoc.data();
             userRole = 'SCHOOL';
-            if (schoolDoc.data().name) userName = schoolDoc.data().name;
+            if (scData.name) userName = scData.name;
+            if (scData.forcePasswordReset === true) forceReset = true;
           }
         }
 
@@ -86,8 +95,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
         if (!userRole) {
           const tutorDoc = await getDoc(doc(db, 'tutors', currentUser.uid));
           if (tutorDoc.exists()) {
+            const tData = tutorDoc.data();
             userRole = 'TUTOR';
-            if (tutorDoc.data().name) userName = tutorDoc.data().name;
+            if (tData.name) userName = tData.name;
+            if (tData.forcePasswordReset === true) forceReset = true;
           }
         }
 
@@ -99,6 +110,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
         sessionStorage.setItem('userRole', userRole.toLowerCase());
         sessionStorage.setItem('userId', currentUser.uid);
         if (userName) sessionStorage.setItem('userName', userName);
+
+        // Check if forced password reset is triggered
+        if (forceReset) {
+          setMustResetPassword(true);
+        }
 
         // Normalize roles comparison
         const normalizedRole = userRole.toUpperCase();
@@ -151,7 +167,18 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to={redirectPath} replace />;
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      {mustResetPassword && (
+        <ChangePasswordModal
+          isOpen={true}
+          isForced={true}
+          onSuccess={() => setMustResetPassword(false)}
+        />
+      )}
+      {children}
+    </>
+  );
 };
 
 export default ProtectedRoute;

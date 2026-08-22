@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { db, auth } from '../../lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { 
-  Users, Calendar, GraduationCap, ShieldCheck,
+  Users, Calendar, GraduationCap,
   BookOpen, FileText, ExternalLink, Download, CheckCircle2, Clock, 
   Award, Layers
 } from 'lucide-react';
 import SEO from '../../components/ui/SEO';
+import { DashboardGreeting } from '../../components/portal/DashboardGreeting';
 
 interface SchoolStudent {
   id: string;
@@ -206,30 +207,13 @@ const SchoolDashboard: React.FC = () => {
         noindex={true}
       />
 
-      {/* Welcome Banner */}
-      <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-brand-slate rounded-3xl p-6 md:p-8 text-white relative overflow-hidden shadow-lg border border-slate-700/50">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-brand-red/20 rounded-full blur-[100px] pointer-events-none"></div>
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div>
-            <h1 className="text-2xl md:text-3xl font-black text-white">
-              {schoolData?.name || 'Partner Academy'} Console
-            </h1>
-            <p className="text-slate-300 text-sm md:text-base mt-1 max-w-xl">
-              Track student enrollment batches, CBT exam evaluations, syllabus downloads, and practical lab schedules.
-            </p>
-          </div>
-
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10 flex flex-col gap-2 min-w-[220px]">
-            <div className="text-xs text-white/70">Institutional Access Code:</div>
-            <div className="text-sm font-bold text-white font-mono uppercase">
-              {schoolData?.schoolCode || schoolData?.id || 'SCH-JAYSTAR'}
-            </div>
-            <div className="text-xs text-green-400 font-medium flex items-center gap-1.5 pt-1 border-t border-white/10">
-              <ShieldCheck size={13} /> Active Partnership Status
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* Dynamic Timezone Greeting Banner */}
+      <DashboardGreeting 
+        name={`${schoolData?.name || 'Partner Academy'} Console`}
+        role="School Administrator"
+        subtitle="Track student enrollment batches, CBT exam evaluations, syllabus downloads, and practical lab schedules."
+        badge={`Code: ${schoolData?.schoolCode || schoolData?.id || 'SCH-JAYSTAR'}`}
+      />
 
       {/* TABS NAVIGATION */}
       <div className="flex border-b border-gray-200 dark:border-slate-800 gap-2 overflow-x-auto pb-0.5">

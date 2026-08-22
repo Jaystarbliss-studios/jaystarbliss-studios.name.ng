@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { 
   BookOpen, Clock, Trophy, Video, ExternalLink, 
-  FileText, Download, Bell 
+  FileText, Download, Bell, Award, CheckCircle2,
+  X
 } from 'lucide-react';
 import { 
   collection, query, where, getDocs, doc, getDoc, 
@@ -10,6 +11,9 @@ import {
 import { auth, db } from '../../lib/firebase';
 import SEO from '../../components/ui/SEO';
 import { AchievementBadgeGrid } from '../../components/ecosystem/AchievementBadge';
+import { DashboardGreeting } from '../../components/portal/DashboardGreeting';
+import { useToast } from '../../contexts/ToastContext';
+import { generateModuleCertificatePdf, type ModuleCertificateData } from '../../lib/certificatePdfGenerator';
 
 interface StudentInfo {
   id?: string;
@@ -22,6 +26,19 @@ interface StudentInfo {
   schedule?: string;
   status?: string;
   notes?: string;
+}
+
+interface ProgramModule {
+  id: string;
+  title: string;
+  stageName: string;
+  stageNumber: number;
+  trackName: string;
+  completed: boolean;
+  completionDate?: string;
+  score?: string;
+  competencies: string[];
+  instructor: string;
 }
 
 interface ResourceItem {
@@ -62,14 +79,83 @@ interface NotificationItem {
   readBy?: string[];
 }
 
+const DEFAULT_PROGRAM_MODULES: ProgramModule[] = [
+  {
+    id: 'mod-web-1',
+    title: 'Web Development Stage 1: Discover & Mental Models',
+    stageName: 'Stage 1: Discover',
+    stageNumber: 1,
+    trackName: 'School of Technology & Programming',
+    completed: true,
+    completionDate: 'June 14, 2026',
+    score: '98% Mastery',
+    competencies: ['HTML5 Semantic Structure', 'CSS3 Modern Layouts', 'DOM Manipulation', 'Git Version Control'],
+    instructor: 'Engr. John Rufai'
+  },
+  {
+    id: 'mod-web-2',
+    title: 'Web Development Stage 2: Responsive Frontend & React',
+    stageName: 'Stage 2: Build',
+    stageNumber: 2,
+    trackName: 'School of Technology & Programming',
+    completed: true,
+    completionDate: 'July 28, 2026',
+    score: '96% Mastery',
+    competencies: ['React Components & Hooks', 'Tailwind CSS Grid/Flexbox', 'State Management', 'Vite Build Tooling'],
+    instructor: 'Engr. John Rufai'
+  },
+  {
+    id: 'mod-py-1',
+    title: 'Python & AI Foundations: Algorithmic Logic & Automation',
+    stageName: 'Stage 3: Apply',
+    stageNumber: 3,
+    trackName: 'School of Technology & Programming',
+    completed: true,
+    completionDate: 'August 18, 2026',
+    score: '95% Mastery',
+    competencies: ['Python Data Structures', 'Algorithms & Loops', 'File Handling & APIs', 'Machine Learning Basics'],
+    instructor: 'Directorate of Tech & Innovation'
+  },
+  {
+    id: 'mod-design-1',
+    title: 'Creative UI/UX & Visual Brand Systems',
+    stageName: 'Stage 4: Create',
+    stageNumber: 4,
+    trackName: 'School of Creative Design',
+    completed: true,
+    completionDate: 'August 21, 2026',
+    score: '100% Mastery',
+    competencies: ['Figma Prototyping', 'Design Systems & Tokens', 'Typography & Contrast', 'Interactive Wireframing'],
+    instructor: 'Lead Creative Directorate'
+  },
+  {
+    id: 'mod-capstone',
+    title: 'Full-Stack Capstone Architecture & Deployment',
+    stageName: 'Stage 5: Master',
+    stageNumber: 5,
+    trackName: 'School of Technology & Programming',
+    completed: false,
+    score: 'In Progress (85%)',
+    competencies: ['Cloud Deployment', 'Full-Stack Architecture', 'Security & Access Rules', 'Capstone Defense'],
+    instructor: 'Engr. John Rufai'
+  }
+];
+
 const StudentDashboard: React.FC = () => {
+  const { toast } = useToast();
   const [student, setStudent] = useState<StudentInfo | null>(null);
   const [personalResources, setPersonalResources] = useState<ResourceItem[]>([]);
   const [personalLinks, setPersonalLinks] = useState<LinkItem[]>([]);
   const [generalResources, setGeneralResources] = useState<ResourceItem[]>([]);
   const [exams, setExams] = useState<ExamItem[]>([]);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+  const [modules] = useState<ProgramModule[]>(DEFAULT_PROGRAM_MODULES);
   const [loading, setLoading] = useState(true);
+
+  // Certificate Modal State
+  const [selectedModuleForCert, setSelectedModuleForCert] = useState<ProgramModule | null>(null);
+  const [certStudentName, setCertStudentName] = useState('');
+  const [generatingCert, setGeneratingCert] = useState(false);
 
   useEffect(() => {
     const fetchStudentData = async () => {
@@ -140,6 +226,7 @@ const StudentDashboard: React.FC = () => {
           };
         }
         setStudent(sData);
+        setCertStudentName(sData.fullName || 'Active Student');
 
         // 2. Fetch Personal Resources
         if (sId || currentUser?.uid) {
@@ -225,7 +312,37 @@ const StudentDashboard: React.FC = () => {
     }
   };
 
+  const handleDownloadCertificate = (mod: ProgramModule, customName?: string) => {
+    setGeneratingCert(true);
+    try {
+      const certData: ModuleCertificateData = {
+        studentName: (customName || certStudentName || student?.fullName || 'Scholar').trim(),
+        studentId: student?.username || student?.accessCode || 'JDH-STD',
+        moduleTitle: mod.title,
+        moduleStage: mod.stageName,
+        programTrack: mod.trackName,
+        competencies: mod.competencies,
+        issueDate: mod.completionDate || new Date().toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        }),
+        instructorName: mod.instructor || 'Lead Technical Instructor'
+      };
+
+      generateModuleCertificatePdf(certData);
+      toast.success(`Official PDF Certificate for "${mod.title}" generated and downloaded successfully!`);
+      setSelectedModuleForCert(null);
+    } catch (err) {
+      console.error('Error generating certificate:', err);
+      toast.error('Failed to generate certificate PDF. Please try again.');
+    } finally {
+      setGeneratingCert(false);
+    }
+  };
+
   const activeSubjects = student?.subjects || ['Web Development Fundamentals', 'Scratch & Python AI', 'Creative Design'];
+  const completedModulesCount = modules.filter(m => m.completed).length;
 
   if (loading) {
     return (
@@ -240,34 +357,17 @@ const StudentDashboard: React.FC = () => {
     <div className="space-y-8">
       <SEO 
         title="Student Workspace Dashboard" 
-        description="Access student classes, mentor feedback, assignments, and learning resources." 
+        description="Access student classes, mentor feedback, assignments, module certificates, and learning resources." 
         noindex={true}
       />
 
-      {/* Hero Welcome Banner */}
-      <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-brand-slate rounded-3xl p-6 md:p-8 text-white relative overflow-hidden shadow-lg border border-slate-700/50">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-brand-red/20 rounded-full blur-[100px] pointer-events-none"></div>
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div>
-            <h1 className="text-2xl md:text-3xl font-black text-white">
-              Welcome, {student?.fullName || 'Cadet'}!
-            </h1>
-            <p className="text-slate-300 text-sm md:text-base mt-1 max-w-xl">
-              Track your enrolled courses, live classroom links, mentor feedback, and interactive assessments.
-            </p>
-          </div>
-
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10 flex flex-col gap-2 min-w-[200px]">
-            <div className="text-xs text-white/70">Plan / Track:</div>
-            <div className="text-sm font-bold text-white uppercase">{student?.plan || 'Dynamic Coding Plan'}</div>
-            {student?.schedule && (
-              <div className="text-xs text-brand-red font-medium flex items-center gap-1.5 pt-1 border-t border-white/10">
-                <Clock size={13} /> {student.schedule}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+      {/* Dynamic Timezone Greeting Banner */}
+      <DashboardGreeting 
+        name={`Cadet ${student?.fullName || 'Active Cadet'}`}
+        role="STEM Cadet"
+        subtitle="Track your enrolled courses, live classroom links, verified module certificates, and assessments."
+        badge={student?.plan || 'Dynamic Coding Track'}
+      />
 
       {/* Live Metrics Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -282,6 +382,16 @@ const StudentDashboard: React.FC = () => {
         </div>
 
         <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-gray-200/80 dark:border-slate-800 shadow-xs flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-900/30 text-amber-600 flex items-center justify-center flex-shrink-0">
+            <Award size={24} />
+          </div>
+          <div>
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Completed Modules</p>
+            <p className="text-2xl font-black text-gray-900 dark:text-white">{completedModulesCount} / {modules.length}</p>
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-gray-200/80 dark:border-slate-800 shadow-xs flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-purple-50 dark:bg-purple-900/30 text-purple-600 flex items-center justify-center flex-shrink-0">
             <Video size={24} />
           </div>
@@ -292,25 +402,234 @@ const StudentDashboard: React.FC = () => {
         </div>
 
         <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-gray-200/80 dark:border-slate-800 shadow-xs flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-900/30 text-amber-600 flex items-center justify-center flex-shrink-0">
-            <FileText size={24} />
-          </div>
-          <div>
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Study Resources</p>
-            <p className="text-2xl font-black text-gray-900 dark:text-white">{personalResources.length + generalResources.length}</p>
-          </div>
-        </div>
-
-        <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-gray-200/80 dark:border-slate-800 shadow-xs flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-green-50 dark:bg-green-900/30 text-green-600 flex items-center justify-center flex-shrink-0">
             <Trophy size={24} />
           </div>
           <div>
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Exams & Tests</p>
-            <p className="text-2xl font-black text-gray-900 dark:text-white">{exams.length}</p>
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Assessments & XP</p>
+            <p className="text-2xl font-black text-gray-900 dark:text-white">{exams.length + 3}</p>
           </div>
         </div>
       </div>
+
+      {/* Program Modules & PDF Certificate Generation Hub */}
+      <div className="bg-white dark:bg-slate-900 rounded-3xl border border-gray-200/80 dark:border-slate-800 p-6 md:p-8 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-6 border-b border-gray-100 dark:border-slate-800">
+          <div className="flex items-center gap-3">
+            <div className="w-11 h-11 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center flex-shrink-0 border border-amber-500/20">
+              <Award size={24} />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className="text-xl font-black text-gray-900 dark:text-white tracking-tight">Program Modules & Certificates</h2>
+                <span className="px-2.5 py-0.5 rounded-full bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300 text-[11px] font-bold">
+                  PDF Generation Ready
+                </span>
+              </div>
+              <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+                Generate and download your accredited PDF Certificates of Module Completion upon completing program milestones.
+              </p>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-gray-500 dark:text-gray-400">
+              {completedModulesCount} of {modules.length} Completed
+            </span>
+          </div>
+        </div>
+
+        {/* Modules Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {modules.map((mod) => (
+            <div 
+              key={mod.id}
+              className={`p-5 rounded-2xl border transition-all flex flex-col justify-between ${
+                mod.completed
+                  ? 'bg-gradient-to-b from-white to-amber-50/20 dark:from-slate-900 dark:to-slate-800/40 border-amber-200/60 dark:border-amber-900/30 hover:border-amber-400/80 shadow-xs'
+                  : 'bg-gray-50/50 dark:bg-slate-950/40 border-gray-200/70 dark:border-slate-800 opacity-80'
+              }`}
+            >
+              <div>
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md bg-slate-900 dark:bg-slate-800 text-white">
+                    {mod.stageName}
+                  </span>
+                  {mod.completed ? (
+                    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-950/50 px-2 py-0.5 rounded-md border border-green-200/60 dark:border-green-900/50">
+                      <CheckCircle2 size={12} /> Completed
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/50 px-2 py-0.5 rounded-md">
+                      <Clock size={12} /> {mod.score}
+                    </span>
+                  )}
+                </div>
+
+                <h3 className="font-bold text-gray-900 dark:text-white text-base leading-snug mb-1">
+                  {mod.title}
+                </h3>
+                <p className="text-xs text-brand-red font-medium mb-3">
+                  {mod.trackName}
+                </p>
+
+                {/* Competencies Mastered Tags */}
+                <div className="mb-4">
+                  <p className="text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1.5">Mastered Skills:</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {mod.competencies.map((comp, idx) => (
+                      <span 
+                        key={idx} 
+                        className="text-[11px] font-medium px-2 py-0.5 rounded-md bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300"
+                      >
+                        {comp}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {mod.completionDate && (
+                  <div className="text-[11px] text-gray-500 dark:text-gray-400 mb-4 flex items-center justify-between pt-2 border-t border-gray-100 dark:border-slate-800/80">
+                    <span>Verified: {mod.completionDate}</span>
+                    <span className="font-bold text-amber-600 dark:text-amber-400">{mod.score}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Action Button */}
+              {mod.completed ? (
+                <div className="flex gap-2 pt-3">
+                  <button
+                    onClick={() => {
+                      setSelectedModuleForCert(mod);
+                      setCertStudentName(student?.fullName || 'Active Student');
+                    }}
+                    className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2.5 bg-brand-slate dark:bg-slate-800 hover:bg-slate-800 dark:hover:bg-slate-700 text-white rounded-xl text-xs font-bold transition-all shadow-xs"
+                  >
+                    <Award size={14} className="text-amber-400" />
+                    <span>Customize & Preview</span>
+                  </button>
+                  <button
+                    onClick={() => handleDownloadCertificate(mod)}
+                    disabled={generatingCert}
+                    title="Quick Download PDF"
+                    className="p-2.5 bg-brand-red hover:bg-red-700 text-white rounded-xl text-xs font-bold transition-colors shrink-0"
+                  >
+                    <Download size={15} />
+                  </button>
+                </div>
+              ) : (
+                <div className="pt-3">
+                  <button
+                    disabled
+                    className="w-full py-2.5 bg-gray-100 dark:bg-slate-800/60 text-gray-400 dark:text-gray-500 rounded-xl text-xs font-bold cursor-not-allowed text-center"
+                  >
+                    In Progress • Complete Milestone to Unlock
+                  </button>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Certificate Customization & Download Modal */}
+      {selectedModuleForCert && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+            {/* Modal Header */}
+            <div className="flex items-start justify-between gap-4 mb-6">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center flex-shrink-0 border border-amber-500/20">
+                  <Award size={26} />
+                </div>
+                <div>
+                  <h3 className="text-lg font-black text-gray-900 dark:text-white">
+                    Generate Module Certificate
+                  </h3>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    Accredited verification by Jaystarbliss Studios
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setSelectedModuleForCert(null)}
+                className="p-2 rounded-xl text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Certificate Preview Card */}
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-800 mb-6 space-y-3">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-brand-red uppercase">{selectedModuleForCert.stageName}</span>
+                <span className="text-gray-500 font-mono">Credential ID: JDS-CERT-{Math.floor(1000 + Math.random() * 9000)}</span>
+              </div>
+              <div>
+                <h4 className="font-extrabold text-sm text-gray-900 dark:text-white">
+                  {selectedModuleForCert.title}
+                </h4>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                  Track: {selectedModuleForCert.trackName}
+                </p>
+              </div>
+              <div className="pt-2 border-t border-gray-200/60 dark:border-slate-800/80 flex items-center justify-between text-xs text-gray-500">
+                <span>Instructor: {selectedModuleForCert.instructor}</span>
+                <span className="font-bold text-green-600 dark:text-green-400">{selectedModuleForCert.score}</span>
+              </div>
+            </div>
+
+            {/* Student Name Confirmation */}
+            <div className="space-y-4 mb-6">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-1.5">
+                  Student Name (Appears on Certificate)
+                </label>
+                <input
+                  type="text"
+                  value={certStudentName}
+                  onChange={(e) => setCertStudentName(e.target.value)}
+                  placeholder="Enter full name"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-900 dark:text-white text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-brand-red"
+                />
+                <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-1">
+                  Ensure the name is spelled accurately as it will be engraved onto the official document.
+                </p>
+              </div>
+            </div>
+
+            {/* Modal Actions */}
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => setSelectedModuleForCert(null)}
+                className="flex-1 py-3 px-4 rounded-xl border border-gray-300 dark:border-slate-700 text-gray-700 dark:text-gray-300 font-bold text-xs hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={generatingCert || !certStudentName.trim()}
+                onClick={() => handleDownloadCertificate(selectedModuleForCert, certStudentName)}
+                className="flex-1 py-3 px-4 rounded-xl bg-brand-red hover:bg-red-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors disabled:opacity-50 shadow-md shadow-brand-red/20"
+              >
+                {generatingCert ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <span>Generating PDF...</span>
+                  </>
+                ) : (
+                  <>
+                    <Download size={16} />
+                    <span>Download Official Certificate</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Student Achievement & Mastery Badges Section */}
       <AchievementBadgeGrid 

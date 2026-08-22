@@ -20,6 +20,8 @@ export const ThemeContext = createContext<ThemeContextType>({
   toggleTheme: () => {},
 });
 
+export const useTheme = () => React.useContext(ThemeContext);
+
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setThemeState] = useState<Theme>(() => {
     try {

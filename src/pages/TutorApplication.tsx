@@ -6,6 +6,7 @@ import SEO from '../components/ui/SEO';
 import { CheckCircle2, ArrowRight, ArrowLeft, Send, User, Briefcase, FileText } from 'lucide-react';
 import Button from '../components/ui/Button';
 import ProgressStepper from '../components/ui/ProgressStepper';
+import { useToast } from '../contexts/ToastContext';
 
 const steps = [
   { id: 'personal', title: 'Personal Info', subtitle: 'Contact details', icon: User },
@@ -14,6 +15,7 @@ const steps = [
 ];
 
 const TutorApplication: React.FC = () => {
+  const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
     name: '',
@@ -107,9 +109,11 @@ const TutorApplication: React.FC = () => {
         updatedAt: new Date().toISOString()
       });
       setSuccess(true);
+      toast.success('Your instructor application has been submitted successfully! We look forward to reviewing your profile.');
     } catch (err) {
       console.error('Error submitting form:', err);
       setError('There was an error sending your application. Please try again.');
+      toast.error('There was an error submitting your application. Please try again.');
     } finally {
       setLoading(false);
     }

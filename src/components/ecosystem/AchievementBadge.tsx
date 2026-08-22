@@ -321,7 +321,7 @@ export const AchievementBadgeGrid: React.FC<{
 }> = ({ 
   badges = PRESET_ACHIEVEMENTS,
   title = "Student Achievements & Mastery Badges",
-  subtitle = "Verifiable milestone badges earned across Jaystarbliss Academies.",
+  subtitle = "Verifiable milestone badges earned across Jaystarbliss Programs.",
   studentName
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
@@ -373,22 +373,27 @@ export const AchievementBadgeGrid: React.FC<{
         </div>
       </div>
 
-      {/* Filter Tabs */}
-      <div className="flex overflow-x-auto gap-2 pb-1 hide-scrollbar">
-        {categories.map(cat => (
-          <button
-            key={cat.id}
-            type="button"
-            onClick={() => setSelectedCategory(cat.id)}
-            className={`whitespace-nowrap px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
-              selectedCategory === cat.id
-                ? 'bg-brand-slate text-white dark:bg-white dark:text-slate-900 shadow-xs'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
-            }`}
+      {/* Filter Selector */}
+      <div className="flex items-center justify-between gap-3">
+        <div className="relative w-full sm:w-64">
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="w-full pl-3.5 pr-8 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white text-xs font-bold focus:outline-none focus:ring-2 focus:ring-brand-red cursor-pointer appearance-none"
           >
-            {cat.label}
-          </button>
-        ))}
+            {categories.map(cat => (
+              <option key={cat.id} value={cat.id}>
+                {cat.label}
+              </option>
+            ))}
+          </select>
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 text-xs">
+            ▼
+          </div>
+        </div>
+        <span className="text-xs font-bold text-slate-400 shrink-0">
+          {filteredBadges.length} Badges
+        </span>
       </div>
 
       {/* Badges Grid */}

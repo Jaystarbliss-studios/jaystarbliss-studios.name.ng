@@ -276,14 +276,14 @@ export const CMS_PAGES: EditablePageConfig[] = [
     id: 'programs',
     title: 'Programs Page',
     path: '/programs',
-    description: 'Ecosystem header banner shown above the 8 Academies / Pathfinder / Catalog views.',
+    description: 'Ecosystem header banner shown above the 8 Programs / Roadmap / Pathfinder / Catalog views.',
     sections: [
       {
         id: 'hero',
         name: 'Programs Hero Header',
-        description: 'Headline and banner photo above the academy explorer.',
+        description: 'Headline and banner photo above the program explorer.',
         defaultData: {
-          title: "One Ecosystem. 8 Specialized Academies. Infinite Potential.",
+          title: "Our Learning Ecosystem. 8 Specialized Programs. Infinite Potential.",
           subtitle: "Jaystarbliss Studios is more than tutoring — we build tailored learning pathways across technology, music, digital literacy, creative arts, and academic excellence with our proven 5-stage mastery framework.",
           bannerImage: ''
         },
@@ -308,8 +308,9 @@ export const CMS_PAGES: EditablePageConfig[] = [
         defaultData: {
           title: 'GET IN TOUCH',
           subtitle: 'Have questions about admissions, school partnerships, or digital services? Our team is here to assist.',
-          email: 'hello@jaystarbliss.com',
-          phone: '+234 123 456 7890',
+          email: 'jaystarblissstudios@gmail.com',
+          phone: '+234 913 651 8194',
+          secondaryPhone: '+234 913 052 9010',
           address: 'Lagos, Nigeria',
           officeHours: 'Monday - Friday: 9:00 AM - 6:00 PM (WAT)',
           bannerImage: ''
@@ -318,7 +319,8 @@ export const CMS_PAGES: EditablePageConfig[] = [
           { key: 'title', label: 'Title', type: 'text' },
           { key: 'subtitle', label: 'Subtitle', type: 'textarea' },
           { key: 'email', label: 'Contact Email', type: 'text' },
-          { key: 'phone', label: 'Contact Phone Number', type: 'text' },
+          { key: 'phone', label: 'Primary Contact Phone', type: 'text' },
+          { key: 'secondaryPhone', label: 'Secondary Contact Phone', type: 'text' },
           { key: 'address', label: 'Physical Office Address', type: 'text' },
           { key: 'officeHours', label: 'Office / Support Hours', type: 'text' },
           { key: 'bannerImage', label: 'Banner Image (Cloudinary)', type: 'image' }

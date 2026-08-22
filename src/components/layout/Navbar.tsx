@@ -20,7 +20,8 @@ import {
   HelpCircle,
   ArrowRight,
   Music,
-  Brain
+  Brain,
+  Compass
 } from 'lucide-react';
 import { useTheme } from '../../hooks/useTheme';
 import { useKeyboardShortcut } from '../../hooks/useKeyboardShortcut';
@@ -238,10 +239,17 @@ const Navbar: React.FC = () => {
                         </div>
                       </Link>
 
-                      <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
+                      <div className="pt-2 border-t border-slate-100 dark:border-slate-800 space-y-1">
+                        <Link 
+                          to="/programs?tab=roadmap#roadmap-section" 
+                          className="flex items-center justify-between px-3 py-2 rounded-lg bg-red-50 dark:bg-red-950/30 text-xs font-bold text-brand-red hover:bg-brand-red/10 transition-colors"
+                        >
+                          <span className="flex items-center gap-1.5"><Compass size={13} /> Visual Learning Roadmap</span>
+                          <ArrowRight size={13} />
+                        </Link>
                         <Link 
                           to="/programs?tab=catalog#catalog-section" 
-                          className="flex items-center justify-between px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800/50 text-xs font-bold text-brand-red hover:bg-brand-red/10 transition-colors"
+                          className="flex items-center justify-between px-3 py-2 rounded-lg bg-slate-50 dark:bg-slate-800/50 text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-brand-red hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                         >
                           <span>View Full Program Catalog</span>
                           <ArrowRight size={13} />
@@ -569,7 +577,10 @@ const Navbar: React.FC = () => {
                 </button>
                 {mobileExpanded.programs && (
                   <div className="pl-3 pr-2 py-2 space-y-1.5 bg-slate-50/70 dark:bg-slate-900/60 rounded-xl my-1 border border-slate-100 dark:border-slate-800">
-                    <Link to="/programs?tab=catalog#catalog-section" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-2 text-xs font-bold text-brand-red hover:underline">
+                    <Link to="/programs?tab=roadmap#roadmap-section" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-2 text-xs font-bold text-brand-red bg-red-50 dark:bg-red-950/40 rounded-lg">
+                      <Compass size={14} className="text-brand-red" /> Visual Learning Roadmap
+                    </Link>
+                    <Link to="/programs?tab=catalog#catalog-section" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2 px-3 py-2 text-xs font-bold text-slate-700 dark:text-slate-300 hover:text-brand-red">
                       <ArrowRight size={13} /> Full Programs Catalog
                     </Link>
                     <Link to="/programs?school=academic-excellence#programs-content" onClick={() => setMobileMenuOpen(false)} className="flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-brand-red">

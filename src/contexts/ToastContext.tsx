@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
 import type { ReactNode } from 'react';
 import { X, CheckCircle, AlertCircle, Info } from 'lucide-react';
 
@@ -11,8 +11,15 @@ interface Toast {
   type: ToastType;
 }
 
+export interface ToastFn {
+  (message: string, type?: ToastType): void;
+  success: (message: string) => void;
+  error: (message: string) => void;
+  info: (message: string) => void;
+}
+
 interface ToastContextType {
-  toast: (message: string, type?: ToastType) => void;
+  toast: ToastFn;
   success: (message: string) => void;
   error: (message: string) => void;
   info: (message: string) => void;
@@ -35,12 +42,20 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const error = useCallback((message: string) => addToast(message, 'error'), [addToast]);
   const info = useCallback((message: string) => addToast(message, 'info'), [addToast]);
 
+  const toastFn = useMemo(() => {
+    const fn = (message: string, type: ToastType = 'info') => addToast(message, type);
+    fn.success = success;
+    fn.error = error;
+    fn.info = info;
+    return fn as ToastFn;
+  }, [addToast, success, error, info]);
+
   const removeToast = (id: string) => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   };
 
   return (
-    <ToastContext.Provider value={{ toast: addToast, success, error, info }}>
+    <ToastContext.Provider value={{ toast: toastFn, success, error, info }}>
       {children}
       <div className="fixed bottom-4 right-4 z-[9999] flex flex-col gap-2">
         {toasts.map((toast) => (
@@ -78,3 +93,4 @@ export const useToast = () => {
   }
   return context;
 };
+

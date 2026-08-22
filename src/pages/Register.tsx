@@ -13,6 +13,8 @@ import { useTheme } from '../hooks/useTheme';
 import ProgressStepper from '../components/ui/ProgressStepper';
 import Tooltip from '../components/ui/Tooltip';
 import SEO from '../components/ui/SEO';
+import { JaystarblissIcon } from '../components/common/JaystarblissLogo';
+import { useToast } from '../contexts/ToastContext';
 import './Register.css';
 
 const SUBJECTS = [
@@ -49,6 +51,7 @@ const TIME_SLOTS = [
 ];
 
 const Register: React.FC = () => {
+  const { toast } = useToast();
   const { theme, toggleTheme } = useTheme();
   const isDarkMode = theme === 'dark';
   const navigate = useNavigate();
@@ -262,6 +265,7 @@ const Register: React.FC = () => {
         sessionStorage.setItem('userName', fullName);
         
         setSuccess('Account created! A verification email has been sent. Redirecting to dashboard...');
+        toast.success('Account created successfully! Verification email has been sent.');
         
         setTimeout(() => {
           navigate('/portal/parent');
@@ -273,6 +277,7 @@ const Register: React.FC = () => {
         if (err.code === 'auth/invalid-email') msg = 'Please enter a valid email address.';
         if (err.code === 'auth/network-request-failed') msg = 'Network error. Please check your connection.';
         setError(msg);
+        toast.error(msg);
       } finally {
         setLoading(false);
       }
@@ -292,12 +297,14 @@ const Register: React.FC = () => {
         });
         
         setSuccess('Student registration request submitted! An admin will review and email your access code within 24 hours.');
+        toast.success('Student registration request submitted! Check your email for login & access details.');
         // Clear form
         setFullName(''); setPhone(''); setEmail(''); setStudentClass(''); setParentPhone('');
         setSelectedSubjects([]); setNotes('');
         setCurrentStep(0);
       } catch (err) {
         setError('Error submitting request. Please try again or contact support.');
+        toast.error('Error submitting student request. Please try again or reach out on WhatsApp.');
         console.error('Student request error:', err);
       } finally {
         setLoading(false);
@@ -323,6 +330,7 @@ const Register: React.FC = () => {
         });
         
         setSuccess('Instructor Application submitted successfully! Our Academic Directorate will review your credentials and schedule an interview/onboarding session.');
+        toast.success('Instructor application submitted successfully! Our Directorate will contact you soon.');
         
         // Clear form
         setFullName(''); setPhone(''); setEmail(''); setLocation(''); setQualification('');
@@ -330,6 +338,7 @@ const Register: React.FC = () => {
         setCurrentStep(0);
       } catch (err: any) {
         setError('Error submitting tutor application. Please try again or contact us.');
+        toast.error('Error submitting tutor application. Please try again.');
         console.error('Tutor application error:', err);
       } finally {
         setLoading(false);
@@ -346,8 +355,8 @@ const Register: React.FC = () => {
       {/* NAV */}
       <nav className="reg-nav">
         <div className="reg-nav-inner">
-          <Link to="/" className="reg-nav-brand">
-            <img className="reg-nav-brand-icon" src="/favicon-16x16.png" alt="Jaystarbliss Studios Logo" />
+          <Link to="/" className="reg-nav-brand group">
+            <JaystarblissIcon className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl group-hover:scale-105 transition-transform shadow-sm" />
             <span className="reg-nav-brand-name">
               Jaystarbliss <span style={{ color: 'var(--madder)' }}>Studios</span>
             </span>

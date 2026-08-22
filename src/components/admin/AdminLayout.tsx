@@ -20,30 +20,75 @@ import {
   Gamepad2,
   Search,
   ExternalLink,
-  UserCheck
+  UserCheck,
+  School,
+  CreditCard,
+  Bell,
+  Activity,
+  Layers
 } from 'lucide-react';
+
+interface NavGroup {
+  sectionTitle: string;
+  items: {
+    name: string;
+    href: string;
+    icon: any;
+    desc: string;
+    badge?: string;
+  }[];
+}
 
 const AdminLayout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const location = useLocation();
 
-  const navigation = [
-    { name: "Dashboard", href: "/admin", icon: LayoutDashboard, desc: "Overview & metrics" },
-    { name: "Pages (CMS)", href: "/admin/pages", icon: FileText, desc: "Live content editor" },
-    { name: "Programs", href: "/admin/programs", icon: BookOpen, desc: "Manage courses & curriculum" },
-    { name: "Services", href: "/admin/services", icon: Briefcase, desc: "Business & enterprise offerings" },
-    { name: "Portfolio", href: "/admin/portfolio", icon: FolderOpen, desc: "Client case studies" },
-    { name: "Kids Projects", href: "/admin/kids-projects", icon: Gamepad2, desc: "Student showcase" },
-    { name: "Blog", href: "/admin/blog", icon: FileText, desc: "Articles & news" },
-    { name: "Approvals", href: "/admin/approvals", icon: UserCheck, desc: "Tutor & student applications" },
-    { name: "Inquiries", href: "/admin/inquiries", icon: MessageSquare, desc: "Applications & leads" },
-    { name: "Users", href: "/admin/users", icon: Users, desc: "User accounts & roles" },
-    { name: "Settings", href: "/admin/settings", icon: Settings, desc: "System configuration" },
+  const navigationGroups: NavGroup[] = [
+    {
+      sectionTitle: "Command & Telemetry",
+      items: [
+        { name: "Dashboard", href: "/admin", icon: LayoutDashboard, desc: "System KPIs, metrics & telemetry" },
+        { name: "Inquiries & Leads", href: "/admin/inquiries", icon: MessageSquare, desc: "Public inquiries & contact requests" },
+        { name: "Activity Logs", href: "/admin/activity", icon: Activity, desc: "Real-time authentication & operation audit" },
+      ]
+    },
+    {
+      sectionTitle: "Website & Pages CMS",
+      items: [
+        { name: "Pages & Section CMS", href: "/admin/pages", icon: Layers, desc: "Live content & visual sections editor" },
+        { name: "Programs & Courses", href: "/admin/programs", icon: BookOpen, desc: "Curriculum tracks, stages & syllabi" },
+        { name: "Services Catalog", href: "/admin/services", icon: Briefcase, desc: "Custom software & institutional solutions" },
+        { name: "Portfolio Showcase", href: "/admin/portfolio", icon: FolderOpen, desc: "Client deliverables & case studies" },
+        { name: "Kids Zone Builds", href: "/admin/kids-projects", icon: Gamepad2, desc: "Scholars gaming & app showcase" },
+        { name: "News Corner & Blog", href: "/admin/blog", icon: FileText, desc: "Articles, announcements & press" },
+      ]
+    },
+    {
+      sectionTitle: "Portals & Academic Hub",
+      items: [
+        { name: "Approvals & Requests", href: "/admin/approvals", icon: UserCheck, desc: "Student, tutor & enrollment approvals" },
+        { name: "Scholars & Students", href: "/admin/students", icon: Users, desc: "Student credentials & individual dispatches" },
+        { name: "Parents & Payments", href: "/admin/parents", icon: CreditCard, desc: "Tuition transactions & family plans" },
+        { name: "Faculty & Staff", href: "/admin/staff", icon: UserCheck, desc: "Staff invitations & faculty curriculum" },
+        { name: "Affiliated Schools", href: "/admin/schools", icon: School, desc: "6 Partner Montessori portals & exams" },
+        { name: "Learning Resources", href: "/admin/resources", icon: FolderOpen, desc: "General downloads, links & tests" },
+      ]
+    },
+    {
+      sectionTitle: "System & Management",
+      items: [
+        { name: "Notifications", href: "/admin/notifications", icon: Bell, desc: "Push broadcasts & alerts" },
+        { name: "Users & RBAC", href: "/admin/users", icon: Users, desc: "User accounts & role permissions" },
+        { name: "Settings & Cloud", href: "/admin/settings", icon: Settings, desc: "Cloudinary & system configuration" },
+      ]
+    }
   ];
 
   const closeSidebar = () => setSidebarOpen(false);
-  const currentNav = navigation.find(n => n.href === location.pathname);
+  
+  const allNavItems = navigationGroups.flatMap(g => g.items);
+  const currentNav = allNavItems.find(n => n.href === location.pathname);
   const currentTitle = currentNav ? `Admin ${currentNav.name}` : 'Admin Management Panel';
 
   return (
@@ -62,15 +107,15 @@ const AdminLayout: React.FC = () => {
       />
 
       {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-brand-slate text-white transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-auto lg:flex lg:w-64 lg:flex-col ${
+      <div className={`fixed inset-y-0 left-0 z-50 w-72 bg-brand-slate text-white transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-auto lg:flex lg:w-72 lg:flex-col ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
-        <div className="flex items-center justify-between h-16 px-6 bg-brand-slate border-b border-white/10">
+        <div className="flex items-center justify-between h-16 px-6 bg-brand-slate border-b border-white/10 shrink-0">
           <Tooltip content="Return to Public Website" placement="bottom">
             <Link to="/" className="flex items-center gap-2 group">
               <JaystarblissIcon className="w-8 h-8 group-hover:scale-105 transition-transform" />
               <span className="font-bold text-sm tracking-tight text-white flex items-center gap-1">
-                ADMIN PORTAL
+                ADMIN COMMAND
                 <ExternalLink size={12} className="opacity-0 group-hover:opacity-70 transition-opacity" />
               </span>
             </Link>
@@ -81,40 +126,49 @@ const AdminLayout: React.FC = () => {
             </button>
           </Tooltip>
         </div>
-        <div className="flex-1 overflow-y-auto py-4 px-3">
-          <nav className="space-y-1">
-            {navigation.map((item) => {
-              const isActive = location.pathname === item.href || (location.pathname.startsWith(item.href) && item.href !== '/admin');
-              const Icon = item.icon;
-              return (
-                <Tooltip key={item.name} content={item.desc} placement="right" delay={300}>
-                  <Link
-                    to={item.href}
-                    onClick={closeSidebar}
-                    className={`group flex items-center px-3 py-2.5 text-sm font-medium rounded-md transition-colors ${
-                      isActive 
-                        ? 'bg-brand-red text-white shadow-sm' 
-                        : 'text-gray-300 hover:bg-white/5 hover:text-white'
-                    }`}
-                  >
-                    <Icon 
-                      className={`flex-shrink-0 mr-3 h-5 w-5 transition-colors ${
-                        isActive ? 'text-white' : 'text-gray-400 group-hover:text-white'
-                      }`} 
-                    />
-                    {item.name}
-                  </Link>
-                </Tooltip>
-              );
-            })}
-          </nav>
+
+        <div className="flex-1 overflow-y-auto py-4 px-3 space-y-6">
+          {navigationGroups.map((group, gIdx) => (
+            <div key={gIdx} className="space-y-1">
+              <div className="px-3 text-[10px] font-mono font-bold tracking-widest text-slate-400 uppercase">
+                {group.sectionTitle}
+              </div>
+              <nav className="space-y-0.5">
+                {group.items.map((item) => {
+                  const isActive = location.pathname === item.href || (location.pathname.startsWith(item.href) && item.href !== '/admin');
+                  const Icon = item.icon;
+                  return (
+                    <Tooltip key={item.name} content={item.desc} placement="right" delay={300}>
+                      <Link
+                        to={item.href}
+                        onClick={closeSidebar}
+                        className={`group flex items-center px-3 py-2 text-xs font-bold rounded-xl transition-all ${
+                          isActive 
+                            ? 'bg-brand-red text-white shadow-sm' 
+                            : 'text-gray-300 hover:bg-white/5 hover:text-white'
+                        }`}
+                      >
+                        <Icon 
+                          className={`flex-shrink-0 mr-2.5 h-4 w-4 transition-colors ${
+                            isActive ? 'text-white' : 'text-gray-400 group-hover:text-white'
+                          }`} 
+                        />
+                        <span className="truncate">{item.name}</span>
+                      </Link>
+                    </Tooltip>
+                  );
+                })}
+              </nav>
+            </div>
+          ))}
         </div>
-        <div className="p-4 border-t border-white/10">
+
+        <div className="p-4 border-t border-white/10 shrink-0">
           <Tooltip content="End administrative session" placement="top">
-            <button className="flex items-center w-full px-3 py-2.5 text-sm font-medium text-gray-300 rounded-md hover:bg-white/5 hover:text-white transition-colors">
-              <LogOut className="mr-3 h-5 w-5 text-gray-400" />
-              Sign Out
-            </button>
+            <Link to="/admin/login" className="flex items-center w-full px-3 py-2 text-xs font-bold text-gray-300 rounded-xl hover:bg-white/5 hover:text-white transition-colors">
+              <LogOut className="mr-2.5 h-4 w-4 text-gray-400" />
+              Exit Session
+            </Link>
           </Tooltip>
         </div>
       </div>
@@ -122,10 +176,10 @@ const AdminLayout: React.FC = () => {
       {/* Main content */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Topbar */}
-        <div className="flex-shrink-0 flex items-center justify-between h-16 bg-white border-b border-gray-200 px-4 sm:px-6 lg:px-8">
+        <div className="flex-shrink-0 flex items-center justify-between h-16 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 px-4 sm:px-6 lg:px-8">
           <Tooltip content="Open navigation menu" placement="right">
             <button 
-              className="lg:hidden text-gray-500 hover:text-gray-700 p-2 rounded-lg hover:bg-gray-100 transition-colors" 
+              className="lg:hidden text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors" 
               onClick={() => setSidebarOpen(true)}
               aria-label="Open navigation menu"
             >
@@ -134,21 +188,21 @@ const AdminLayout: React.FC = () => {
           </Tooltip>
           
           <div className="flex-1 flex justify-end items-center gap-4">
-            <Tooltip content="Search anything (Cmd+K)" placement="bottom">
+            <Tooltip content="Search admin workspace" placement="bottom">
               <button 
                 onClick={() => setSearchOpen(true)}
-                className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition-colors"
+                className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
                 aria-label="Search content"
               >
-                <Search size={20} />
+                <Search size={18} />
               </button>
             </Tooltip>
-            <div className="h-6 w-px bg-gray-200"></div>
-            <Tooltip content="Active Administrator: John Rufai" placement="bottom">
-              <div className="flex items-center gap-3 cursor-pointer py-1 px-2 rounded-lg hover:bg-gray-50 transition-colors">
-                <div className="text-sm font-medium text-gray-700 hidden sm:block">Admin User</div>
-                <div className="w-8 h-8 rounded-full bg-brand-neutral text-brand-slate flex items-center justify-center font-bold text-sm border border-slate-200">
-                  AU
+            <div className="h-6 w-px bg-gray-200 dark:bg-slate-800"></div>
+            <Tooltip content="Administrator Terminal Session" placement="bottom">
+              <div className="flex items-center gap-3 py-1 px-2 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors">
+                <div className="text-xs font-bold text-gray-700 dark:text-gray-200 hidden sm:block">Admin Officer</div>
+                <div className="w-8 h-8 rounded-full bg-brand-red text-white flex items-center justify-center font-bold text-xs shadow-xs">
+                  JD
                 </div>
               </div>
             </Tooltip>
@@ -162,10 +216,10 @@ const AdminLayout: React.FC = () => {
               <AnimatePresence mode="wait">
                 <motion.div
                   key={location.pathname}
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.2 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.15 }}
                 >
                   <Outlet />
                 </motion.div>

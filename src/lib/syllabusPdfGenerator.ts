@@ -280,14 +280,14 @@ export function generateSyllabusPdf(program: SyllabusProgramData): void {
   });
 
   // ==========================================
-  // SECTION 3: PARENT PLANNING & SCHEDULING GUIDE
+  // SECTION 3: LEARNER & ENROLLMENT PLANNING GUIDE
   // ==========================================
   checkPageBreak(50);
 
   doc.setFontSize(11);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(slate900[0], slate900[1], slate900[2]);
-  doc.text('3. PARENT PLANNING & SCHEDULING BLUEPRINT', margin, y);
+  doc.text('3. LEARNER PLANNING & PACING BLUEPRINT', margin, y);
   y += 6;
 
   doc.setFillColor(softBg[0], softBg[1], softBg[2]);
@@ -302,10 +302,10 @@ export function generateSyllabusPdf(program: SyllabusProgramData): void {
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(slate700[0], slate700[1], slate700[2]);
   doc.text('• Pacing: 1 to 2 sessions per week (90 to 120 minutes per session) for optimal retention.', margin + 6, y + 13);
-  doc.text('• Home Practice: 30–45 minutes of creative exploration between guided mentor sessions.', margin + 6, y + 18);
-  doc.text('• Diagnostic Onboarding: Every student completes a diagnostic consultation to calibrate starting stage.', margin + 6, y + 23);
-  doc.text('• Progress Portal: Parents receive bi-weekly milestone reports and verifiable code/design artifacts.', margin + 6, y + 28);
-  doc.text('• Capstone Exhibition: Parents are invited to the termly Student Demo Day at Stage 5.', margin + 6, y + 33);
+  doc.text('• Hands-on Practice: 30–45 minutes of practical project building between mentor sessions.', margin + 6, y + 18);
+  doc.text('• Diagnostic Onboarding: Every student/enrollee completes a diagnostic session to calibrate starting level.', margin + 6, y + 23);
+  doc.text('• Progress Portal: Regular milestone reports and verifiable code/design project artifacts.', margin + 6, y + 28);
+  doc.text('• Capstone Exhibition: Opportunity to present finished works at the termly Demo Day at Stage 5.', margin + 6, y + 33);
 
   y += 44;
 
@@ -322,7 +322,7 @@ export function generateSyllabusPdf(program: SyllabusProgramData): void {
   doc.setFontSize(7.5);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(200, 210, 225);
-  doc.text('Visit www.jaystarbliss.com • WhatsApp / Support: +234 (0) 800-JAYSTAR • contact@jaystarbliss.com', margin + 8, y + 14);
+  doc.text('Support / WhatsApp: +234 913 651 8194 | +234 913 052 9010 • Email: jaystarblissstudios@gmail.com', margin + 8, y + 14);
 
   // Draw header / footer across all pages
   const totalPages = doc.getNumberOfPages();

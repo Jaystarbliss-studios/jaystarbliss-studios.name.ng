@@ -3,13 +3,15 @@ import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import MainLayout from '../components/layout/MainLayout';
 import SEO from '../components/ui/SEO';
-import { CheckCircle2, MapPin, Mail, Phone } from 'lucide-react';
+import { CheckCircle2, MapPin, Mail, Phone, Globe, ExternalLink } from 'lucide-react';
 import Button from '../components/ui/Button';
 import PageHeader from '../components/ui/PageHeader';
 import { pageHeaderImages } from '../lib/stockImages';
 import { usePageSection } from '../lib/cms';
+import { useToast } from '../contexts/ToastContext';
 
 const Contact: React.FC = () => {
+  const { toast } = useToast();
   const { data: heroData } = usePageSection('contact', 'details', {
     title: 'GET IN TOUCH',
     subtitle: "Whether you're looking to start a new project, enroll in a program, or just say hello, we'd love to hear from you.",
@@ -45,10 +47,12 @@ const Contact: React.FC = () => {
         updatedAt: new Date().toISOString()
       });
       setSuccess(true);
+      toast.success('Your message has been sent successfully! Our team will respond shortly.');
       setFormData({ name: '', email: '', type: 'General Inquiry', message: '' });
     } catch (err) {
       console.error('Error submitting form:', err);
       setError(true);
+      toast.error('Failed to submit message. Please try again or reach out via WhatsApp.');
     } finally {
       setLoading(false);
     }
@@ -92,8 +96,8 @@ const Contact: React.FC = () => {
                   </div>
                   <div>
                     <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-1">Email Us</h3>
-                    <a href="mailto:hello@jaystarbliss.com" className="text-base font-semibold text-brand-slate dark:text-white hover:text-brand-red transition-colors">
-                      hello@jaystarbliss.com
+                    <a href="mailto:jaystarblissstudios@gmail.com" className="text-base font-semibold text-brand-slate dark:text-white hover:text-brand-red transition-colors break-all">
+                      jaystarblissstudios@gmail.com
                     </a>
                   </div>
                 </div>
@@ -103,9 +107,32 @@ const Contact: React.FC = () => {
                     <Phone size={20} />
                   </div>
                   <div>
-                    <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-1">Call Us</h3>
-                    <a href="tel:+2341234567890" className="text-base font-semibold text-brand-slate dark:text-white hover:text-brand-red transition-colors">
-                      +234 (0) 123 456 7890
+                    <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-1">Call / WhatsApp</h3>
+                    <div className="flex flex-col gap-1">
+                      <a href="tel:+2349136518194" className="text-base font-semibold text-brand-slate dark:text-white hover:text-brand-red transition-colors">
+                        +234 913 651 8194
+                      </a>
+                      <a href="tel:+2349130529010" className="text-base font-semibold text-brand-slate dark:text-white hover:text-brand-red transition-colors">
+                        +234 913 052 9010
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="py-6 flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-brand-red/10 flex items-center justify-center text-brand-red shrink-0 mt-0.5">
+                    <Globe size={20} />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-1">Google Business</h3>
+                    <a 
+                      href="https://share.google/mqVU8pAgKEDjOfGHe" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="inline-flex items-center gap-1.5 text-sm font-bold text-brand-red hover:underline mt-0.5"
+                    >
+                      <span>Verified Google Profile</span>
+                      <ExternalLink size={13} />
                     </a>
                   </div>
                 </div>
@@ -115,9 +142,9 @@ const Contact: React.FC = () => {
                     <MapPin size={20} />
                   </div>
                   <div>
-                    <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-1">Our Office</h3>
+                    <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-1">Headquarters</h3>
                     <p className="text-base font-medium text-brand-slate dark:text-white leading-relaxed">
-                      123 Innovation Drive<br/>Tech District, Lagos, Nigeria
+                      Lagos, Nigeria
                     </p>
                   </div>
                 </div>
@@ -128,7 +155,7 @@ const Contact: React.FC = () => {
                 <h4 className="text-sm font-bold text-brand-slate dark:text-white mb-1">Operating Hours</h4>
                 <p className="text-xs text-slate-500 dark:text-slate-400">
                   Monday – Friday: 9:00 AM – 6:00 PM WAT<br />
-                  Saturday: 10:00 AM – 3:00 PM WAT
+                  Saturday: 10:00 AM – 4:00 PM WAT
                 </p>
               </div>
             </div>

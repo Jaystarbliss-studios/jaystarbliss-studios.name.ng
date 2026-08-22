@@ -6,6 +6,7 @@ import SEO from '../components/ui/SEO';
 import { CheckCircle2, ArrowRight, ArrowLeft, Send, User, Layers, Calendar } from 'lucide-react';
 import Button from '../components/ui/Button';
 import ProgressStepper from '../components/ui/ProgressStepper';
+import { useToast } from '../contexts/ToastContext';
 
 const steps = [
   { id: 'contact', title: 'Your Details', subtitle: 'Name & organization', icon: User },
@@ -14,6 +15,7 @@ const steps = [
 ];
 
 const ProjectRequest: React.FC = () => {
+  const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
     name: '',
@@ -96,9 +98,11 @@ const ProjectRequest: React.FC = () => {
         updatedAt: new Date().toISOString()
       });
       setSuccess(true);
+      toast.success('Project request submitted successfully! Our engineering team will review your scope and get in touch.');
     } catch (err) {
       console.error('Error submitting form:', err);
       setError('There was an error sending your request. Please try again.');
+      toast.error('There was an error submitting your project request. Please try again.');
     } finally {
       setLoading(false);
     }

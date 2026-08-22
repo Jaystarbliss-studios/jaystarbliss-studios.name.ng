@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { Mail, Phone, MapPin, ExternalLink, Globe } from 'lucide-react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { JaystarblissIcon } from '../common/JaystarblissLogo';
+import { useToast } from '../../contexts/ToastContext';
 
 const Footer: React.FC = () => {
+  const { toast } = useToast();
   const [email, setEmail] = useState('');
   const [settings, setSettings] = useState({
     companyName: 'Jaystarbliss Studios',
-    contactEmail: 'hello@jaystarbliss.com',
-    contactPhone: '+234 123 456 7890',
+    contactEmail: 'jaystarblissstudios@gmail.com',
+    contactPhone: '+234 913 651 8194',
+    secondaryPhone: '+234 913 052 9010',
+    googleBusinessUrl: 'https://share.google/mqVU8pAgKEDjOfGHe',
     address: 'Lagos, Nigeria',
     twitter: '#',
     linkedin: '#',
@@ -33,9 +37,10 @@ const Footer: React.FC = () => {
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate subscription
+    if (!email.trim()) return;
+    // Process newsletter subscription
     setEmail('');
-    alert('Thank you for subscribing to our newsletter!');
+    toast.success('Thank you for subscribing to Jaystarbliss Studios updates & curriculum newsletters!');
   };
 
   return (
@@ -52,9 +57,9 @@ const Footer: React.FC = () => {
               </span>
             </Link>
             <p className="text-gray-400 mb-8 font-medium leading-relaxed">
-              Empowering the next generation through digital education, and building scalable tech solutions for modern businesses.
+              Empowering learners of all ages through personalized digital education, technology tracks, and scalable software solutions.
             </p>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <a href={settings.twitter || '#'} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-gray-400 hover:bg-brand-red hover:text-white transition-all">
                 <span className="text-xs font-bold">X</span>
               </a>
@@ -63,6 +68,16 @@ const Footer: React.FC = () => {
               </a>
               <a href={settings.linkedin || '#'} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-gray-400 hover:bg-brand-red hover:text-white transition-all">
                 <span className="text-xs font-bold">IN</span>
+              </a>
+              <a 
+                href={settings.googleBusinessUrl || 'https://share.google/mqVU8pAgKEDjOfGHe'} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="px-3 h-10 rounded-full bg-slate-800 flex items-center gap-1.5 text-gray-300 hover:bg-brand-red hover:text-white transition-all text-xs font-bold"
+                title="View Google Business Profile"
+              >
+                <Globe size={14} />
+                <span>Google</span>
               </a>
             </div>
           </div>
@@ -84,6 +99,7 @@ const Footer: React.FC = () => {
           <div className="lg:col-span-2">
             <h3 className="text-white font-bold mb-6 tracking-wide uppercase text-sm">Resources</h3>
             <ul className="space-y-4">
+              <li><Link to="/tutors" className="text-gray-400 hover:text-brand-red transition-colors font-medium">Find a Mentor</Link></li>
               <li><Link to="/resources" className="text-gray-400 hover:text-brand-red transition-colors font-medium">Resource Center</Link></li>
               <li><Link to="/blog" className="text-gray-400 hover:text-brand-red transition-colors font-medium">Blog</Link></li>
               <li><Link to="/faq" className="text-gray-400 hover:text-brand-red transition-colors font-medium">FAQ</Link></li>
@@ -101,29 +117,43 @@ const Footer: React.FC = () => {
               <input 
                 type="email" 
                 placeholder="Enter your email" 
-                className="bg-slate-800 text-white px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-red flex-grow border border-slate-700"
+                className="bg-slate-800 text-white px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-red flex-grow border border-slate-700 text-sm"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
-              <button type="submit" className="bg-brand-red hover:bg-red-700 text-white px-6 py-3 rounded-lg font-bold transition-colors">
+              <button type="submit" className="bg-brand-red hover:bg-red-700 text-white px-6 py-3 rounded-lg font-bold transition-colors text-sm">
                 Join
               </button>
             </form>
             
             <div className="space-y-3">
               <a href={`mailto:${settings.contactEmail}`} className="flex items-center gap-3 text-gray-400 hover:text-white transition-colors">
-                <Mail size={16} />
-                <span className="font-medium text-sm">{settings.contactEmail}</span>
+                <Mail size={16} className="text-brand-red shrink-0" />
+                <span className="font-medium text-sm break-all">{settings.contactEmail}</span>
               </a>
-              <div className="flex items-center gap-3 text-gray-400">
-                <Phone size={16} />
-                <span className="font-medium text-sm">{settings.contactPhone}</span>
+              <div className="flex flex-col gap-1.5">
+                <a href="tel:+2349136518194" className="flex items-center gap-3 text-gray-400 hover:text-white transition-colors">
+                  <Phone size={16} className="text-brand-red shrink-0" />
+                  <span className="font-medium text-sm">+234 913 651 8194</span>
+                </a>
+                <a href="tel:+2349130529010" className="flex items-center gap-3 text-gray-400 hover:text-white transition-colors pl-7">
+                  <span className="font-medium text-sm">+234 913 052 9010</span>
+                </a>
               </div>
               <div className="flex items-center gap-3 text-gray-400">
-                <MapPin size={16} />
+                <MapPin size={16} className="text-brand-red shrink-0" />
                 <span className="font-medium text-sm">{settings.address}</span>
               </div>
+              <a 
+                href={settings.googleBusinessUrl || 'https://share.google/mqVU8pAgKEDjOfGHe'}
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="flex items-center gap-2 text-xs font-semibold text-cyan-400 hover:text-cyan-300 transition-colors pt-1"
+              >
+                <span>Google Business Profile Details</span>
+                <ExternalLink size={13} />
+              </a>
             </div>
           </div>
         </div>

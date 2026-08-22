@@ -73,7 +73,7 @@ const FeaturedPrograms: React.FC = () => {
         {/* Header */}
         <Reveal className="text-center max-w-4xl mx-auto mb-12">
           <span className="text-xs font-black uppercase tracking-widest text-brand-red mb-2 block">
-            Progressive Multi-Disciplinary Academies
+            Progressive Multi-Disciplinary Programs
           </span>
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[42px] font-extrabold text-brand-slate dark:text-white mb-3 tracking-tight">
             {sectionInfo.title}

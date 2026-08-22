@@ -51,6 +51,13 @@ import AdminKidsProjects from "./pages/admin/AdminKidsProjects";
 import AdminInquiries from "./pages/admin/AdminInquiries";
 import AdminApprovals from "./pages/admin/AdminApprovals";
 import AdminSettings from "./pages/admin/AdminSettings";
+import AdminStudents from "./pages/admin/AdminStudents";
+import AdminParents from "./pages/admin/AdminParents";
+import AdminStaff from "./pages/admin/AdminStaff";
+import AdminSchools from "./pages/admin/AdminSchools";
+import AdminResources from "./pages/admin/AdminResources";
+import AdminNotifications from "./pages/admin/AdminNotifications";
+import AdminActivityLogs from "./pages/admin/AdminActivityLogs";
 
 import ScrollToTop from "./components/ScrollToTop";
 import GlassRippleListener from "./components/ui/GlassRippleListener";
@@ -129,6 +136,13 @@ function AnimatedRoutes() {
           <Route path="pages" element={<AdminPages />} />
           <Route path="pages/new" element={<AdminPageForm />} />
           <Route path="pages/:id" element={<AdminPageForm />} />
+          <Route path="students" element={<AdminStudents />} />
+          <Route path="parents" element={<AdminParents />} />
+          <Route path="staff" element={<AdminStaff />} />
+          <Route path="schools" element={<AdminSchools />} />
+          <Route path="resources" element={<AdminResources />} />
+          <Route path="notifications" element={<AdminNotifications />} />
+          <Route path="activity" element={<AdminActivityLogs />} />
           <Route path="settings" element={<AdminSettings />} />
         </Route>
       </Routes>

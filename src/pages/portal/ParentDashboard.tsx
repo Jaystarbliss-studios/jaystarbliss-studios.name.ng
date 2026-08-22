@@ -5,10 +5,11 @@ import {
 } from 'firebase/firestore';
 import { 
   GraduationCap, PlusCircle, CreditCard, 
-  Bell, CheckCircle2, Clock, UserPlus, Award
+  Bell, CheckCircle2, Clock, Award
 } from 'lucide-react';
 import SEO from '../../components/ui/SEO';
 import { AchievementBadge, PRESET_ACHIEVEMENTS } from '../../components/ecosystem/AchievementBadge';
+import { DashboardGreeting } from '../../components/portal/DashboardGreeting';
 
 const ParentDashboard: React.FC = () => {
   const [children, setChildren] = useState<any[]>([]);
@@ -169,28 +170,13 @@ const ParentDashboard: React.FC = () => {
         noindex={true}
       />
 
-      {/* Welcome Banner */}
-      <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-brand-slate rounded-3xl p-6 md:p-8 text-white relative overflow-hidden shadow-lg border border-slate-700/50">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-brand-red/20 rounded-full blur-[100px] pointer-events-none"></div>
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div>
-            <h1 className="text-2xl md:text-3xl font-black text-white">
-              Parent Guardian Portal
-            </h1>
-            <p className="text-slate-300 text-sm md:text-base mt-1 max-w-xl">
-              Track your child's weekly coding milestones, access codes, mentor notes, and tuition statements.
-            </p>
-          </div>
-
-          <button 
-            type="button"
-            onClick={() => setShowEnrollModal(true)}
-            className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-brand-red hover:bg-red-700 text-white font-bold rounded-xl shadow-md transition-colors text-sm"
-          >
-            <UserPlus size={16} /> Enroll Another Child
-          </button>
-        </div>
-      </div>
+      {/* Dynamic Timezone Greeting Banner */}
+      <DashboardGreeting 
+        name="Parent & Guardian Console"
+        role="Parent / Guardian"
+        subtitle="Track your child's weekly coding milestones, access codes, mentor notes, and tuition statements."
+        badge={`${children.length} Enrolled Cadets`}
+      />
 
       {enrollSuccess && (
         <div className="p-4 rounded-xl bg-green-50 dark:bg-green-950/30 border border-green-200 text-green-800 dark:text-green-300 text-sm flex items-center gap-3">

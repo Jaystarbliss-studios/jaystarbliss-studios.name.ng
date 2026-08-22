@@ -338,20 +338,23 @@ const KidsGallery: React.FC<KidsGalleryProps> = ({ showHeroBanner = true }) => {
           )}
         </div>
 
-        <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0">
-          {['ALL', 'Action', 'Arcade', 'Multi-Game', 'Educational', 'Runner', 'Creative'].map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors ${
-                selectedCategory === cat
-                  ? 'bg-amber-500 text-slate-950 shadow-sm'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
-              }`}
-            >
-              {cat === 'ALL' ? 'All Games' : cat}
-            </button>
-          ))}
+        <div className="relative w-full md:w-56">
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="w-full pl-3.5 pr-8 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white text-xs font-bold focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer appearance-none"
+          >
+            <option value="ALL">All Game Categories</option>
+            <option value="Action">Action</option>
+            <option value="Arcade">Arcade</option>
+            <option value="Multi-Game">Multi-Game</option>
+            <option value="Educational">Educational</option>
+            <option value="Runner">Runner</option>
+            <option value="Creative">Creative</option>
+          </select>
+          <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 text-xs">
+            ▼
+          </div>
         </div>
       </div>
 

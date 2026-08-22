@@ -95,12 +95,12 @@ const ProgramDetails: React.FC = () => {
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl relative z-10">
           <Link to="/programs" className="text-white/70 hover:text-white inline-flex items-center gap-2 mb-6 text-xs font-bold tracking-widest uppercase">
-            <ArrowLeft size={14} /> Back to Programs & Academies
+            <ArrowLeft size={14} /> Back to Programs
           </Link>
           
           <div className="mb-4">
             <span className="inline-block px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full bg-white/10 text-white border border-white/20">
-              {program.categoryId ? program.categoryId.replace(/_/g, ' ') : 'Learning Academy'}
+              {program.categoryId ? program.categoryId.replace(/_/g, ' ') : 'Our Programs'}
             </span>
           </div>
           
