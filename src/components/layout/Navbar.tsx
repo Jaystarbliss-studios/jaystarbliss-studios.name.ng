@@ -24,13 +24,12 @@ import {
   Compass
 } from 'lucide-react';
 import { useTheme } from '../../hooks/useTheme';
-import { useKeyboardShortcut } from '../../hooks/useKeyboardShortcut';
-import SearchModal from '../ui/SearchModal';
+import { useSearch } from '../../contexts/SearchContext';
 
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
+  const { openSearch } = useSearch();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [mobileExpanded, setMobileExpanded] = useState<Record<string, boolean>>({
     programs: false,
@@ -40,7 +39,6 @@ const Navbar: React.FC = () => {
   
   const dropdownTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const location = useLocation();
-  useKeyboardShortcut("/", () => setSearchOpen(true));
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
@@ -434,12 +432,12 @@ const Navbar: React.FC = () => {
             {/* Desktop Right Actions */}
             <div className="hidden lg:flex items-center gap-2 xl:gap-3 shrink-0">
               <button 
-                onClick={() => setSearchOpen(true)}
+                onClick={openSearch}
                 className={`p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 transition-colors ${
                   isScrolled ? 'text-slate-700 dark:text-slate-200' : 'text-white/90 hover:text-white'
                 }`}
-                aria-label="Search site (Press /)"
-                title="Search (Press /)"
+                aria-label="Search site (Press Ctrl+K or /)"
+                title="Search site (Ctrl+K or /)"
               >
                 <Search size={18} />
               </button>
@@ -477,7 +475,7 @@ const Navbar: React.FC = () => {
             {/* Mobile Header Controls */}
             <div className="flex items-center gap-1 sm:gap-1.5 lg:hidden relative z-50 shrink-0">
               <button 
-                onClick={() => setSearchOpen(true)}
+                onClick={openSearch}
                 className={`p-1.5 sm:p-2 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 transition-colors ${
                   isScrolled ? 'text-brand-slate dark:text-white' : 'text-white'
                 }`}
@@ -714,11 +712,6 @@ const Navbar: React.FC = () => {
           </div>
         </div>
       )}
-
-      <SearchModal 
-        isOpen={searchOpen} 
-        onClose={() => setSearchOpen(false)} 
-      />
     </>
   );
 };

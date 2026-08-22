@@ -1,5 +1,7 @@
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { ToastProvider } from "./contexts/ToastContext";
+import { MetaTagsProvider } from "./contexts/MetaTagsContext";
+import { SearchProvider } from "./contexts/SearchContext";
 import ErrorBoundary from "./components/ui/ErrorBoundary";
 import PageLoader from "./components/ui/PageLoader";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
@@ -180,10 +182,14 @@ function App() {
       <ThemeProvider>
         <ToastProvider>
           <Router>
-            <PageLoader />
-            <ScrollToTop />
-            <GlassRippleListener />
-            <AnimatedRoutes />
+            <MetaTagsProvider>
+              <SearchProvider>
+                <PageLoader />
+                <ScrollToTop />
+                <GlassRippleListener />
+                <AnimatedRoutes />
+              </SearchProvider>
+            </MetaTagsProvider>
           </Router>
         </ToastProvider>
       </ThemeProvider>
