@@ -253,13 +253,13 @@ const Programs: React.FC = () => {
             <div id="ecosystem-section" className="space-y-8 scroll-mt-24">
               <div className="max-w-3xl">
                 <div className="text-xs font-black uppercase tracking-wider text-brand-red">
-                  Explore by Academy
+                  Explore by Program
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight mt-1">
-                  The 8 Schools of the Jaystarbliss Ecosystem
+                  Our Learning programs
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-                  Click on any academy below to review its specialized levels, topics, and discipline progression.
+                  Click on any program below to review its specialized levels, topics, and discipline progression.
                 </p>
               </div>
 
@@ -317,7 +317,7 @@ const Programs: React.FC = () => {
                   )}
                 </div>
 
-                {/* Academy Filter Pills */}
+                {/* Program Filter Pills */}
                 <div className="flex overflow-x-auto gap-1.5 pb-1 max-w-full hide-scrollbar">
                   {Object.entries(SCHOOL_FILTER_MAP).map(([key, meta]) => {
                     const Icon = meta.icon;
@@ -369,7 +369,7 @@ const Programs: React.FC = () => {
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                         <span className="absolute bottom-3 left-4 text-[10px] font-black uppercase tracking-wider text-white bg-brand-red/90 px-2 py-0.5 rounded-md">
-                          {program.categoryId ? program.categoryId.replace(/_/g, ' ') : 'Academy Course'}
+                          {program.categoryId ? program.categoryId.replace(/_/g, ' ') : 'Program Course'}
                         </span>
                       </div>
                       <CardContent className="space-y-3">
