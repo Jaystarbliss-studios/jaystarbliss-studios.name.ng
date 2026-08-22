@@ -79,8 +79,8 @@ const Programs: React.FC = () => {
   const [searchParams] = useSearchParams();
   const location = useLocation();
   const { data: heroData } = usePageSection('programs', 'hero', {
-    title: "One Ecosystem. 8 Specialized Academies. Infinite Potential.",
-    subtitle: "Jaystarbliss Studios is more than tutoring — we build tailored learning pathways across technology, music, digital literacy, creative arts, and academic excellence with our proven 5-stage mastery framework.",
+    title: "One Ecosystem",
+    subtitle: "find a specialised learning pathway",
     bannerImage: ''
   });
   const [activeView, setActiveView] = useState<'ecosystem' | 'pathfinder' | 'catalog'>('ecosystem');
@@ -167,14 +167,14 @@ const Programs: React.FC = () => {
   return (
     <MainLayout>
       <SEO 
-        title="Jaystarbliss Learning Ecosystem | 8 Academies & Progressive Pathways" 
+        title="Our Learning Ecosystem | 8 Progressive Pathways" 
         description="Explore the multi-disciplinary learning ecosystem: Technology & Coding, Digital Literacy, Creative Design, Music, Academic Excellence, Chess, and Young Creators." 
       />
 
       {/* Hero Header */}
       <PageHeader
-        eyebrow="The Jaystarbliss Learning Ecosystem"
-        title={heroData.title || "One Ecosystem. 8 Specialized Academies. Infinite Potential."}
+        eyebrow=""
+        title={heroData.title || "One Ecosystem."}
         description={heroData.subtitle}
         image={heroData.bannerImage}
         fallbackImage={pageHeaderImages.programs}
