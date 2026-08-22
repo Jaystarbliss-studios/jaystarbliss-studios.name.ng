@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { 
   BookOpen, Clock, Trophy, Video, ExternalLink, 
   FileText, Download, Bell, Award, CheckCircle2,
-  X
+  X, ArrowRight
 } from 'lucide-react';
 import { 
   collection, query, where, getDocs, doc, getDoc, 
@@ -698,13 +699,20 @@ const StudentDashboard: React.FC = () => {
 
           {/* Personal & General Resources */}
           <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200/80 dark:border-slate-800 p-6 shadow-sm">
-            <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center justify-between mb-5 flex-wrap gap-2">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
                   <FileText size={18} />
                 </div>
                 <h2 className="text-lg font-bold text-gray-900 dark:text-white">Learning Materials & Handouts</h2>
               </div>
+              <Link 
+                to="/portal/student/resources" 
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-red hover:text-red-700 dark:hover:text-red-400 transition-colors"
+              >
+                <span>Browse Full Resource Library</span>
+                <ArrowRight size={13} />
+              </Link>
             </div>
 
             {personalResources.length === 0 && generalResources.length === 0 ? (

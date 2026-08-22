@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
-  Book, Settings, LogOut, LayoutDashboard, 
+  Book, BookOpen, Settings, LogOut, LayoutDashboard, 
   Calendar, ExternalLink, Building2, CreditCard,
   User, Lock, Moon, Sun, ChevronDown, CheckCircle2,
   AlertCircle, Menu, X, ShieldCheck, Video
@@ -92,6 +92,7 @@ const PortalLayout: React.FC = () => {
   const getNavLinks = () => {
     const base = [
       { name: 'Dashboard', path: `/portal/${role}`, icon: <LayoutDashboard size={18} />, desc: 'Portal Overview & Metrics' },
+      { name: 'Resource Library', path: `/portal/${role}/resources`, icon: <BookOpen size={18} />, desc: 'PDFs, Lesson Notes & Syllabi' },
       { name: 'Calendar', path: `/portal/${role}/calendar`, icon: <Calendar size={18} />, desc: 'Schedules, Timetables & Labs' },
     ];
 

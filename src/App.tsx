@@ -27,6 +27,11 @@ import ParentDashboard from "./pages/portal/ParentDashboard";
 import StaffDashboard from "./pages/portal/StaffDashboard";
 import StudentDashboard from "./pages/portal/StudentDashboard";
 import SchoolDashboard from "./pages/portal/SchoolDashboard";
+import ResourceLibrary from "./pages/portal/ResourceLibrary";
+import PortalCourses from "./pages/portal/PortalCourses";
+import PortalCalendar from "./pages/portal/PortalCalendar";
+import PortalPayments from "./pages/portal/PortalPayments";
+import PortalSettings from "./pages/portal/PortalSettings";
 
 import Resources from "./pages/Resources";
 import Blog from "./pages/Blog";
@@ -92,23 +97,42 @@ function AnimatedRoutes() {
         {/* Portal Routes */}
         <Route path="/portal" element={<PageTransition><Portal /></PageTransition>} />
         <Route path="/register" element={<PageTransition><Register /></PageTransition>} />
+        
+        {/* Student Portal */}
         <Route path="/portal/student" element={<ProtectedRoute allowedRoles={['STUDENT']} redirectPath="/portal"><PortalLayout /></ProtectedRoute>}>
           <Route index element={<StudentDashboard />} />
-          <Route path="calendar" element={<div className="p-8 text-center text-gray-500">Calendar coming soon</div>} />
-          <Route path="courses" element={<div className="p-8 text-center text-gray-500">My Courses coming soon</div>} />
-          <Route path="settings" element={<div className="p-8 text-center text-gray-500">Settings coming soon</div>} />
+          <Route path="resources" element={<ResourceLibrary role="student" />} />
+          <Route path="calendar" element={<PortalCalendar />} />
+          <Route path="courses" element={<PortalCourses />} />
+          <Route path="payments" element={<PortalPayments />} />
+          <Route path="settings" element={<PortalSettings />} />
         </Route>
         
+        {/* Staff / Tutor Portal */}
         <Route path="/portal/staff" element={<ProtectedRoute allowedRoles={['TUTOR', 'STAFF']} redirectPath="/portal"><PortalLayout /></ProtectedRoute>}>
           <Route index element={<StaffDashboard />} />
+          <Route path="resources" element={<ResourceLibrary role="staff" />} />
+          <Route path="classes" element={<PortalCourses />} />
+          <Route path="calendar" element={<PortalCalendar />} />
+          <Route path="settings" element={<PortalSettings />} />
         </Route>
         
+        {/* Parent Portal */}
         <Route path="/portal/parent" element={<ProtectedRoute allowedRoles={['PARENT']} redirectPath="/portal"><PortalLayout /></ProtectedRoute>}>
           <Route index element={<ParentDashboard />} />
+          <Route path="resources" element={<ResourceLibrary role="parent" />} />
+          <Route path="calendar" element={<PortalCalendar />} />
+          <Route path="payments" element={<PortalPayments />} />
+          <Route path="settings" element={<PortalSettings />} />
         </Route>
         
+        {/* School Admin Portal */}
         <Route path="/portal/school" element={<ProtectedRoute allowedRoles={['SCHOOL']} redirectPath="/portal"><PortalLayout /></ProtectedRoute>}>
           <Route index element={<SchoolDashboard />} />
+          <Route path="resources" element={<ResourceLibrary role="school" />} />
+          <Route path="calendar" element={<PortalCalendar />} />
+          <Route path="payments" element={<PortalPayments />} />
+          <Route path="settings" element={<PortalSettings />} />
         </Route>
 
         {/* Admin Login */}

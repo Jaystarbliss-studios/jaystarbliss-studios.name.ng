@@ -3,11 +3,12 @@ import { db, auth } from '../../lib/firebase';
 import { collection, getDocs } from 'firebase/firestore';
 import { 
   Users, Calendar, GraduationCap,
-  BookOpen, FileText, ExternalLink, Download, CheckCircle2, Clock, 
+  BookOpen, ExternalLink, Download, CheckCircle2, Clock, 
   Award, Layers
 } from 'lucide-react';
 import SEO from '../../components/ui/SEO';
 import { DashboardGreeting } from '../../components/portal/DashboardGreeting';
+import ResourceLibrary from './ResourceLibrary';
 
 interface SchoolStudent {
   id: string;
@@ -509,38 +510,8 @@ const SchoolDashboard: React.FC = () => {
 
       {/* TAB 4: CURRICULUM RESOURCES */}
       {activeTab === 'resources' && (
-        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-gray-200/80 dark:border-slate-800 p-6 shadow-sm space-y-6">
-          <div>
-            <h2 className="text-lg font-bold text-gray-900 dark:text-white">Curriculum & Teaching Resources</h2>
-            <p className="text-xs text-gray-500">Download syllabi, teacher slide decks, and offline coding project files.</p>
-          </div>
-
-          <div className="space-y-4">
-            {resources.map(res => (
-              <div key={res.id} className="p-4 rounded-xl border border-gray-200 dark:border-slate-800 bg-gray-50/50 dark:bg-slate-950 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div className="flex items-start gap-3">
-                  <div className="p-3 bg-blue-50 dark:bg-blue-900/30 text-blue-600 rounded-xl shrink-0">
-                    <FileText size={22} />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-sm text-gray-900 dark:text-white">{res.title}</h3>
-                    <p className="text-xs text-gray-500 mt-0.5">{res.description}</p>
-                    <span className="inline-block mt-2 text-[11px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950 px-2 py-0.5 rounded">
-                      {res.category} • {res.fileType}
-                    </span>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => alert(`Starting download for ${res.title}...`)}
-                  className="px-4 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-white dark:text-slate-900 text-white font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 shrink-0"
-                >
-                  <Download size={14} /> Download File
-                </button>
-              </div>
-            ))}
-          </div>
+        <div className="pt-2">
+          <ResourceLibrary role="school" />
         </div>
       )}
 

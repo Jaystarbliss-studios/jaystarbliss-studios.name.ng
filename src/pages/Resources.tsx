@@ -8,6 +8,14 @@ import { motion } from 'motion/react';
 const Resources: React.FC = () => {
   const resourceItems = [
     {
+      title: "Curriculum & Resource Library",
+      desc: "Browse and download termly syllabi, lesson notes, and hands-on coding worksheets for students, parents, and partner school educators.",
+      link: "/portal",
+      label: "OPEN RESOURCE PORTAL",
+      icon: BookOpen,
+      active: true
+    },
+    {
       title: "FAQ",
       desc: "Find answers to common questions about our educational programs, digital services, timelines, and how we collaborate.",
       link: "/faq",
@@ -29,14 +37,6 @@ const Resources: React.FC = () => {
       link: "#",
       label: "VIEW POLICY",
       icon: FileText,
-      active: false
-    },
-    {
-      title: "Terms of Service",
-      desc: "Read the terms and conditions that govern your use of Jaystarbliss Studios' website, programs, and digital services.",
-      link: "#",
-      label: "VIEW TERMS",
-      icon: BookOpen,
       active: false
     }
   ];
