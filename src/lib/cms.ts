@@ -259,13 +259,38 @@ export const CMS_PAGES: EditablePageConfig[] = [
           title: 'SOLUTIONS THAT DELIVER.',
           subtitle: 'From interactive software platforms to enterprise school management systems and branding, we provide end-to-end digital solutions.',
           ctaText: 'REQUEST A PROJECT',
-          ctaLink: '/project-request'
+          ctaLink: '/project-request',
+          bannerImage: ''
         },
         fields: [
           { key: 'title', label: 'Header Title', type: 'text' },
           { key: 'subtitle', label: 'Header Subtitle', type: 'textarea' },
           { key: 'ctaText', label: 'CTA Button Text', type: 'text' },
-          { key: 'ctaLink', label: 'CTA Button Link', type: 'text' }
+          { key: 'ctaLink', label: 'CTA Button Link', type: 'text' },
+          { key: 'bannerImage', label: 'Banner Image (Cloudinary)', type: 'image' }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'programs',
+    title: 'Programs Page',
+    path: '/programs',
+    description: 'Ecosystem header banner shown above the 8 Academies / Pathfinder / Catalog views.',
+    sections: [
+      {
+        id: 'hero',
+        name: 'Programs Hero Header',
+        description: 'Headline and banner photo above the academy explorer.',
+        defaultData: {
+          title: "One Ecosystem. 8 Specialized Academies. Infinite Potential.",
+          subtitle: "Jaystarbliss Studios is more than tutoring — we build tailored learning pathways across technology, music, digital literacy, creative arts, and academic excellence with our proven 5-stage mastery framework.",
+          bannerImage: ''
+        },
+        fields: [
+          { key: 'title', label: 'Headline', type: 'text' },
+          { key: 'subtitle', label: 'Description', type: 'textarea' },
+          { key: 'bannerImage', label: 'Banner Image (Cloudinary)', type: 'image' }
         ]
       }
     ]
@@ -286,7 +311,8 @@ export const CMS_PAGES: EditablePageConfig[] = [
           email: 'hello@jaystarbliss.com',
           phone: '+234 123 456 7890',
           address: 'Lagos, Nigeria',
-          officeHours: 'Monday - Friday: 9:00 AM - 6:00 PM (WAT)'
+          officeHours: 'Monday - Friday: 9:00 AM - 6:00 PM (WAT)',
+          bannerImage: ''
         },
         fields: [
           { key: 'title', label: 'Title', type: 'text' },
@@ -294,7 +320,8 @@ export const CMS_PAGES: EditablePageConfig[] = [
           { key: 'email', label: 'Contact Email', type: 'text' },
           { key: 'phone', label: 'Contact Phone Number', type: 'text' },
           { key: 'address', label: 'Physical Office Address', type: 'text' },
-          { key: 'officeHours', label: 'Office / Support Hours', type: 'text' }
+          { key: 'officeHours', label: 'Office / Support Hours', type: 'text' },
+          { key: 'bannerImage', label: 'Banner Image (Cloudinary)', type: 'image' }
         ]
       }
     ]

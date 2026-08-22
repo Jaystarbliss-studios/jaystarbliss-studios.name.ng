@@ -24,7 +24,31 @@ export const stockImages = {
   tech: pexels(17323801),
   care: pexels(26775361),
   music: pexels(7521202),      // hands on piano keys with sheet music
+  chess: pexels(4576336),      // close-up wooden chess pieces on board
 };
+
+// Photo used behind each page's title banner (gradient overlay applied in <PageHeader>)
+export const pageHeaderImages = {
+  about: stockImages.businesses,
+  services: stockImages.webDev,
+  contact: stockImages.parents,
+  programs: stockImages.learn,
+  portfolio: stockImages.build,
+};
+
+// One relatable photo per Academy/School, keyed by the school id used in learningEcosystem.ts
+const academyImageMap: Record<string, string> = {
+  'tech-programming': stockImages.build,
+  'digital-literacy': stockImages.webDev,
+  'creative-design': stockImages.create,
+  'music-performing-arts': stockImages.music,
+  'academic-excellence': stockImages.learn,
+  'strategy-games': stockImages.chess,
+  'young-creators': stockImages.care,
+  'private-tutoring': stockImages.businesses,
+};
+
+export const getAcademyImage = (schoolId?: string) => academyImageMap[schoolId || ''] || stockImages.learn;
 
 const categoryImageMap: Record<string, string> = {
   academics: stockImages.learn,

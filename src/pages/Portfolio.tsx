@@ -18,6 +18,7 @@ import {
 import DOMPurify from 'dompurify';
 import Badge from '../components/ui/Badge';
 import { CardSkeleton } from '../components/ui/Skeleton';
+import { pageHeaderImages } from '../lib/stockImages';
 import EmptyState from '../components/ui/EmptyState';
 import { Link } from 'react-router-dom';
 import KidsGallery from '../components/kids/KidsGallery';
@@ -66,6 +67,14 @@ const Portfolio: React.FC = () => {
 
       {/* Header Banner */}
       <div className="bg-brand-slate text-white py-16 lg:py-24 relative overflow-hidden">
+        <img
+          src={pageHeaderImages.portfolio}
+          alt=""
+          loading="eager"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-slate via-brand-slate/85 to-brand-slate/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-brand-slate via-transparent to-brand-slate/20" />
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
           

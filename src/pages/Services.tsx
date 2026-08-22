@@ -7,8 +7,9 @@ import { Monitor, Paintbrush, Database, Globe, Briefcase, Cpu } from 'lucide-rea
 import { Link } from 'react-router-dom';
 import { CardSkeleton } from '../components/ui/Skeleton';
 import EmptyState from '../components/ui/EmptyState';
-import { stockImages } from '../lib/stockImages';
+import { stockImages, pageHeaderImages } from '../lib/stockImages';
 import { StaggerGroup } from '../components/ui/Reveal';
+import PageHeader from '../components/ui/PageHeader';
 import { staggerItem } from '../components/ui/animationVariants';
 import { motion } from 'motion/react';
 import { usePageSection } from '../lib/cms';
@@ -45,7 +46,8 @@ const Services: React.FC = () => {
 
   const { data: heroData } = usePageSection('services', 'hero', {
     title: 'SOLUTIONS THAT DELIVER.',
-    subtitle: 'From interactive software platforms to enterprise school management systems and branding, we provide end-to-end digital solutions.'
+    subtitle: 'From interactive software platforms to enterprise school management systems and branding, we provide end-to-end digital solutions.',
+    bannerImage: ''
   });
 
   useEffect(() => {
@@ -66,16 +68,13 @@ const Services: React.FC = () => {
   return (
     <MainLayout>
       <SEO title="Services" description="Professional technology and creative services designed to elevate your brand." />
-      <div className="bg-brand-slate text-white py-20 lg:py-32">
-        <div className="container mx-auto px-4 max-w-7xl text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
-            {heroData.title || 'SOLUTIONS THAT DELIVER.'}
-          </h1>
-          <p className="text-xl text-white/80 max-w-3xl mx-auto leading-relaxed">
-            {heroData.subtitle || 'From interactive software platforms to enterprise school management systems and branding, we provide end-to-end digital solutions.'}
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        eyebrow="What We Offer"
+        title={heroData.title || 'SOLUTIONS THAT DELIVER.'}
+        description={heroData.subtitle || 'From interactive software platforms to enterprise school management systems and branding, we provide end-to-end digital solutions.'}
+        image={heroData.bannerImage}
+        fallbackImage={pageHeaderImages.services}
+      />
       
       <div className="py-24 bg-brand-neutral dark:bg-slate-900 dark:border-slate-800 min-h-[50vh]">
         <div className="container mx-auto px-4 max-w-7xl">

@@ -5,8 +5,17 @@ import MainLayout from '../components/layout/MainLayout';
 import SEO from '../components/ui/SEO';
 import { CheckCircle2, MapPin, Mail, Phone } from 'lucide-react';
 import Button from '../components/ui/Button';
+import PageHeader from '../components/ui/PageHeader';
+import { pageHeaderImages } from '../lib/stockImages';
+import { usePageSection } from '../lib/cms';
 
 const Contact: React.FC = () => {
+  const { data: heroData } = usePageSection('contact', 'details', {
+    title: 'GET IN TOUCH',
+    subtitle: "Whether you're looking to start a new project, enroll in a program, or just say hello, we'd love to hear from you.",
+    bannerImage: ''
+  });
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -53,22 +62,13 @@ const Contact: React.FC = () => {
       />
 
       {/* Header Banner */}
-      <div className="bg-brand-slate text-white py-20 lg:py-28 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
-          <div className="max-w-3xl">
-            <span className="inline-block text-xs font-black uppercase tracking-widest text-brand-red mb-3">
-              Direct Communication
-            </span>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight">
-              Get in Touch
-            </h1>
-            <p className="text-base sm:text-lg text-white/80 leading-relaxed font-normal">
-              Whether you're looking to start a new project, enroll in a program, or just say hello, we'd love to hear from you.
-            </p>
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        eyebrow="Direct Communication"
+        title={heroData.title || 'GET IN TOUCH'}
+        description={heroData.subtitle}
+        image={heroData.bannerImage}
+        fallbackImage={pageHeaderImages.contact}
+      />
 
       {/* Contact Content Split */}
       <div className="py-16 md:py-24 bg-brand-neutral dark:bg-slate-900">

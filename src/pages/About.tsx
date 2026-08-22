@@ -2,6 +2,8 @@ import React from 'react';
 import MainLayout from '../components/layout/MainLayout';
 import Button from '../components/ui/Button';
 import SEO from '../components/ui/SEO';
+import PageHeader from '../components/ui/PageHeader';
+import { pageHeaderImages } from '../lib/stockImages';
 import { usePageSection } from '../lib/cms';
 import { motion } from 'motion/react';
 
@@ -58,24 +60,20 @@ const About: React.FC = () => {
       />
 
       {/* Hero Header */}
-      <div className="bg-brand-slate text-white py-20 lg:py-32 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
-          <div className="max-w-4xl">
-            <span className="inline-block text-xs font-black uppercase tracking-widest text-brand-red mb-4">
-              About Jaystarbliss Studios
-            </span>
-            <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold mb-8 tracking-tight leading-[1.08]">
-              {heroData.title || 'WE TEACH. WE BUILD. WE CREATE.'}
-            </h1>
-            <div className="space-y-6 text-lg sm:text-xl text-white/80 leading-relaxed font-normal max-w-3xl border-l-2 border-brand-red pl-6">
-              {heroData.paragraph1 && <p>{heroData.paragraph1}</p>}
-              {heroData.paragraph2 && <p>{heroData.paragraph2}</p>}
-              {heroData.paragraph3 && <p>{heroData.paragraph3}</p>}
-            </div>
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        eyebrow="About Jaystarbliss Studios"
+        title={heroData.title || 'WE TEACH. WE BUILD. WE CREATE.'}
+        image={heroData.bannerImage}
+        fallbackImage={pageHeaderImages.about}
+        size="lg"
+        description={
+          <span className="block space-y-4 border-l-2 border-brand-red pl-6">
+            {heroData.paragraph1 && <span className="block">{heroData.paragraph1}</span>}
+            {heroData.paragraph2 && <span className="block">{heroData.paragraph2}</span>}
+            {heroData.paragraph3 && <span className="block">{heroData.paragraph3}</span>}
+          </span>
+        }
+      />
 
       {/* What We Believe - Clean Editorial Rows */}
       <div className="py-20 lg:py-28 bg-brand-neutral dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800">

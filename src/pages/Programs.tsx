@@ -27,6 +27,9 @@ import {
 import StageArchitectureBanner from '../components/ecosystem/StageArchitectureBanner';
 import LearningSchoolsGrid from '../components/ecosystem/LearningSchoolsGrid';
 import LearningPathBuilder from '../components/ecosystem/LearningPathBuilder';
+import PageHeader from '../components/ui/PageHeader';
+import { pageHeaderImages, getProgramImage } from '../lib/stockImages';
+import { usePageSection } from '../lib/cms';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
 
 const SCHOOL_FILTER_MAP: Record<string, { label: string; icon: React.FC<{ size?: number; className?: string }> }> = {
@@ -75,6 +78,11 @@ const CANONICAL_SCHOOL_MAP: Record<string, { schoolId: string; filterKey: string
 const Programs: React.FC = () => {
   const [searchParams] = useSearchParams();
   const location = useLocation();
+  const { data: heroData } = usePageSection('programs', 'hero', {
+    title: "One Ecosystem. 8 Specialized Academies. Infinite Potential.",
+    subtitle: "Jaystarbliss Studios is more than tutoring — we build tailored learning pathways across technology, music, digital literacy, creative arts, and academic excellence with our proven 5-stage mastery framework.",
+    bannerImage: ''
+  });
   const [activeView, setActiveView] = useState<'ecosystem' | 'pathfinder' | 'catalog'>('ecosystem');
   const [selectedSchoolId, setSelectedSchoolId] = useState<string>('tech-programming');
   const [programs, setPrograms] = useState<any[]>([]);
@@ -164,75 +172,74 @@ const Programs: React.FC = () => {
       />
 
       {/* Hero Header */}
-      <div className="bg-brand-slate text-white py-16 lg:py-24 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
-        <div className="container mx-auto px-4 max-w-7xl relative z-10">
-          
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-            <div className="max-w-3xl">
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
-                One Ecosystem. 8 Specialized Academies. Infinite Potential.
-              </h1>
-              <p className="text-base sm:text-lg text-white/80 mt-4 leading-relaxed max-w-2xl">
-                Jaystarbliss Studios is more than tutoring — we build tailored learning pathways across technology, music, digital literacy, creative arts, and academic excellence with our proven 5-stage mastery framework.
-              </p>
-            </div>
+      <PageHeader
+        eyebrow="The Jaystarbliss Learning Ecosystem"
+        title={heroData.title || "One Ecosystem. 8 Specialized Academies. Infinite Potential."}
+        description={heroData.subtitle}
+        image={heroData.bannerImage}
+        fallbackImage={pageHeaderImages.programs}
+        size="lg"
+      >
+        {/* Quick Actions */}
+        <div className="flex flex-col sm:flex-row gap-3 mb-10">
+          <button
+            type="button"
+            onClick={() => {
+              setActiveView('pathfinder');
+              const el = document.getElementById('pathfinder-section');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}
+            className="bg-brand-red hover:bg-red-700 text-white px-6 py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-brand-red/20 transition-all text-center"
+          >
+            <Compass size={16} />
+            <span>Build My Child's Pathway</span>
+          </button>
 
-            {/* Quick Action Hub */}
-            <div className="shrink-0 flex flex-col sm:flex-row lg:flex-col gap-3">
+          <Link
+            to="/tutors"
+            className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-6 py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all text-center"
+          >
+            <UserCheck size={16} />
+            <span>Find a Dedicated Mentor</span>
+          </Link>
+        </div>
+
+        {/* Clear 3-Way Mode Selector — each is a distinct destination, not a nested tab */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {[
+            { id: 'ecosystem', label: '8 Learning Academies', hint: 'Browse every subject we teach, organized by school', icon: Layers },
+            { id: 'pathfinder', label: 'Pathfinder', hint: 'Answer a few questions, get a custom plan', icon: Compass },
+            { id: 'catalog', label: 'Program Catalog', hint: 'Search & filter every course directly', icon: BookOpen }
+          ].map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeView === tab.id;
+            return (
               <button
+                key={tab.id}
                 type="button"
                 onClick={() => {
-                  setActiveView('pathfinder');
-                  const el = document.getElementById('pathfinder-section');
+                  setActiveView(tab.id as any);
+                  const el = document.getElementById('programs-content');
                   if (el) el.scrollIntoView({ behavior: 'smooth' });
                 }}
-                className="bg-brand-red hover:bg-red-700 text-white px-6 py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-brand-red/20 transition-all text-center"
+                className={`text-left p-5 rounded-2xl border transition-all duration-200 flex flex-col gap-3 ${
+                  isActive
+                    ? 'bg-white text-brand-slate border-white shadow-xl'
+                    : 'bg-white/[0.06] text-white border-white/15 hover:bg-white/[0.12] hover:border-white/30'
+                }`}
               >
-                <Compass size={16} />
-                <span>Build My Child's Pathway</span>
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isActive ? 'bg-brand-red text-white' : 'bg-white/10 text-white'}`}>
+                  <Icon size={18} />
+                </div>
+                <div>
+                  <div className="font-black text-sm">{tab.label}</div>
+                  <div className={`text-xs mt-0.5 ${isActive ? 'text-brand-slate/60' : 'text-white/60'}`}>{tab.hint}</div>
+                </div>
               </button>
-
-              <Link
-                to="/tutors"
-                className="bg-white/10 hover:bg-white/20 text-white border border-white/20 px-6 py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all text-center"
-              >
-                <UserCheck size={16} />
-                <span>Find a Dedicated Mentor</span>
-              </Link>
-            </div>
-          </div>
-
-          {/* Sub-Navigation View Switcher */}
-          <div className="flex flex-wrap gap-2 pt-10 mt-6 border-t border-white/10">
-            {[
-              { id: 'ecosystem', label: '8 Learning Academies', icon: Layers },
-              { id: 'pathfinder', label: 'Pathfinder (Custom Program Builder)', icon: Compass },
-              { id: 'catalog', label: 'Program Catalog & Courses', icon: BookOpen }
-            ].map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeView === tab.id;
-
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => setActiveView(tab.id as any)}
-                  className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
-                    isActive
-                      ? 'bg-white text-slate-900 shadow-md'
-                      : 'bg-white/10 text-white/80 hover:text-white hover:bg-white/15'
-                  }`}
-                >
-                  <Icon size={14} />
-                  <span>{tab.label}</span>
-                </button>
-              );
-            })}
-          </div>
-
+            );
+          })}
         </div>
-      </div>
+      </PageHeader>
 
       {/* Main Section Content based on active view */}
       <div id="programs-content" className="py-16 bg-slate-50 dark:bg-slate-950 scroll-mt-20">
@@ -352,12 +359,21 @@ const Programs: React.FC = () => {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {filteredPrograms.map((program) => (
-                    <Card key={program.id} hoverEffect floatEffect className="flex flex-col justify-between">
+                    <Card key={program.id} hoverEffect floatEffect className="flex flex-col justify-between overflow-hidden">
+                      <div className="relative h-32 overflow-hidden -m-px">
+                        <img
+                          src={getProgramImage(program.categoryId)}
+                          alt=""
+                          loading="lazy"
+                          className="absolute inset-0 w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                        <span className="absolute bottom-3 left-4 text-[10px] font-black uppercase tracking-wider text-white bg-brand-red/90 px-2 py-0.5 rounded-md">
+                          {program.categoryId ? program.categoryId.replace(/_/g, ' ') : 'Academy Course'}
+                        </span>
+                      </div>
                       <CardContent className="space-y-3">
                         <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-black uppercase tracking-wider text-brand-red bg-brand-red/10 px-2 py-0.5 rounded-md">
-                            {program.categoryId ? program.categoryId.replace(/_/g, ' ') : 'Academy Course'}
-                          </span>
                           <span className="text-[11px] font-bold text-slate-500">
                             {program.deliveryFormat || 'Online / Physical'}
                           </span>
